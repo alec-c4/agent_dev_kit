@@ -1,0 +1,99 @@
+# Stack Registry — detection only. Tooling, DoD overlays, and patterns live in skills/stacks/*/profile.yaml
+# Consumed by: scripts/detect-stack.sh, skills/stack-loader/SKILL.md
+version: 1
+
+detection_order:
+  - rails
+  - elixir
+  - nextjs
+  - nuxt
+  - sveltekit
+  - svelte
+  - node
+  - fastapi
+  - django
+  - flask
+  - python
+  - go
+  - rust
+
+stacks:
+  rails:
+    detect:
+      files: [Gemfile]
+      gem: rails
+    stack_skill: stacks/rails
+
+  elixir:
+    detect:
+      files: [mix.exs]
+      content_match: phoenix
+    stack_skill: stacks/elixir
+
+  nextjs:
+    detect:
+      files: [package.json]
+      package_dep: next
+    stack_skill: stacks/nextjs
+
+  nuxt:
+    detect:
+      files: [package.json]
+      package_dep: nuxt
+    stack_skill: stacks/nuxt
+
+  sveltekit:
+    detect:
+      files: [package.json]
+      package_dep: "@sveltejs/kit"
+    stack_skill: stacks/sveltekit
+
+  svelte:
+    detect:
+      files: [package.json]
+      package_dep: svelte
+      exclude_package_dep: "@sveltejs/kit"
+    stack_skill: stacks/svelte
+
+  node:
+    detect:
+      files: [package.json]
+    stack_skill: stacks/node
+
+  fastapi:
+    detect:
+      files: [pyproject.toml, requirements.txt]
+      content_match: fastapi
+    stack_skill: stacks/fastapi
+
+  django:
+    detect:
+      files: [pyproject.toml, requirements.txt, manage.py]
+      content_match: django
+    stack_skill: stacks/django
+
+  flask:
+    detect:
+      files: [pyproject.toml, requirements.txt]
+      content_match: flask
+    stack_skill: stacks/flask
+
+  python:
+    detect:
+      files: [pyproject.toml, requirements.txt]
+    stack_skill: stacks/python
+
+  go:
+    detect:
+      files: [go.mod]
+    stack_skill: stacks/go
+
+  rust:
+    detect:
+      files: [Cargo.toml]
+    stack_skill: stacks/rust
+
+universal_tooling:
+  context:
+    - git log --oneline -10
+    - git diff HEAD

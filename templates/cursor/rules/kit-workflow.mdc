@@ -1,0 +1,28 @@
+---
+description: Kit workflow — spec, plan, TDD, verification, review. Supplements user global rules; user rules win on conflict.
+alwaysApply: false
+---
+
+# Kit workflow
+
+Read before non-trivial tasks when Agent Dev Kit is installed.
+
+**User global rules** (`~/.cursor/rules/`) take precedence when stricter.
+
+## Flow
+
+1. Classify intent (feature / bug / refactor / audit).
+2. Follow [docs/guidelines/WORKFLOW.md](../agent_dev_kit/docs/guidelines/WORKFLOW.md).
+3. **Spec first** — write `.ai/*-spec.md`, get human approval ([SPECS.md](../agent_dev_kit/docs/guidelines/SPECS.md)).
+4. **Plan** — write `.ai/*-plan.md` with Detail: minimal | standard | detailed; wait for approval before production code.
+5. **TDD** — implement per [TESTING.md](../agent_dev_kit/docs/guidelines/TESTING.md).
+6. **Verification** — separate agent session before commit ([VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md)).
+7. **Review** — [REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md) before commit or PR.
+
+## Guidelines
+
+All kit guidelines: [docs/guidelines/](../agent_dev_kit/docs/guidelines/)
+
+Spec examples: [docs/examples/specs/](../agent_dev_kit/docs/examples/specs/)
+
+Definition of Done: [registry/dod.yaml](../agent_dev_kit/registry/dod.yaml)

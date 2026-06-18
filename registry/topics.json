@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "topics": {
+    "security": {
+      "skill": "security-best-practices",
+      "stack_files": {
+        "rails": "security-best-practices/stacks/rails.md",
+        "node": "security-best-practices/stacks/node.md",
+        "nextjs": "security-best-practices/stacks/node.md",
+        "nuxt": "security-best-practices/stacks/node.md",
+        "sveltekit": "security-best-practices/stacks/node.md",
+        "svelte": "security-best-practices/stacks/node.md",
+        "elixir": "security-best-practices/stacks/elixir.md",
+        "python": "security-best-practices/stacks/python.md",
+        "fastapi": "security-best-practices/stacks/python.md",
+        "django": "security-best-practices/stacks/python.md",
+        "flask": "security-best-practices/stacks/python.md",
+        "go": "security-best-practices/stacks/go.md"
+      }
+    },
+    "llm": {
+      "skill": "llm-integration",
+      "stack_files": {
+        "rails": "llm-integration/stacks/rails.md",
+        "node": "llm-integration/stacks/node.md",
+        "nextjs": "llm-integration/stacks/node.md",
+        "nuxt": "llm-integration/stacks/node.md",
+        "sveltekit": "llm-integration/stacks/node.md",
+        "svelte": "llm-integration/stacks/node.md",
+        "elixir": "llm-integration/stacks/elixir.md",
+        "python": "llm-integration/stacks/python.md",
+        "fastapi": "llm-integration/stacks/python.md",
+        "django": "llm-integration/stacks/python.md"
+      }
+    },
+    "rag": {
+      "skill": "rag-implementation",
+      "stack_files": {
+        "rails": "rag-implementation/stacks/rails.md",
+        "node": "rag-implementation/stacks/node.md",
+        "nextjs": "rag-implementation/stacks/node.md",
+        "nuxt": "rag-implementation/stacks/node.md",
+        "sveltekit": "rag-implementation/stacks/node.md",
+        "elixir": "rag-implementation/stacks/elixir.md",
+        "python": "rag-implementation/stacks/python.md",
+        "fastapi": "rag-implementation/stacks/python.md"
+      }
+    },
+    "mcp": {
+      "skill": "mcp-server-integration",
+      "stack_files": {
+        "rails": "mcp-server-integration/stacks/rails.md",
+        "node": "mcp-server-integration/stacks/node.md",
+        "nextjs": "mcp-server-integration/stacks/node.md",
+        "nuxt": "mcp-server-integration/stacks/node.md",
+        "sveltekit": "mcp-server-integration/stacks/node.md",
+        "elixir": "mcp-server-integration/stacks/elixir.md",
+        "python": "mcp-server-integration/stacks/python.md"
+      }
+    }
+  }
+}

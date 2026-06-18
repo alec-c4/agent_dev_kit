@@ -1,0 +1,22 @@
+---
+id: python
+label: Python
+language: python
+framework: python
+tooling:
+  test:
+  - pytest
+  lint:
+  - ruff check .
+  typecheck:
+  - mypy .
+  deps_audit:
+  - pip-audit
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+mcp_suggest: []
+dod_overlay:
+- id: pydantic_validation
+  label: External input validated with Pydantic or equivalent at API boundary
