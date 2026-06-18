@@ -1,0 +1,27 @@
+{
+  "id": "core",
+  "name": "Universal Core",
+  "description": "Stack detection, stack profiles, and universal testing. Required baseline before pattern packs.",
+  "version": "1.0",
+  "depends_on": [
+
+  ],
+  "skills": [
+    "stack-detection",
+    "stack-loader",
+    "testing-universal",
+    "stacks/django",
+    "stacks/elixir",
+    "stacks/fastapi",
+    "stacks/flask",
+    "stacks/go",
+    "stacks/nextjs",
+    "stacks/node",
+    "stacks/nuxt",
+    "stacks/python",
+    "stacks/rails",
+    "stacks/rust",
+    "stacks/svelte",
+    "stacks/sveltekit"
+  ]
+}

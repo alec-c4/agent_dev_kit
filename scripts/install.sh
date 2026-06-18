@@ -258,6 +258,23 @@ sync_cursor_user_rules_project() {
   bash "$REPO_DIR/scripts/kit" sync-rules "${args[@]}"
 }
 
+deploy_skills_pack() {
+  local scope="$1"
+  local also_claude="${2:-false}"
+  local sync_ag="${3:-false}"
+  local args=(--pack=core --scope="$scope")
+  [[ "$also_claude" == true ]] && args+=(--also-claude)
+  [[ "$sync_ag" == true ]] && args+=(--sync-antigravity-cli)
+  $DRY_RUN && args+=(--dry-run)
+  [[ "$MODE" == copy ]] && args+=(--copy)
+  log "Skills pack core → .agents/skills ($scope)"
+  if $DRY_RUN; then
+    echo "  [dry] deploy-skills.sh ${args[*]}"
+    return
+  fi
+  bash "$REPO_DIR/scripts/deploy-skills.sh" "${args[@]}"
+}
+
 want_claude() { [[ "$TARGET" == "claude" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }
 want_cursor() { [[ "$TARGET" == "cursor" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }
 want_codex() { [[ "$TARGET" == "codex" || "$TARGET" == "all" ]]; }
@@ -307,6 +324,12 @@ if want_antigravity; then
   else
     install_antigravity
   fi
+fi
+
+if [[ "$SCOPE" == "project" ]]; then
+  deploy_skills_pack project false false
+else
+  deploy_skills_pack global "$(want_claude && echo true || echo false)" "$(want_antigravity && echo true || echo false)"
 fi
 
 echo

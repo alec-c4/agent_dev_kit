@@ -53,3 +53,23 @@ print('wrote $json')
 "
   fi
 done
+
+# Pack manifests
+for yaml in "$KIT_DIR"/packs/*/manifest.yaml; do
+  [[ -f "$yaml" ]] || continue
+  json="${yaml%.yaml}.json"
+  if command -v ruby &>/dev/null; then
+    ruby -ryaml -rjson -e "
+      File.write('$json', JSON.pretty_generate(YAML.load_file('$yaml')))
+      puts 'wrote $json'
+    "
+  elif python3 -c "import yaml" 2>/dev/null; then
+    python3 -c "
+import json, yaml
+from pathlib import Path
+p = Path('$yaml')
+Path('$json').write_text(json.dumps(yaml.safe_load(p.read_text()), indent=2) + chr(10))
+print('wrote $json')
+"
+  fi
+done

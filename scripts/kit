@@ -8,6 +8,8 @@
 #   ./scripts/kit install [--target=cursor|claude|codex|antigravity|both|all] [--project] [--dry-run] [--force]
 #   ./scripts/kit compile
 #   ./scripts/kit validate [--phase=1]
+#   ./scripts/kit validate-skills --pack=core [--report=packs/core/validate-report.md]
+#   ./scripts/kit deploy-skills --pack=core [--scope=global|project|both]
 #   ./scripts/kit detect-stack [--write-profile] [path]
 #   ./scripts/kit sync-rules [--dry-run] [--rules-dir DIR ...]
 #   ./scripts/kit shell-info [--json]
@@ -50,6 +52,12 @@ case "$CMD" in
     ;;
   validate)
     exec "$RUNNER" "$KIT_DIR/scripts/validate-registry.sh" "$@"
+    ;;
+  validate-skills)
+    exec "$RUNNER" "$KIT_DIR/scripts/validate-skills.sh" "$@"
+    ;;
+  deploy-skills)
+    exec "$RUNNER" "$KIT_DIR/scripts/deploy-skills.sh" "$@"
     ;;
   detect-stack)
     exec "$RUNNER" "$KIT_DIR/scripts/detect-stack.sh" "$@"

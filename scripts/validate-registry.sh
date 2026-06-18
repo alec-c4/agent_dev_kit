@@ -107,6 +107,16 @@ if [[ "$PHASE" == "1" ]]; then
     ok "human comprehension gate (COMPREHENSION.md + handoff example)"
   fi
 
+  if [[ ! -f "$KIT_DIR/packs/core/manifest.json" ]]; then
+    err "missing packs/core/manifest.json — run: bash scripts/compile_registry.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/deploy-skills.sh" ]]; then
+    err "missing scripts/deploy-skills.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/validate-skills.sh" ]]; then
+    err "missing scripts/validate-skills.sh"
+  else
+    ok "core skills pack (packs/core + deploy-skills + validate-skills)"
+  fi
+
   if [[ ! -f "$KIT_DIR/scripts/kit" ]]; then
     err "missing scripts/kit CLI wrapper"
   elif [[ ! -f "$KIT_DIR/docs/shell-commands.md" ]]; then
