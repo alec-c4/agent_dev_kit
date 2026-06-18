@@ -71,7 +71,8 @@ if [[ "$PHASE" == "1" ]]; then
     done < <(jq -r '.stacks | keys[]' "$KIT_DIR/registry/stacks.json")
   fi
 
-  for skill in stack-detection stack-loader testing-universal intent-router feature fix plan review ship work-intake resolve-task; do
+  for skill in $(jq -r '.skills[] | select(startswith("stacks/") | not)' "$KIT_DIR/packs/core/manifest.json" 2>/dev/null); do
+    [[ -z "$skill" ]] && continue
     if [[ ! -f "$KIT_DIR/skills/$skill/SKILL.md" ]]; then
       err "missing core skill: skills/$skill/SKILL.md"
     else
@@ -119,8 +120,12 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing scripts/intake-work-item.sh"
   elif [[ ! -f "$KIT_DIR/scripts/sync-tracker-cache.sh" ]]; then
     err "missing scripts/sync-tracker-cache.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/validate-handoff.sh" ]]; then
+    err "missing scripts/validate-handoff.sh"
+  elif [[ ! -f "$KIT_DIR/skills/comprehension-check/SKILL.md" ]]; then
+    err "missing skills/comprehension-check/SKILL.md"
   else
-    ok "core skills pack (packs/core + deploy-skills + validate-skills + deploy-workflows + intake + sync-tracker)"
+    ok "core skills pack (packs/core + deploy + intake + sync-tracker + validate-handoff)"
   fi
 
   if [[ ! -f "$KIT_DIR/packs/patterns/manifest.json" ]]; then
@@ -320,6 +325,16 @@ if [[ -d "$FIXTURE_ELIXIR" ]]; then
     ok "detect_stack fixture elixir"
   else
     err "detect_stack fixture did not detect elixir"
+  fi
+fi
+
+# ── validate-handoff fixture ──────────────────────────────────────────────────
+HANDOFF_EXAMPLE="$KIT_DIR/docs/examples/work/GH-58-handoff.example.md"
+if [[ -f "$HANDOFF_EXAMPLE" ]]; then
+  if bash "$KIT_DIR/scripts/validate-handoff.sh" --file="$HANDOFF_EXAMPLE" --tier=standard >/dev/null 2>&1; then
+    ok "validate-handoff fixture (GH-58-handoff.example.md)"
+  else
+    err "validate-handoff fixture failed on GH-58-handoff.example.md"
   fi
 fi
 
