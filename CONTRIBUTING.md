@@ -22,7 +22,7 @@ Thank you for improving the kit. This repo is configuration and documentation fo
 
 Works from fish, zsh, or bash — see [docs/shell-commands.md](docs/shell-commands.md).
 
-CI (Phase 5+) will run [.github/workflows/validate.yml](.github/workflows/validate.yml).
+CI runs [.github/workflows/validate.yml](.github/workflows/validate.yml) on every push and PR.
 
 ## What to change where
 
