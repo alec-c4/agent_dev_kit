@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/alec-c4/agent_dev_kit/blob/master/CONTRIBUTING.md
+    about: Validation commands and where to change guidelines vs skills
+  - name: Architecture
+    url: https://github.com/alec-c4/agent_dev_kit/blob/master/docs/architecture.md
+    about: How guidelines, skills, and registry fit together

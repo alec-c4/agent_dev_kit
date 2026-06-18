@@ -1,0 +1,26 @@
+name: Label issues
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Ensure triage label exists
+        run: gh label create "triage" --color "fbca04" --description "Needs maintainer triage" 2>/dev/null || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Add triage label
+        run: gh issue edit "$NUMBER" --add-label "triage"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
