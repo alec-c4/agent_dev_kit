@@ -26,17 +26,30 @@ Classify every request before acting:
 
 ## Planning artifacts (`.ai/`)
 
-Store session planning files in the **target project** (not in this kit repo):
+Store session planning files in the **target project** (not in this kit repo). See [TRACKER.md](TRACKER.md) for `work_ref`, `spec_key`, and intake without MCP.
 
 ```
 .ai/
-  issue-{n}-analysis.md   # exploration + problem analysis
-  issue-{n}-spec.md       # current spec (always latest version)
-  archive/                # superseded spec versions
-    issue-{n}-spec.v1.0.md
-  issue-{n}-plan.md       # implementation plan (references spec AC IDs)
-  issue-{n}-verification.md # verifier agent report (tests, lint, docs)
-  pr-summary.md           # structured PR body draft
+  tracker.yaml              # optional — provider, url_template (see docs/examples/tracker.yaml.example)
+  specs/
+    export-csv-spec.md        # current spec (spec_key lineage)
+  archive/
+    export-csv-spec.v1.0.md
+  work/
+    GH-58-analysis.md         # intake for current task (work_ref)
+    GH-58-plan.md
+    GH-58-verification.md
+  pr-summary.md
+
+  # Legacy GitHub-numeric (still supported):
+  issue-42-spec.md
+  issue-58-plan.md
+
+  # No tracker:
+  task-analysis.md
+  task-spec.md
+  task-plan.md
+  task-verification.md
 ```
 
 Add `.ai/` to the target project's `.gitignore` unless the team commits plans intentionally.
@@ -47,20 +60,21 @@ See [.ai/README.md](../../.ai/README.md) for artifact naming. Worked examples: [
 
 ### 1. Analyze
 
-- Read the issue or user request.
+- Read the issue, ticket paste, or user request — see [TRACKER.md](TRACKER.md) intake ladder.
+- **No MCP/API required:** paste ticket title and body into `.ai/work/{work_ref}-analysis.md` (or legacy `issue-{n}-analysis.md`, or `task-analysis.md`).
+- Set **work_ref** (current task) and **spec_key** (feature lineage) in analysis header.
 - Detect stack (`registry/stacks.yaml`, `scripts/detect-stack.sh`).
 - Explore affected code.
-- Write `.ai/issue-{n}-analysis.md` (or `.ai/task-analysis.md` without issue number).
 
 ### 2. Spec
 
-- **New task:** create `.ai/issue-{n}-spec.md` at version **1.0** — [SPECS.md](SPECS.md).
-- **Fix or update:** open existing spec, bump version, Changelog, archive old file, actualize ACs.
+- **New task:** create spec at version **1.0** — `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-spec.md` — [SPECS.md](SPECS.md).
+- **Fix or update:** open existing spec by **spec_key**, bump version, Changelog, archive old file, actualize ACs.
 - **Present spec to the human. Wait for approval before plan or code.**
 
 ### 3. Plan
 
-- Produce `.ai/issue-{n}-plan.md` with phases, files, and links to spec AC IDs.
+- Produce `.ai/work/{work_ref}-plan.md` (or legacy `issue-{n}-plan.md`) with phases, files, and links to spec AC IDs.
 - Set **Detail** to match task size — see table below (default: **standard**).
 - **Present plan to the human. Wait for approval before production code.**
 
@@ -84,7 +98,8 @@ Plan template:
 # Plan: [name]
 
 **Detail:** standard
-**Spec:** issue-{n}-spec.md **v1.1** (approved)
+**Spec:** specs/export-csv-spec.md **v1.1** (approved)
+**Work ref:** GH-58
 
 ## Summary
 What and why.
@@ -133,7 +148,7 @@ Follow [GIT.md](GIT.md).
 - Implementation matches documentation
 - Spec ACs satisfied (if spec exists)
 
-Save report to `.ai/issue-{n}-verification.md`. **Do not commit while verdict is FAIL.**
+Save report to `.ai/work/{work_ref}-verification.md` (or legacy `issue-{n}-verification.md`, or `task-verification.md`). **Do not commit while verdict is FAIL.**
 
 ### 7. Review
 
@@ -158,6 +173,10 @@ See the developer's `unknown-tasks` rule when present.
 
 Before destructive, irreversible, or broad-scope actions, warn and confirm. See the developer's `request-validation` rule when present.
 
+## Intent routing (plain text vs slash commands)
+
+Users may describe tasks in natural language — **same workflow** as `/feature`, `/fix`, etc. Classify intent first; clarify if ambiguous; optional soft hint for commands. See [INTENT-ROUTING.md](INTENT-ROUTING.md).
+
 ## Tool-specific shortcuts (optional)
 
 Some tools expose workflow shortcuts that encode this document:
@@ -166,8 +185,9 @@ Some tools expose workflow shortcuts that encode this document:
 |------|-----------|-------|
 | Claude Code | Slash commands (`/feature`, `/fix`, …) | 2+ |
 | Cursor | Skills, rules, agent prompts | 1+ |
+| Any | Plain text → [INTENT-ROUTING.md](INTENT-ROUTING.md) | 1+ |
 
-Prefer guidelines directly when no shortcut exists.
+Prefer guidelines directly when no shortcut exists. **Do not require** slash commands for workflow.
 
 ## Definition of Done
 

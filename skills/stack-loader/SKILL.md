@@ -15,6 +15,7 @@ Use the **stack profile** as the source of truth for commands and skills. Guidel
 
 ```bash
 bash scripts/detect-stack.sh --write-profile
+# or from kit repo: ./scripts/kit detect-stack --write-profile
 ```
 
 **Cached:** `.claude/stack.profile.json`

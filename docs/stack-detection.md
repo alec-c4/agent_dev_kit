@@ -4,19 +4,19 @@ Detection is **declarative** in `registry/stacks.yaml` (signals only). Stack-spe
 
 ## Quick start
 
-```bash
-# From your application repo
-bash path/to/agent_dev_kit/scripts/detect-stack.sh --write-profile
+```text
+# From your application repo (any interactive shell)
+path/to/agent_dev_kit/scripts/kit detect-stack --write-profile
 cat .claude/stack.profile.json
 ```
 
-Requires: compiled `profile.json` files (`bash scripts/compile_registry.sh` from the kit repo).
+Requires: compiled `profile.json` files (`./scripts/kit compile` from the kit repo).
 
 ## Two-step flow
 
 | Step | What | Where |
 |------|------|-------|
-| 1 | Run detector | `scripts/detect-stack.sh` |
+| 1 | Run detector | `./scripts/kit detect-stack` |
 | 2 | Load stack skill + tooling | `skills/stacks/<id>/` |
 
 Read `skills/stack-detection/SKILL.md` and `skills/stack-loader/SKILL.md` for the full protocol.
@@ -56,8 +56,8 @@ Human-oriented context: `skills/stacks/rails/SKILL.md`.
 
 1. Add `skills/stacks/<id>/profile.yaml` + `SKILL.md`
 2. Add detection entry in `registry/stacks.yaml` with `stack_skill: stacks/<id>`
-3. Run `bash scripts/compile_registry.sh`
-4. Verify: `bash scripts/detect-stack.sh /path/to/sample-project`
+3. Run `./scripts/kit compile`
+4. Verify: `./scripts/kit detect-stack /path/to/sample-project`
 
 Framework-specific patterns go in **optional pack skills** (for example `rails-core-patterns`), not in guidelines or registry.
 

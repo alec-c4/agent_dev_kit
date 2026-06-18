@@ -25,11 +25,12 @@ Knowledge compounds when repeated mistakes become docs and docs become skills �
 
 ## What's included (Phase 1)
 
-- **8 guideline docs** — `docs/guidelines/` (universal workflow)
+- **9 guideline docs** — `docs/guidelines/` (universal workflow + tracker-agnostic intake)
 - **13 stack skills** — `skills/stacks/<id>/` (tooling, DoD, routing)
 - **3 core skills** — stack-detection, stack-loader, testing-universal
 - **Slim registry** — detection only + universal DoD
-- **Install script** — `scripts/install.sh --target=cursor|claude|both`
+- **Install script** — `./scripts/kit install --target=cursor|claude|both` (works from fish, zsh, bash)
+- **Cursor user-rules dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` (skip duplicate guidelines)
 
 Coming later: slash commands (Claude Code), pattern skill packs, hooks, CI.
 
@@ -39,12 +40,14 @@ Coming later: slash commands (Claude Code), pattern skill packs, hooks, CI.
 git clone https://github.com/alexey-poimtsev/claude_dev.git ~/Projects/agent_dev_kit
 cd ~/Projects/agent_dev_kit
 
-bash scripts/install.sh --dry-run --target=both
-bash scripts/install.sh --target=both
+./scripts/kit install --dry-run --target=both
+./scripts/kit install --target=both
 # or per tool:
-bash scripts/install.sh --target=cursor
-bash scripts/install.sh --target=claude
+./scripts/kit install --target=cursor
+./scripts/kit install --target=claude
 ```
+
+Kit scripts run with bash internally — your interactive shell (`$SHELL`) does not matter for `./scripts/kit`. See [docs/shell-commands.md](docs/shell-commands.md).
 
 Then open any project. The assistant reads **AGENTS.md** and loads guidelines for the task.
 
@@ -68,6 +71,7 @@ skills/stacks/<id>/ — technology-specific tooling and DoD
 
 | Doc | Purpose |
 |-----|---------|
+| [TRACKER.md](docs/guidelines/TRACKER.md) | work_ref, spec_key, intake without MCP |
 | [SPECS.md](docs/guidelines/SPECS.md) | Spec-first — acceptance criteria before code |
 | [Spec examples](docs/examples/specs/README.md) | Sample specs v1.0, v1.1, archive |
 | [WORKFLOW.md](docs/guidelines/WORKFLOW.md) | Issue → spec → plan → implement → verify → PR |
@@ -77,6 +81,7 @@ skills/stacks/<id>/ — technology-specific tooling and DoD
 | [REVIEW.md](docs/guidelines/REVIEW.md) | Security and DoD review |
 | [COMMITS.md](docs/guidelines/COMMITS.md) | Conventional commits |
 | [GIT.md](docs/guidelines/GIT.md) | Branching and merge policy |
+| [Shell commands](docs/shell-commands.md) | `./scripts/kit` from any shell |
 
 ## Architecture
 

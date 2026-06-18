@@ -50,16 +50,22 @@ Agent Dev Kit is **stack-agnostic** and **LLM-agnostic**. Universal rules live i
 
 ## Stack profile cache
 
-```bash
-bash scripts/detect-stack.sh --write-profile
-# → .claude/stack.profile.json
+```text
+./scripts/kit detect-stack --write-profile
+# → .claude/stack.profile.json (or project .claude/)
 ```
 
-After editing `skills/stacks/*/profile.yaml` or `registry/*.yaml`, run `bash scripts/compile_registry.sh`.
+After editing `skills/stacks/*/profile.yaml` or `registry/*.yaml`, run `./scripts/kit compile`.
 
 ## User rules
 
 Global Cursor rules and project rules override kit defaults when stricter.
+
+**Token dedup (Cursor):** `scripts/sync-cursor-user-rules.sh` scans user rules — see [cursor-user-rules.md](cursor-user-rules.md).
+
+**Tracker-agnostic intake:** [TRACKER.md](guidelines/TRACKER.md) — `.ai/` is source of truth; external tracker optional.
+
+**Shell:** Kit CLI `./scripts/kit` (bash inside) — [shell-commands.md](shell-commands.md). Interactive `$SHELL` syntax defers to user rules (`fish-shell.mdc`, etc.).
 
 ## Extending
 
