@@ -1,5 +1,6 @@
-# Verification: Fix CSV export UTF-8 / empty file (#58)
+# Verification: Fix CSV export UTF-8 / empty file
 
+**Work ref:** GH-58  
 **Agent:** verifier (fresh session)  
 **Verdict:** PASS  
 **Scope:** `feature/fix-csv-utf8` — `git diff main...HEAD`
@@ -21,7 +22,7 @@
 
 ## Spec conformance
 
-Spec: `.ai/issue-42-spec.md` **v1.1**
+Spec: `.ai/specs/export-csv-spec.md` **v1.1** (legacy: `issue-42-spec.md`)
 
 | AC | Status | Evidence |
 |----|--------|----------|

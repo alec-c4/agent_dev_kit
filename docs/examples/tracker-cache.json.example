@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "synced_at": "2026-06-18T12:00:00Z",
+  "provider": "github",
+  "query": "is:open assignee:@me",
+  "items": [
+    {
+      "work_ref": "GH-42",
+      "external_id": "42",
+      "title": "CSV export for record list",
+      "status": "open",
+      "url": "https://github.com/org/app/issues/42"
+    },
+    {
+      "work_ref": "GH-58",
+      "external_id": "58",
+      "title": "CSV export empty / wrong encoding",
+      "status": "open",
+      "url": "https://github.com/org/app/issues/58"
+    },
+    {
+      "work_ref": "LIN-ENG-77",
+      "external_id": "ENG-77",
+      "title": "Export button misaligned on mobile",
+      "status": "In Progress",
+      "url": "https://linear.app/acme/issue/ENG-77"
+    }
+  ]
+}

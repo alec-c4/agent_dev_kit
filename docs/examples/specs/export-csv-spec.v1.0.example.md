@@ -1,13 +1,15 @@
 # Spec: CSV export for record list
 
 **Document version:** 1.0  
-**Status:** superseded  
+**Status:** approved  
 **Task type:** new  
 **Spec key:** export-csv  
-**Work ref:** GH-42 (original feature)  
-**Superseded by:** 1.1 (2026-06-18, work ref GH-58)
+**Work ref:** GH-42  
+**Tracker link:** https://github.com/org/app/issues/42  
+**Supersedes:** —
 
-> Archived copy. Do not implement from this file. Current spec: `issue-42-spec.md` v1.1.
+Recommended path: `.ai/specs/export-csv-spec.md`  
+Legacy alias: `.ai/issue-42-spec.md` (same content)
 
 ## Changelog
 
@@ -40,3 +42,13 @@ Authenticated users can download the current filtered record list as a CSV file 
 
 - Column customization UI.
 - Background job for large exports (future issue).
+
+## Constraints
+
+- Must use existing `AuthorizationPolicy` for record access — no ad-hoc checks in the controller.
+- Must not add gems without human approval — use Ruby `CSV` stdlib.
+- Export must reuse the same scoped relation as the HTML index (no duplicate query logic in the controller).
+
+## Open questions
+
+- None (resolved before approval).

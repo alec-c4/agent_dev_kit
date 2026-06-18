@@ -1,0 +1,22 @@
+# Example: optional tracker config for a target project
+# Copy to .ai/tracker.yaml in your application repo.
+
+provider: github          # none | github | linear | jira
+work_ref_format: "GH-{n}" # used when human says "issue 42"
+spec_filename: "specs/{spec_key}-spec.md"
+work_filename: "work/{work_ref}-{kind}.md"
+url_template: "https://github.com/org/repo/issues/{id}"
+
+# Optional Phase 2 — local index of active tickets (gitignore this file in target projects)
+cache_file: ".ai/tracker-cache.json"
+cache_max_items: 50
+cache_statuses:             # provider-specific open states to include
+  - open
+
+# Intent routing UX (optional) — see docs/guidelines/INTENT-ROUTING.md
+ux_hints: true              # one-line tip for /feature etc. after plain-text workflow start
+
+# Linear example (uncomment and adjust):
+# provider: linear
+# work_ref_format: "LIN-{team}-{n}"
+# url_template: "https://linear.app/my-team/issue/{team}-{n}"

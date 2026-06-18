@@ -84,12 +84,14 @@ Classify every task before writing or editing a spec:
 | **Fix** (bug on existing feature) | Update existing spec for that feature/issue | Bump **patch** (1.0 → 1.1) |
 | **Update** (extend or change existing feature) | Actualize existing spec | Bump **minor** (1.0 → 1.1) or **major** (1.x → 2.0) if scope shifts |
 
-**Rule:** one feature area → one spec lineage (one issue or epic id). Fixes and updates **edit that spec**, they do not silently fork a second file.
+**Rule:** one feature area → one **spec_key** (spec lineage). Fixes and updates **edit that spec**, they do not silently fork a second file.
+
+See [TRACKER.md](TRACKER.md) for `work_ref` vs `spec_key` and tracker-agnostic intake.
 
 ### How to find the spec to update
 
-1. Same GitHub issue / ticket → `.ai/issue-{n}-spec.md`
-2. Follow-up task without issue → search `.ai/` for feature name or `related_issue`
+1. Same **spec_key** / feature lineage → `.ai/specs/{spec_key}-spec.md` (or legacy `.ai/issue-{n}-spec.md`)
+2. Follow-up task → search `.ai/` for `spec_key` in headers or `related_spec_key`
 3. No spec exists but code clearly implements a prior feature → create spec at current behaviour first (retroactive **1.0**), then bump for the fix/update
 
 ### Version numbering
@@ -108,7 +110,7 @@ Patch and minor both use 1.1, 1.2, … — pick the next number. Reserve **2.0+*
 
 1. Set `status: draft` until re-approved
 2. Add a **Changelog** entry (what changed and why)
-3. Archive the previous approved version → `.ai/archive/issue-{n}-spec.v{old}.md`
+3. Archive the previous approved version → `.ai/archive/{spec_key}-spec.v{old}.md` (legacy: `.ai/archive/issue-{n}-spec.v{old}.md`)
 4. Update **Acceptance criteria** — mark added/changed/removed ACs
 5. **Human re-approval** required before plan or code (same as new spec)
 
@@ -130,7 +132,7 @@ Optional for:
 
 ## Spec template
 
-Save as `.ai/issue-{n}-spec.md` (always the **current** version):
+Save as `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-spec.md` — always the **current** version:
 
 ```markdown
 # Spec: [feature or fix name]
@@ -138,7 +140,9 @@ Save as `.ai/issue-{n}-spec.md` (always the **current** version):
 **Document version:** 1.0
 **Status:** draft | approved
 **Task type:** new | fix | update
-**Issue:** #42 (or link)
+**Spec key:** export-csv
+**Work ref:** GH-42 | LIN-ENG-123 | adhoc-slug
+**Tracker link:** https://… (optional)
 **Supersedes:** — (or `1.0` — see archive)
 
 ## Changelog
@@ -189,7 +193,8 @@ In `.ai/*-plan.md`, reference spec **version** and AC IDs:
 
 ```markdown
 ## Spec
-issue-42-spec.md **v1.1** (approved)
+specs/export-csv-spec.md **v1.1** (approved)
+**Work ref:** GH-58
 
 ## Phase 1 — API endpoint
 - [ ] Add controller (covers AC-1, AC-2)

@@ -3,7 +3,9 @@
 **Document version:** 1.1  
 **Status:** approved  
 **Task type:** fix  
-**Issue:** #58 (fix for #42 feature)  
+**Spec key:** export-csv  
+**Work ref:** GH-58  
+**Tracker link:** https://github.com/org/app/issues/58  
 **Supersedes:** 1.0 — see [archive/issue-42-spec.v1.0.example.md](archive/issue-42-spec.v1.0.example.md)
 
 ## Changelog

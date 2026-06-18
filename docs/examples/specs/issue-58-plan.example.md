@@ -1,7 +1,8 @@
-# Plan: Fix CSV export UTF-8 / empty file (#58)
+# Plan: Fix CSV export UTF-8 / empty file
 
 **Detail:** standard  
-**Spec:** issue-42-spec.md **v1.1** (approved)
+**Work ref:** GH-58  
+**Spec:** specs/export-csv-spec.md **v1.1** (approved) — legacy alias `issue-42-spec.md`
 
 ## Stack
 
@@ -20,4 +21,4 @@ Detected from profile: `stacks/rails` (example)
 ## Success criteria
 
 - [ ] All AC-1–AC-6 from spec v1.1
-- [ ] Verification report in `.ai/issue-58-verification.md`
+- [ ] Verification report in `.ai/work/GH-58-verification.md` (legacy: `issue-58-verification.md`)
