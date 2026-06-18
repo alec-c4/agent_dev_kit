@@ -8,14 +8,19 @@ Thank you for improving the kit. This repo is configuration and documentation fo
 
 ```bash
 # After editing registry/*.yaml
-bash scripts/compile_registry.sh
+./scripts/kit compile
 
 # Registry validation
-bash scripts/validate-registry.sh --phase=1
+./scripts/kit validate --phase=1
+
+# Cursor user-rules dedup manifest
+./scripts/kit sync-rules --dry-run
 
 # Preview install
-bash scripts/install.sh --dry-run --target=both
+./scripts/kit install --dry-run --target=both
 ```
+
+Works from fish, zsh, or bash — see [docs/shell-commands.md](docs/shell-commands.md).
 
 CI (Phase 5+) will run [.github/workflows/validate.yml](.github/workflows/validate.yml).
 
@@ -39,7 +44,7 @@ See [docs/EXTENDING.md](docs/EXTENDING.md) and [docs/architecture.md](docs/archi
 
 - **Stack-specific content goes in skills** — not in guidelines, `CLAUDE.md`, or bloated registry YAML.
 - New stack: add `skills/stacks/<id>/` + detection line in `registry/stacks.yaml`.
-- Run `compile_registry.sh` after editing `registry/*.yaml` or `skills/stacks/*/profile.yaml`.
+- Run `./scripts/kit compile` after editing `registry/*.yaml` or `skills/stacks/*/profile.yaml`.
 - No secrets, API keys, or machine-specific paths in committed files.
 - Keep PRs focused — one concern per PR when possible.
 - **Personal CLAUDE.md additions** (auto-injected blocks from third-party tools, private MCP workflows, `<!-- tool:start/end -->` markers) must not be committed to the repo. They belong in a local-only file outside the kit, or behind a gitignore. The committed `CLAUDE.md` must stay universally applicable.
@@ -47,10 +52,10 @@ See [docs/EXTENDING.md](docs/EXTENDING.md) and [docs/architecture.md](docs/archi
 ## Install locally
 
 ```bash
-bash scripts/install.sh --dry-run --target=both
-bash scripts/install.sh --target=cursor
-bash scripts/install.sh --target=claude
-bash scripts/install.sh --target=both --project   # current repo
+./scripts/kit install --dry-run --target=both
+./scripts/kit install --target=cursor
+./scripts/kit install --target=claude
+./scripts/kit install --target=both --project   # current repo
 ```
 
 ## Questions
