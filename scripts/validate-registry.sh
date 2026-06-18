@@ -71,7 +71,7 @@ if [[ "$PHASE" == "1" ]]; then
     done < <(jq -r '.stacks | keys[]' "$KIT_DIR/registry/stacks.json")
   fi
 
-  for skill in stack-detection stack-loader testing-universal intent-router; do
+  for skill in stack-detection stack-loader testing-universal intent-router feature fix plan review ship; do
     if [[ ! -f "$KIT_DIR/skills/$skill/SKILL.md" ]]; then
       err "missing core skill: skills/$skill/SKILL.md"
     else
@@ -113,8 +113,10 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing scripts/deploy-skills.sh"
   elif [[ ! -f "$KIT_DIR/scripts/validate-skills.sh" ]]; then
     err "missing scripts/validate-skills.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/deploy-workflows.sh" ]]; then
+    err "missing scripts/deploy-workflows.sh"
   else
-    ok "core skills pack (packs/core + deploy-skills + validate-skills)"
+    ok "core skills pack (packs/core + deploy-skills + validate-skills + deploy-workflows)"
   fi
 
   if [[ ! -f "$KIT_DIR/scripts/kit" ]]; then
