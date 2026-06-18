@@ -3,12 +3,12 @@
 #
 # Usage:
 #   ./scripts/deploy-skills.sh --pack=core [--scope=global|project|both] [--dry-run]
-#   ./scripts/deploy-skills.sh --pack=core --scope=project --sync-antigravity-cli
-#   ./scripts/kit deploy-skills --pack=core --scope=both
+#   ./scripts/deploy-skills.sh --pack=rails --scope=project
+#   ./scripts/deploy-skills.sh --pack=core,rails --scope=both
 #
+# Resolves manifest depends_on (dependency packs deploy first).
 # Global:  ~/.agents/skills/<skill-path>/
 # Project: ./.agents/skills/<skill-path>/
-# Optional: ~/.gemini/antigravity-cli/skills/ (Antigravity CLI quirk)
 
 set -euo pipefail
 
@@ -20,6 +20,7 @@ DRY_RUN=false
 MODE="symlink"
 SYNC_AG_CLI=false
 ALSO_CLAUDE=false
+ORDERED_PACKS=()
 
 for arg in "$@"; do
   case "$arg" in
@@ -30,7 +31,7 @@ for arg in "$@"; do
     --sync-antigravity-cli) SYNC_AG_CLI=true ;;
     --also-claude) ALSO_CLAUDE=true ;;
     --help|-h)
-      sed -n '2,12p' "$0"
+      sed -n '2,13p' "$0"
       exit 0
       ;;
     *)
@@ -40,17 +41,46 @@ for arg in "$@"; do
   esac
 done
 
-[[ -n "$PACK" ]] || { echo "ERROR: --pack= required (e.g. core)" >&2; exit 1; }
+[[ -n "$PACK" ]] || { echo "ERROR: --pack= required (e.g. core or core,rails)" >&2; exit 1; }
 
 case "$SCOPE" in
   global|project|both) ;;
   *) echo "ERROR: --scope must be global, project, or both" >&2; exit 1 ;;
 esac
 
-MANIFEST="$KIT_DIR/packs/$PACK/manifest.json"
-[[ -f "$MANIFEST" ]] || { echo "ERROR: missing $MANIFEST — run: bash scripts/compile_registry.sh" >&2; exit 1; }
-
 log() { echo "  $*"; }
+
+find_manifest() {
+  local pack="$1"
+  if [[ -f "$KIT_DIR/packs/$pack/manifest.json" ]]; then
+    printf '%s' "$KIT_DIR/packs/$pack/manifest.json"
+  elif [[ -f "$KIT_DIR/packs/community/$pack/manifest.json" ]]; then
+    printf '%s' "$KIT_DIR/packs/community/$pack/manifest.json"
+  else
+    echo "ERROR: missing manifest for pack '$pack' — run: bash scripts/compile_registry.sh" >&2
+    return 1
+  fi
+}
+
+pack_listed() {
+  local pack="$1" p
+  for p in ${ORDERED_PACKS[@]+"${ORDERED_PACKS[@]}"}; do
+    [[ "$p" == "$pack" ]] && return 0
+  done
+  return 1
+}
+
+add_pack_order() {
+  local pack="$1"
+  pack_listed "$pack" && return 0
+  local manifest deps
+  manifest="$(find_manifest "$pack")" || exit 1
+  while IFS= read -r dep; do
+    [[ -z "$dep" ]] && continue
+    add_pack_order "$dep"
+  done < <(jq -r '.depends_on[]? // empty' "$manifest")
+  ORDERED_PACKS+=("$pack")
+}
 
 link_or_copy() {
   local src="$1" dest="$2"
@@ -73,20 +103,31 @@ deploy_skill_to() {
   local skill="$1" base="$2"
   local src="$KIT_DIR/skills/$skill"
   local dest="$base/$skill"
-  if [[ ! -f "$src/SKILL.md" ]]; then
-    echo "ERROR: missing skills/$skill/SKILL.md" >&2
-    exit 1
-  fi
+  [[ -f "$src/SKILL.md" ]] || { echo "ERROR: missing skills/$skill/SKILL.md" >&2; exit 1; }
   link_or_copy "$src" "$dest"
 }
 
-deploy_pack_to() {
-  local base="$1" label="$2"
-  log "Deploy pack '$PACK' → $label ($base)"
+deploy_manifest_to() {
+  local manifest="$1" base="$2" label="$3"
+  local pack_id
+  pack_id="$(jq -r '.id' "$manifest")"
+  log "Pack '$pack_id' → $label"
   while IFS= read -r skill; do
     [[ -z "$skill" ]] && continue
     deploy_skill_to "$skill" "$base"
-  done < <(jq -r '.skills[]' "$MANIFEST")
+  done < <(jq -r '.skills[]' "$manifest")
+}
+
+deploy_all_bases() {
+  local manifest="$1"
+  if [[ "$SCOPE" == "global" || "$SCOPE" == "both" ]]; then
+    deploy_manifest_to "$manifest" "$HOME/.agents/skills" "global ~/.agents/skills"
+    $SYNC_AG_CLI && deploy_manifest_to "$manifest" "$HOME/.gemini/antigravity-cli/skills" "Antigravity CLI"
+    $ALSO_CLAUDE && deploy_manifest_to "$manifest" "$HOME/.claude/skills" "Claude Code"
+  fi
+  if [[ "$SCOPE" == "project" || "$SCOPE" == "both" ]]; then
+    deploy_manifest_to "$manifest" "$(pwd)/.agents/skills" "project ./.agents/skills"
+  fi
 }
 
 echo "Agent Dev Kit deploy-skills"
@@ -96,20 +137,21 @@ echo "  mode:   $MODE"
 $DRY_RUN && echo "  dry-run: yes"
 echo
 
-if [[ "$SCOPE" == "global" || "$SCOPE" == "both" ]]; then
-  deploy_pack_to "$HOME/.agents/skills" "global ~/.agents/skills"
-  if $SYNC_AG_CLI; then
-    deploy_pack_to "$HOME/.gemini/antigravity-cli/skills" "Antigravity CLI"
-  fi
-  if $ALSO_CLAUDE; then
-    deploy_pack_to "$HOME/.claude/skills" "Claude Code ~/.claude/skills"
-  fi
-fi
+IFS=',' read -ra REQUESTED <<< "$PACK"
+for p in "${REQUESTED[@]}"; do
+  p="${p// /}"
+  [[ -n "$p" ]] && add_pack_order "$p"
+done
 
-if [[ "$SCOPE" == "project" || "$SCOPE" == "both" ]]; then
-  deploy_pack_to "$(pwd)/.agents/skills" "project ./.agents/skills"
-fi
+for p in ${ORDERED_PACKS[@]+"${ORDERED_PACKS[@]}"}; do
+  manifest="$(find_manifest "$p")"
+  deploy_all_bases "$manifest"
+done
 
 echo
-log "Done. Restart Codex / Antigravity / Claude Code to refresh skill discovery."
-log "Validate: ./scripts/kit validate-skills --pack=$PACK"
+if ((${#ORDERED_PACKS[@]} > 0)); then
+  log "Done (${#ORDERED_PACKS[@]} pack(s): ${ORDERED_PACKS[*]})"
+else
+  log "Done (no packs resolved)"
+fi
+log "Validate: ./scripts/kit validate-skills --pack=<id>"

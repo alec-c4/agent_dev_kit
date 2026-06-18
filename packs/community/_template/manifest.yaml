@@ -1,0 +1,15 @@
+# Community pack template — copy to packs/community/<your-pack-id>/manifest.yaml
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: my-community-pack
+name: My Community Pack
+description: Replace with your pack description.
+version: "0.1.0"
+depends_on:
+  - core
+
+skills:
+  - my-community-skill
+
+maintainer: your-github-handle
+docs: https://github.com/your-org/your-repo

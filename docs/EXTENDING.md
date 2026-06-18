@@ -64,11 +64,16 @@ topics:
 
 Stack-specific topic content lives under `skills/` — not in guidelines.
 
-## Add a pack (install, Phase 2+)
+## Add a pack (install)
 
-1. Create `packs/my-pack/manifest.json` with `depends_on: ["core"]` and a `skills` list.
+1. Create `packs/my-pack/manifest.yaml` with `depends_on: ["core"]` and a `skills` list.
 2. Add skills under `skills/`.
-3. Run `./scripts/kit install --pack=my-pack` (Phase 2+).
+3. Run `./scripts/kit compile` and `./scripts/kit validate-skills --pack=my-pack`.
+4. Install: `./scripts/kit install --pack=core,my-pack` or `./scripts/kit deploy-skills --pack=my-pack`.
+
+Community packs: copy [packs/community/_template/](packs/community/_template/) → `packs/community/<id>/`.
+
+Official stack packs: `rails`, `node`, `python`, `go`, `elixir` — see [packs/README.md](../packs/README.md).
 
 ## Project-level overrides
 

@@ -1,0 +1,16 @@
+{
+  "id": "rails",
+  "name": "Rails Pack",
+  "description": "Rails 8 patterns, Hotwire, Inertia, and RSpec/Minitest testing skills.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "rails-core-patterns",
+    "rails-testing-rspec",
+    "rails-testing-minitest",
+    "hotwire",
+    "inertia"
+  ]
+}

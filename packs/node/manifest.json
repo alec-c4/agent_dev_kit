@@ -1,0 +1,15 @@
+{
+  "id": "node",
+  "name": "Frontend / Node Pack",
+  "description": "Next.js, Nuxt, SvelteKit, and Svelte SPA patterns.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "nextjs-patterns",
+    "nuxt-patterns",
+    "sveltekit-patterns",
+    "svelte-patterns"
+  ]
+}

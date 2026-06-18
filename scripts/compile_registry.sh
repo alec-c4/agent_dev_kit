@@ -54,9 +54,10 @@ print('wrote $json')
   fi
 done
 
-# Pack manifests
-for yaml in "$KIT_DIR"/packs/*/manifest.yaml; do
+# Pack manifests (official + community; skip template)
+for yaml in "$KIT_DIR"/packs/*/manifest.yaml "$KIT_DIR"/packs/community/*/manifest.yaml; do
   [[ -f "$yaml" ]] || continue
+  [[ "$yaml" == *"/_template/"* ]] && continue
   json="${yaml%.yaml}.json"
   if command -v ruby &>/dev/null; then
     ruby -ryaml -rjson -e "
