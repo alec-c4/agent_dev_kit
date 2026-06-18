@@ -1,0 +1,42 @@
+name: Validate
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler: none
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements-detect.txt
+
+      - name: Install system and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          pip install -r scripts/requirements-detect.txt
+
+      - name: Compile registry
+        run: ./scripts/kit compile
+
+      - name: Validate kit (phase 1)
+        run: ./scripts/kit validate --phase=1
+
+      - name: Validate core skills pack
+        run: ./scripts/kit validate-skills --pack=core
