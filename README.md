@@ -26,21 +26,49 @@ Knowledge compounds when repeated mistakes become docs and docs become skills �
 
 See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge order.
 
-## What's included (Phase 1)
+## What's included
 
-- **9 guideline docs** — `docs/guidelines/` (universal workflow + tracker-agnostic intake + comprehension gate)
-- **13 stack skills** — `skills/stacks/<id>/` (tooling, DoD, routing)
-- **4 core skills** — stack-detection, stack-loader, testing-universal, intent-router
-- **5 workflow shortcuts** — feature, fix, plan, review, ship, resolve-task
-- **work-intake** — paste or `gh` → `.ai/work/{ref}-analysis.md`
-- **Slim registry** — detection only + universal DoD
-- **Install script** — `./scripts/kit install --target=cursor|claude|codex|antigravity|both|all`
-- **Tool adapters** — Codex (`~/.codex/AGENTS.md`), Antigravity (`~/.gemini/` + GEMINI.md) — Phase 1.6
-- **Cursor user-rules dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` (skip duplicate guidelines)
+Ready to install and use today:
 
-- **Core skills pack** — `packs/core/` (24 skills) → `./scripts/kit deploy-skills --pack=core`
-- **Patterns pack** — `packs/patterns/` (15 skills) → `./scripts/kit deploy-skills --pack=patterns` (depends on core)
-- **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human)
+**Guidelines** — 11 docs in `docs/guidelines/` (workflow, specs, tracker-agnostic intake, comprehension gate, testing, review, git, commits).
+
+**Skill packs** (deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`):
+
+| Pack | Skills | Role |
+|------|--------|------|
+| [core](packs/core/) | 25 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, resolve-task |
+| [patterns](packs/patterns/) | 15 | Framework patterns (Rails, Next.js, Django, Elixir, Go, …) |
+| [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
+
+**Tracker workflow** — paste or `gh` intake → `.ai/work/{ref}-analysis.md`; optional `./scripts/kit sync-tracker` for a local issue index. See [TRACKER.md](docs/guidelines/TRACKER.md).
+
+**Kit CLI** — `./scripts/kit` for install, compile, validate, detect-stack, deploy-skills, deploy-workflows, intake, sync-tracker. See [shell-commands.md](docs/shell-commands.md).
+
+**Tool adapters** — Cursor rules, Claude Code (`CLAUDE.md`), Codex (`~/.codex/AGENTS.md`), Antigravity (`GEMINI.md` + `.agents/`). See [tool-adapters.md](docs/tool-adapters.md).
+
+**Claude Code agents** — `agents/` personas (developer, architect, auditor, explore, orchestrator).
+
+**Registry & validation** — slim detection registry, universal DoD, `./scripts/kit validate` (CI on push).
+
+**Cursor dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` skips guidelines already in your user rules.
+
+**Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human sign-off in PR).
+
+## On the queue
+
+Not shipped yet; planned next:
+
+| Item | Notes |
+|------|-------|
+| **comprehension-check skill** | Generate and validate Q&A from handoff; optional hook later |
+| **Hooks** | Shared shell hooks for Claude Code, Cursor, and Antigravity (secrets, branch protection, format) |
+| **Review gate** | Opt-in `.claude/review-passed` / `.cursor/review-passed` before commit |
+| **Copilot instructions** | `.github/instructions/` pattern-scoped rules |
+| **Stack packs** | Dedicated `packs/rails`, `node`, `python`, `go` + community template |
+| **Docs polish** | Full installation guide, hooks reference, project scaffolds |
+| **Linear / Jira cache** | `sync-tracker` today supports GitHub only; other providers via paste/export |
+
+Track implementation outside this repo (not committed here).
 
 ## Quick start
 
