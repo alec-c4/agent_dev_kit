@@ -21,6 +21,7 @@ skills:
   - work-intake
   - resolve-task
   - tracker-sync
+  - comprehension-check
   # Stack profiles (tooling + DoD overlay per stack)
   - stacks/django
   - stacks/elixir

@@ -48,7 +48,7 @@ Execute all gates from the chosen workflow:
 2. **Plan** — `.ai/work/{work_ref}-plan.md`; approve before production code
 3. **Branch** — `feature/` or `fix/` per [GIT.md](../../docs/guidelines/GIT.md)
 4. **TDD** — [TESTING.md](../../docs/guidelines/TESTING.md) + stack profile
-5. **Comprehension** — when tier ≥ standard ([COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md))
+5. **Comprehension** — when tier ≥ standard ([comprehension-check](../comprehension-check/SKILL.md), [COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md))
 6. **Verification** — **new agent session** ([VERIFICATION.md](../../docs/guidelines/VERIFICATION.md))
 7. **Review** — [REVIEW.md](../../docs/guidelines/REVIEW.md)
 8. **PR** — `.ai/pr-summary.md`; confirm before push ([ship](../ship/SKILL.md) checklist)

@@ -19,6 +19,7 @@
     "work-intake",
     "resolve-task",
     "tracker-sync",
+    "comprehension-check",
     "stacks/django",
     "stacks/elixir",
     "stacks/fastapi",

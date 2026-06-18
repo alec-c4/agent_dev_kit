@@ -36,7 +36,7 @@ Ready to install and use today:
 
 | Pack | Skills | Role |
 |------|--------|------|
-| [core](packs/core/) | 25 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, resolve-task |
+| [core](packs/core/) | 26 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
 | [patterns](packs/patterns/) | 15 | Framework patterns (Rails, Next.js, Django, Elixir, Go, …) |
 | [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
 
@@ -60,7 +60,6 @@ Not shipped yet; planned next:
 
 | Item | Notes |
 |------|-------|
-| **comprehension-check skill** | Generate and validate Q&A from handoff; optional hook later |
 | **Hooks** | Shared shell hooks for Claude Code, Cursor, and Antigravity (secrets, branch protection, format) |
 | **Review gate** | Opt-in `.claude/review-passed` / `.cursor/review-passed` before commit |
 | **Copilot instructions** | `.github/instructions/` pattern-scoped rules |

@@ -21,7 +21,7 @@ Follow [WORKFLOW.md](../../docs/guidelines/WORKFLOW.md) standard feature flow:
 3. **Plan** — `.ai/work/{work_ref}-plan.md` with Detail level (minimal | standard | detailed). **Wait for approval** before production code.
 4. **Branch** — `feature/<short-name>` per [GIT.md](../../docs/guidelines/GIT.md).
 5. **Implement** — TDD per [TESTING.md](../../docs/guidelines/TESTING.md) and stack profile.
-6. **Comprehension** — handoff + Q&A + human sign-off ([COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md)) when tier ≥ standard.
+6. **Comprehension** — [comprehension-check](../comprehension-check/SKILL.md): handoff + Q&A + human sign-off ([COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md)) when tier ≥ standard.
 7. **Verification** — **new agent session** ([VERIFICATION.md](../../docs/guidelines/VERIFICATION.md)); save `.ai/work/{work_ref}-verification.md`.
 8. **Review** — [REVIEW.md](../../docs/guidelines/REVIEW.md).
 9. **PR** — draft `.ai/pr-summary.md`; open PR with test plan.

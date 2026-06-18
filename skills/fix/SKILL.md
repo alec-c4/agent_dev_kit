@@ -21,7 +21,7 @@ Follow [WORKFLOW.md](../../docs/guidelines/WORKFLOW.md):
 3. **Plan** — use **minimal** or **standard** detail in `.ai/work/{work_ref}-plan.md` as appropriate.
 4. **Branch** — `fix/<short-name>` per [GIT.md](../../docs/guidelines/GIT.md).
 5. **Implement** — failing test first ([TESTING.md](../../docs/guidelines/TESTING.md)).
-6. **Comprehension** — when tier ≥ standard ([COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md)).
+6. **Comprehension** — when tier ≥ standard ([comprehension-check](../comprehension-check/SKILL.md), [COMPREHENSION.md](../../docs/guidelines/COMPREHENSION.md)).
 7. **Verification** — new session ([VERIFICATION.md](../../docs/guidelines/VERIFICATION.md)).
 8. **Review** — [REVIEW.md](../../docs/guidelines/REVIEW.md).
 9. **PR** — `.ai/pr-summary.md`.

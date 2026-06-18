@@ -142,14 +142,13 @@ Comprehension runs **after** code is ready and **before** the verifier agent. Th
 
 For **strict** tier or every Nth task, update `.ai/project-map.md` — modules, data stores, entry points. Human **edits** the map; agent proposes diff.
 
-Phase 2 may add a skill `comprehension-check` to generate Q&A. Phase 3 may add an opt-in hook blocking commit without sign-off.
+Phase 2 adds skill `comprehension-check` and `validate-handoff.sh`. Phase 3 may add an opt-in hook blocking commit without sign-off.
 
-## Phase 2 automation
+## Automation
 
-| Component | Role |
-|-----------|------|
-| `skills/comprehension-check/SKILL.md` | Generate Q&A; validate answers against spec |
-| `.ai/tracker.yaml` | `comprehension_gate: minimal\|standard\|strict` |
-| Hook (opt-in) | Require `Signed:` in handoff before `git commit` |
-
-Until Phase 2, follow this guideline manually in chat and in `.ai/work/*-handoff.md`.
+| Component | Status | Role |
+|-----------|--------|------|
+| `skills/comprehension-check/SKILL.md` | shipped | Generate Q&A; validate human answers against spec |
+| `scripts/validate-handoff.sh` | shipped | Structural handoff checks (`./scripts/kit validate-handoff`) |
+| `.ai/tracker.yaml` | shipped | `comprehension_gate: minimal\|standard\|strict` |
+| Hook (opt-in) | planned | Require `Signed:` in handoff before `git commit` |

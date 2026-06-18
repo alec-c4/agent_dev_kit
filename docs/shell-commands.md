@@ -27,6 +27,7 @@ From the kit repo root (works in fish, zsh, bash):
 Ticket title and body
 EOF
 ./scripts/kit sync-tracker --dry-run
+./scripts/kit validate-handoff GH-58 --file=docs/examples/work/GH-58-handoff.example.md
 ./scripts/kit detect-stack --write-profile
 ./scripts/kit sync-rules
 ./scripts/kit shell-info
