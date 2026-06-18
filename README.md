@@ -37,7 +37,7 @@ Ready to install and use today:
 | Pack | Skills | Role |
 |------|--------|------|
 | [core](packs/core/) | 32 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
-| [patterns](packs/patterns/) | 30 | Framework and DevOps patterns (Rails variants, Flutter, Docker, …) |
+| [patterns](packs/patterns/) | 25 | Framework and DevOps patterns (Flutter, Docker, Svelte, …) |
 | [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
 
 **Stack packs** (optional slices — see [packs/README.md](packs/README.md)): `rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter`. Install with `./scripts/kit install --pack=core,rails`.
