@@ -3,7 +3,9 @@
 **Document version:** 1.0  
 **Status:** approved  
 **Task type:** new  
-**Issue:** #42  
+**Spec key:** export-csv  
+**Work ref:** GH-42  
+**Tracker link:** https://github.com/org/app/issues/42  
 **Supersedes:** —
 
 ## Changelog
