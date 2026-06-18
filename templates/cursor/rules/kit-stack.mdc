@@ -1,0 +1,13 @@
+---
+description: Kit stack detection — read registry before assuming test/lint commands.
+globs: "{Gemfile,package.json,pyproject.toml,go.mod,mix.exs,Cargo.toml}"
+alwaysApply: false
+---
+
+# Kit stack detection
+
+Never assume stack or test runner. Run detect-stack, then read `skills/stacks/<id>/profile.yaml`.
+
+Details: [docs/stack-detection.md](../agent_dev_kit/docs/stack-detection.md)
+
+User stack-specific rules (Rails, Svelte, etc.) override kit defaults.

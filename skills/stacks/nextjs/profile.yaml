@@ -1,0 +1,31 @@
+---
+id: nextjs
+label: Next.js
+language: typescript
+framework: nextjs
+tooling:
+  test:
+  - npm test
+  - npx vitest run
+  - npx jest
+  lint:
+  - npx eslint .
+  - npx biome check .
+  typecheck:
+  - npx tsc --noEmit
+  security:
+  - npm audit
+  deps_audit:
+  - npm audit --audit-level=high
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - nextjs-patterns
+mcp_suggest: []
+dod_overlay:
+- id: server_client_boundary
+  label: Server-only secrets and data fetching stay in Server Components / route handlers
+- id: no_any_public_api
+  label: No untyped `any` in public API types without justification

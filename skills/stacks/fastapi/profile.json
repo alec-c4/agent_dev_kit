@@ -1,0 +1,38 @@
+{
+  "id": "fastapi",
+  "label": "FastAPI",
+  "language": "python",
+  "framework": "fastapi",
+  "tooling": {
+    "test": [
+      "pytest"
+    ],
+    "lint": [
+      "ruff check ."
+    ],
+    "typecheck": [
+      "mypy ."
+    ],
+    "deps_audit": [
+      "pip-audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "fastapi-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "pydantic_validation",
+      "label": "Request/response models use Pydantic; no raw dict bodies in routes"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+---
+id: go
+label: Go
+language: go
+framework: go
+tooling:
+  test:
+  - go test ./...
+  lint:
+  - golangci-lint run
+  security:
+  - govulncheck ./...
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - go-service-patterns
+mcp_suggest: []
+dod_overlay:
+- id: context_timeouts
+  label: Outbound calls and DB operations use context timeouts
+- id: error_handling
+  label: Errors wrapped and mapped to HTTP status — not swallowed

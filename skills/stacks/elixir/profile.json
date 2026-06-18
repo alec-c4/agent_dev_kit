@@ -1,0 +1,46 @@
+{
+  "id": "elixir",
+  "label": "Elixir / Phoenix",
+  "language": "elixir",
+  "framework": "phoenix",
+  "tooling": {
+    "test": [
+      "mix test"
+    ],
+    "lint": [
+      "mix format --check-formatted",
+      "mix credo --strict"
+    ],
+    "security": [
+      "mix deps.audit"
+    ],
+    "deps_audit": [
+      "mix hex.audit"
+    ],
+    "optional": [
+      "mix dialyzer"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "elixir-phoenix-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "context_plugs",
+      "label": "Auth and tenant scope set in plugs before controller actions"
+    },
+    {
+      "id": "ecto_preload",
+      "label": "Associations preloaded for list endpoints — no N+1 in templates/JSON"
+    }
+  ]
+}

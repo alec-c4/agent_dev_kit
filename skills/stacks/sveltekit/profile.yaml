@@ -1,0 +1,24 @@
+---
+id: sveltekit
+label: SvelteKit
+language: typescript
+framework: sveltekit
+tooling:
+  test:
+  - npm test
+  - npx vitest run
+  lint:
+  - npm run check
+  - npx eslint .
+  deps_audit:
+  - npm audit
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - sveltekit-patterns
+mcp_suggest: []
+dod_overlay:
+- id: server_client_boundary
+  label: Sensitive logic in +page.server / hooks.server, not client-only

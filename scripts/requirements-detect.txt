@@ -1,0 +1,2 @@
+# Optional dependency for scripts/detect-stack.sh
+pyyaml>=6.0

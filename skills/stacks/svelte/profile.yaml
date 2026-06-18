@@ -1,0 +1,24 @@
+---
+id: svelte
+label: Svelte (SPA / Vite)
+language: typescript
+framework: svelte
+tooling:
+  test:
+  - npm test
+  - npx vitest run
+  lint:
+  - npm run check
+  - npx eslint .
+  deps_audit:
+  - npm audit
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - svelte-patterns
+mcp_suggest: []
+dod_overlay:
+- id: no_secrets_in_client
+  label: API keys and secrets not in client-side stores or env exposed to Vite bundle

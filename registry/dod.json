@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "universal": [
+    {
+      "id": "tests_happy_and_sad",
+      "label": "Tests cover happy path and sad paths (nil, invalid, unauthorized, boundary)"
+    },
+    {
+      "id": "no_secrets",
+      "label": "No hardcoded credentials, tokens, or API keys"
+    },
+    {
+      "id": "linter_clean",
+      "label": "Linter passes on changed files (commands from stack profile)"
+    },
+    {
+      "id": "security_scan",
+      "label": "Security / dependency scan passes when stack profile defines tooling.security or deps_audit"
+    },
+    {
+      "id": "no_commented_code",
+      "label": "No commented-out code left in the diff"
+    },
+    {
+      "id": "types_correct",
+      "label": "Types correct where applicable (per stack profile tooling.typecheck)"
+    },
+    {
+      "id": "authorization_checked",
+      "label": "Authorization verified before data access on protected resources"
+    },
+    {
+      "id": "business_logic_layer",
+      "label": "Business logic not in views/templates/handlers only — service layer used"
+    }
+  ]
+}

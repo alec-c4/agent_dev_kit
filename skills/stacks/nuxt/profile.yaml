@@ -1,0 +1,25 @@
+---
+id: nuxt
+label: Nuxt.js
+language: typescript
+framework: nuxt
+tooling:
+  test:
+  - npm test
+  - npx vitest run
+  lint:
+  - npx eslint .
+  typecheck:
+  - npx nuxi typecheck
+  deps_audit:
+  - npm audit
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - nuxt-patterns
+mcp_suggest: []
+dod_overlay:
+- id: server_client_boundary
+  label: Server routes do not leak secrets to client bundles

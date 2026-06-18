@@ -1,0 +1,65 @@
+{
+  "id": "rails",
+  "label": "Ruby on Rails",
+  "language": "ruby",
+  "framework": "rails",
+  "tooling": {
+    "test": [
+      "bundle exec rspec",
+      "bundle exec rails test"
+    ],
+    "lint": [
+      "bundle exec standardrb",
+      "bundle exec rubocop"
+    ],
+    "security": [
+      "bundle exec brakeman -q"
+    ],
+    "deps_audit": [
+      "bundle audit check"
+    ],
+    "optional": [
+      "bundle exec i18n-tasks health"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "rails-core-patterns"
+    ],
+    "if_spec_dir": [
+      "rails-testing-rspec"
+    ],
+    "if_test_dir": [
+      "rails-testing-minitest"
+    ],
+    "if_gem": {
+      "inertia_rails": [
+        "inertia"
+      ],
+      "turbo-rails": [
+        "hotwire"
+      ]
+    }
+  },
+  "mcp_suggest": [
+    "rails-mcp"
+  ],
+  "dod_overlay": [
+    {
+      "id": "no_n_plus_one",
+      "label": "No N+1 queries — no unscoped iteration triggering per-row DB loads"
+    },
+    {
+      "id": "brakeman_clean",
+      "label": "Brakeman reports no new high-confidence warnings"
+    },
+    {
+      "id": "i18n_user_strings",
+      "label": "User-visible strings use i18n where the project uses i18n"
+    }
+  ]
+}

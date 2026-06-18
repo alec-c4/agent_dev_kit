@@ -1,0 +1,37 @@
+{
+  "id": "node",
+  "label": "Node.js / TypeScript",
+  "language": "typescript",
+  "framework": "node",
+  "tooling": {
+    "test": [
+      "npm test",
+      "npx vitest run",
+      "npx jest"
+    ],
+    "lint": [
+      "npx eslint ."
+    ],
+    "typecheck": [
+      "npx tsc --noEmit"
+    ],
+    "deps_audit": [
+      "npm audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "no_any_public_api",
+      "label": "No untyped `any` in public API types without justification"
+    }
+  ]
+}

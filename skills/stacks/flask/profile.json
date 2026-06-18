@@ -1,0 +1,26 @@
+{
+  "id": "flask",
+  "label": "Flask",
+  "language": "python",
+  "framework": "flask",
+  "tooling": {
+    "test": [
+      "pytest"
+    ],
+    "lint": [
+      "ruff check ."
+    ],
+    "deps_audit": [
+      "pip-audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ]
+  },
+  "mcp_suggest": [
+
+  ]
+}

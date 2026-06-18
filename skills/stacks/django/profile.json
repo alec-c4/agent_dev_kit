@@ -1,0 +1,36 @@
+{
+  "id": "django",
+  "label": "Django",
+  "language": "python",
+  "framework": "django",
+  "tooling": {
+    "test": [
+      "pytest",
+      "python manage.py test"
+    ],
+    "lint": [
+      "ruff check ."
+    ],
+    "deps_audit": [
+      "pip-audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "django-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "orm_optimization",
+      "label": "Querysets use select_related / prefetch_related where lists are rendered"
+    }
+  ]
+}
