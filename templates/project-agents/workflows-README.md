@@ -1,5 +1,15 @@
 # Project workflows
 
-Antigravity slash workflows land here in Phase 2 (for example `feature.md`, `fix.md`).
+Antigravity slash workflows in this directory mirror Claude Code `/feature`, `/fix`, etc.
 
-Each file encodes the same steps as [docs/guidelines/WORKFLOW.md](../../docs/guidelines/WORKFLOW.md). Plain text requests use [INTENT-ROUTING.md](../../docs/guidelines/INTENT-ROUTING.md) until workflows exist.
+Install:
+
+```bash
+./scripts/kit deploy-workflows --scope=project
+# or
+./scripts/kit install --target=antigravity --project
+```
+
+Source of truth: `skills/{feature,fix,plan,review,ship}/SKILL.md` in the kit repo.
+
+Plain text requests use [intent-router](../../skills/intent-router/SKILL.md) or [INTENT-ROUTING.md](../../docs/guidelines/INTENT-ROUTING.md) — same steps as workflows.

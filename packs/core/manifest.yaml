@@ -13,6 +13,11 @@ skills:
   - stack-loader
   - testing-universal
   - intent-router
+  - feature
+  - fix
+  - plan
+  - review
+  - ship
   # Stack profiles (tooling + DoD overlay per stack)
   - stacks/django
   - stacks/elixir

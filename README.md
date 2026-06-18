@@ -31,12 +31,13 @@ See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge o
 - **9 guideline docs** — `docs/guidelines/` (universal workflow + tracker-agnostic intake + comprehension gate)
 - **13 stack skills** — `skills/stacks/<id>/` (tooling, DoD, routing)
 - **4 core skills** — stack-detection, stack-loader, testing-universal, intent-router
+- **5 workflow shortcuts** — feature, fix, plan, review, ship (`/feature`, `$feature`, `.agents/workflows/`)
 - **Slim registry** — detection only + universal DoD
 - **Install script** — `./scripts/kit install --target=cursor|claude|codex|antigravity|both|all`
 - **Tool adapters** — Codex (`~/.codex/AGENTS.md`), Antigravity (`~/.gemini/` + GEMINI.md) — Phase 1.6
 - **Cursor user-rules dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` (skip duplicate guidelines)
 
-- **Core skills pack** — `packs/core/` (17 skills) → `./scripts/kit deploy-skills --pack=core`
+- **Core skills pack** — `packs/core/` (22 skills) → `./scripts/kit deploy-skills --pack=core`
 - **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human)
 
 ## Quick start

@@ -7,16 +7,30 @@ Antigravity loads `GEMINI.md` and `AGENTS.md` at session start. **In Antigravity
 ## Quick routing
 
 1. Read [AGENTS.md](AGENTS.md) for workflow and guidelines index.
-2. Classify intent — [docs/guidelines/INTENT-ROUTING.md](docs/guidelines/INTENT-ROUTING.md) (plain text and workflows share one pipeline).
-3. Non-trivial task: spec first — [docs/guidelines/SPECS.md](docs/guidelines/SPECS.md).
-4. Detect stack: `./scripts/kit detect-stack --write-profile` → load `skills/stacks/<id>/`.
-5. Task complete → verifier session — [docs/guidelines/VERIFICATION.md](docs/guidelines/VERIFICATION.md).
+2. **Plain text** → [intent-router](skills/intent-router/SKILL.md) or [INTENT-ROUTING.md](docs/guidelines/INTENT-ROUTING.md).
+3. **Workflow slash** → `.agents/workflows/*.md` (table below) — same pipeline as NL.
+4. Non-trivial task: spec first — [docs/guidelines/SPECS.md](docs/guidelines/SPECS.md).
+5. Detect stack: `./scripts/kit detect-stack --write-profile` → load `skills/stacks/<id>/`.
+6. Task complete → verifier session — [docs/guidelines/VERIFICATION.md](docs/guidelines/VERIFICATION.md).
+
+## Workflows
+
+Deployed to `./.agents/workflows/` via `./scripts/kit install --target=antigravity --project` or `./scripts/kit deploy-workflows`.
+
+| Workflow | Source | Same as Claude |
+|----------|--------|----------------|
+| `feature` | [skills/feature/SKILL.md](skills/feature/SKILL.md) | `/feature` |
+| `fix` | [skills/fix/SKILL.md](skills/fix/SKILL.md) | `/fix` |
+| `plan` | [skills/plan/SKILL.md](skills/plan/SKILL.md) | `/plan` |
+| `review` | [skills/review/SKILL.md](skills/review/SKILL.md) | `/review` |
+| `ship` | [skills/ship/SKILL.md](skills/ship/SKILL.md) | `/ship` |
+
+Codex uses `$feature`, `$fix`, … from `.agents/skills/` after `./scripts/kit deploy-skills --pack=core`.
 
 ## Antigravity-specific
 
 - **Manager vs Editor:** use Manager for parallel or long-running tasks; Editor for synchronous edits. Hand off with clear artifacts in `.ai/`.
 - **Browser verify (optional):** for UI work, verify in the built-in browser when available — do not skip spec or verification gates.
-- **Workflows (Phase 2+):** `.agents/workflows/` slash commands mirror Claude Code `/feature`, `/fix`, etc.
 
 ## Defer
 

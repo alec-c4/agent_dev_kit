@@ -258,6 +258,18 @@ sync_cursor_user_rules_project() {
   bash "$REPO_DIR/scripts/kit" sync-rules "${args[@]}"
 }
 
+deploy_workflows() {
+  local scope="$1"
+  local args=(--scope="$scope")
+  $DRY_RUN && args+=(--dry-run)
+  log "Workflow shortcuts → Claude commands / .agents/workflows ($scope)"
+  if $DRY_RUN; then
+    echo "  [dry] deploy-workflows.sh ${args[*]}"
+    return
+  fi
+  bash "$REPO_DIR/scripts/deploy-workflows.sh" "${args[@]}"
+}
+
 deploy_skills_pack() {
   local scope="$1"
   local also_claude="${2:-false}"
@@ -328,8 +340,12 @@ fi
 
 if [[ "$SCOPE" == "project" ]]; then
   deploy_skills_pack project false false
+  deploy_workflows project
 else
   deploy_skills_pack global "$(want_claude && echo true || echo false)" "$(want_antigravity && echo true || echo false)"
+  if want_claude; then
+    deploy_workflows global
+  fi
 fi
 
 echo

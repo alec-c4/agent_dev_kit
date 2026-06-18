@@ -73,7 +73,15 @@ Table 2: where kit skills and shortcuts deploy.
 
 **CLI quirk:** Antigravity CLI may not read `~/.agents/skills/`. Copy or symlink kit skills to `~/.gemini/antigravity-cli/skills/` if CLI sessions miss them. Documented in install output.
 
-Phase 2 deploys kit skills to `.agents/skills/` and maps workflows per tool — see [INTENT-ROUTING.md](guidelines/INTENT-ROUTING.md).
+Phase 2 deploys kit skills to `.agents/skills/` and workflow shortcuts per tool:
+
+| Tool | Skills (`deploy-skills`) | Shortcuts (`deploy-workflows`) |
+|------|--------------------------|--------------------------------|
+| Codex | `$feature`, `$fix`, … in `.agents/skills/` | — |
+| Claude Code | `~/.claude/skills/` | `/feature`, … in `~/.claude/commands/` |
+| Antigravity | `.agents/skills/` | `.agents/workflows/*.md` |
+
+See [commands/README.md](../commands/README.md) and [INTENT-ROUTING.md](guidelines/INTENT-ROUTING.md).
 
 ## Project scaffold (`.agents/`)
 
