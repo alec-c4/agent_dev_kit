@@ -1,0 +1,17 @@
+# Local pack verification notes (optional, do not commit)
+
+Copy to `packs/<pack>/VERIFICATION.local.md` — file is gitignored.
+
+Pack: _______________
+Date: _______________
+
+| Skill | Agent | Notes | Human |
+|-------|-------|-------|-------|
+| | OK / FIX | | OK / pending |
+
+## Human checklist
+
+- [ ] Reviewed 2–3 skills full-text
+- [ ] `./scripts/kit validate-skills --pack=___` — PASS
+- [ ] `./scripts/kit deploy-skills --pack=___ --dry-run` — paths OK
+- [ ] Approved for merge
