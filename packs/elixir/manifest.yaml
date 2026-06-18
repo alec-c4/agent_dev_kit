@@ -1,0 +1,12 @@
+# Elixir / Phoenix stack pack
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: elixir
+name: Elixir / Phoenix Pack
+description: Phoenix and LiveView pattern skill.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - elixir-phoenix-patterns

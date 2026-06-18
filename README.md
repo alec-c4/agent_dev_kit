@@ -40,6 +40,8 @@ Ready to install and use today:
 | [patterns](packs/patterns/) | 15 | Framework patterns (Rails, Next.js, Django, Elixir, Go, …) |
 | [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
 
+**Stack packs** (optional slices — see [packs/README.md](packs/README.md)): `rails`, `node`, `python`, `go`, `elixir`. Install with `./scripts/kit install --pack=core,rails`.
+
 **Tracker workflow** — paste or `gh` intake → `.ai/work/{ref}-analysis.md`; optional `./scripts/kit sync-tracker` for a local issue index. See [TRACKER.md](docs/guidelines/TRACKER.md).
 
 **Kit CLI** — `./scripts/kit` for install, compile, validate, detect-stack, deploy-skills, deploy-workflows, intake, sync-tracker. See [shell-commands.md](docs/shell-commands.md).
@@ -62,12 +64,10 @@ Not shipped yet; planned next:
 
 | Item | Notes |
 |------|-------|
-| **Review gate docs** | Hooks ship; document team rollout for `--with-review-gate` |
-| **Antigravity hooks** | Reuse shell scripts when IDE hook API is stable |
-| **Copilot instructions** | `.github/instructions/` pattern-scoped rules |
-| **Stack packs** | Dedicated `packs/rails`, `node`, `python`, `go` + community template |
-| **Docs polish** | Full installation guide, hooks reference, project scaffolds |
+| **Docs polish** | Full installation guide, project scaffolds |
 | **Linear / Jira cache** | `sync-tracker` today supports GitHub only; other providers via paste/export |
+| **Antigravity hooks** | Reuse shell scripts when IDE hook API is stable |
+| **Copilot instructions** | `.github/instructions/` pattern-scoped rules (last) |
 
 Track implementation outside this repo (not committed here).
 

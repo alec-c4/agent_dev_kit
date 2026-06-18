@@ -1,0 +1,13 @@
+{
+  "id": "python",
+  "name": "Python Pack",
+  "description": "Django and FastAPI pattern skills.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "django-patterns",
+    "fastapi-patterns"
+  ]
+}

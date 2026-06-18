@@ -144,6 +144,14 @@ if [[ "$PHASE" == "1" ]]; then
     ok "topics skills pack (packs/topics)"
   fi
 
+  for sp in rails node python go elixir; do
+    if [[ ! -f "$KIT_DIR/packs/$sp/manifest.json" ]]; then
+      warn "missing packs/$sp/manifest.json — run: bash scripts/compile_registry.sh"
+    else
+      ok "stack pack (packs/$sp)"
+    fi
+  done
+
   if [[ ! -d "$KIT_DIR/agents" ]] || [[ ! -f "$KIT_DIR/agents/developer.md" ]]; then
     err "missing agents/ personas (Phase 2 P6)"
   else

@@ -11,6 +11,8 @@
 #   ./scripts/install.sh --target=all --project     # current repo
 #   ./scripts/install.sh --dry-run --target=codex
 #   ./scripts/install.sh --with-hooks [--with-review-gate] [--merge-settings]
+#   ./scripts/install.sh --pack=core,patterns,topics   # default when omitted
+#   ./scripts/install.sh --pack=core,rails             # minimal Rails-focused install
 #   ./scripts/kit install --target=all              # same; works from fish/zsh/bash
 #
 # Canonical entry: AGENTS.md. CLAUDE.md and GEMINI.md are thin adapters only.
@@ -27,6 +29,7 @@ FORCE=false
 WITH_HOOKS=false
 WITH_REVIEW_GATE=false
 MERGE_SETTINGS=false
+PACKS=""
 
 for arg in "$@"; do
   case "$arg" in
@@ -38,6 +41,7 @@ for arg in "$@"; do
     --with-hooks) WITH_HOOKS=true ;;
     --with-review-gate) WITH_HOOKS=true; WITH_REVIEW_GATE=true ;;
     --merge-settings) MERGE_SETTINGS=true ;;
+    --pack=*) PACKS="${arg#--pack=}" ;;
     --help|-h)
       sed -n '2,16p' "$0"
       exit 0
@@ -281,32 +285,27 @@ deploy_workflows() {
   bash "$REPO_DIR/scripts/deploy-workflows.sh" "${args[@]}"
 }
 
-deploy_skills_pack() {
-  local pack="$1"
-  local scope="$2"
-  local also_claude="${3:-false}"
-  local sync_ag="${4:-false}"
-  local args=(--pack="$pack" --scope="$scope")
+deploy_skill_packs() {
+  local scope="$1"
+  local also_claude="${2:-false}"
+  local sync_ag="${3:-false}"
+  local pack_list="$PACKS"
+  if [[ -z "$pack_list" ]]; then
+    pack_list="core,patterns,topics"
+  elif [[ "$pack_list" == "all" ]]; then
+    pack_list="core,patterns,topics,rails,node,python,go,elixir"
+  fi
+  local args=(--pack="$pack_list" --scope="$scope")
   [[ "$also_claude" == true ]] && args+=(--also-claude)
   [[ "$sync_ag" == true ]] && args+=(--sync-antigravity-cli)
   $DRY_RUN && args+=(--dry-run)
   [[ "$MODE" == copy ]] && args+=(--copy)
-  log "Skills pack $pack → .agents/skills ($scope)"
+  log "Skills packs ($pack_list) → .agents/skills ($scope)"
   if $DRY_RUN; then
     echo "  [dry] deploy-skills.sh ${args[*]}"
     return
   fi
   bash "$REPO_DIR/scripts/deploy-skills.sh" "${args[@]}"
-}
-
-deploy_skill_packs() {
-  local scope="$1"
-  local also_claude="${2:-false}"
-  local sync_ag="${3:-false}"
-  for pack in core patterns topics; do
-    [[ -f "$REPO_DIR/packs/$pack/manifest.json" ]] || continue
-    deploy_skills_pack "$pack" "$scope" "$also_claude" "$sync_ag"
-  done
 }
 
 want_claude() { [[ "$TARGET" == "claude" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }

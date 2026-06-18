@@ -47,5 +47,12 @@ jobs:
       - name: Validate topics skills pack
         run: ./scripts/kit validate-skills --pack=topics
 
+      - name: Validate stack pack manifests
+        run: |
+          ./scripts/kit validate-skills --pack=rails
+          ./scripts/kit validate-skills --pack=node
+          ./scripts/kit validate-skills --pack=python
+          ./scripts/kit validate-skills --pack=go
+
       - name: Validate kit (full)
         run: ./scripts/kit validate

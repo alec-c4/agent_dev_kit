@@ -1,0 +1,12 @@
+# Go stack pack
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: go
+name: Go Pack
+description: Go service patterns and conventions.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - go-service-patterns
