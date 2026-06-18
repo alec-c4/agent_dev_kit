@@ -36,7 +36,8 @@ See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge o
 - **Tool adapters** — Codex (`~/.codex/AGENTS.md`), Antigravity (`~/.gemini/` + GEMINI.md) — Phase 1.6
 - **Cursor user-rules dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` (skip duplicate guidelines)
 
-Coming later: slash commands (Claude Code), pattern skill packs, hooks, CI.
+- **Core skills pack** — `packs/core/` (16 skills) → `./scripts/kit deploy-skills --pack=core`
+- **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human)
 
 ## Quick start
 

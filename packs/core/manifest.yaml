@@ -1,0 +1,30 @@
+# Core pack — universal skills shipped with Phase 2 [P0]
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: core
+name: Universal Core
+description: Stack detection, stack profiles, and universal testing. Required baseline before pattern packs.
+version: "1.0"
+depends_on: []
+
+skills:
+  # Core workflow skills
+  - stack-detection
+  - stack-loader
+  - testing-universal
+  # Stack profiles (tooling + DoD overlay per stack)
+  - stacks/django
+  - stacks/elixir
+  - stacks/fastapi
+  - stacks/flask
+  - stacks/go
+  - stacks/nextjs
+  - stacks/node
+  - stacks/nuxt
+  - stacks/python
+  - stacks/rails
+  - stacks/rust
+  - stacks/svelte
+  - stacks/sveltekit
+
+# Review: docs/skills-review.md + packs/core/VERIFICATION.md
