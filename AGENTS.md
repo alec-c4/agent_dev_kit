@@ -12,7 +12,7 @@ Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, us
 
 ## First steps
 
-1. Classify intent: feature, bug, refactor, audit, or question — [docs/guidelines/INTENT-ROUTING.md](docs/guidelines/INTENT-ROUTING.md) (plain text and `/commands` use the same pipeline).
+1. Classify intent: feature, bug, refactor, audit, or question — skill `intent-router` or [docs/guidelines/INTENT-ROUTING.md](docs/guidelines/INTENT-ROUTING.md) (plain text and `/commands` use the same pipeline).
 2. If a ticket exists: set **work_ref** and **spec_key** — [docs/guidelines/TRACKER.md](docs/guidelines/TRACKER.md).
 3. Read the matching guideline from `docs/guidelines/`.
 4. Detect stack — `./scripts/kit detect-stack --write-profile`; load `skills/stacks/<id>/` (see `docs/stack-detection.md`).

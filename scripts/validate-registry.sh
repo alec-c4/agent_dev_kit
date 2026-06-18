@@ -71,7 +71,7 @@ if [[ "$PHASE" == "1" ]]; then
     done < <(jq -r '.stacks | keys[]' "$KIT_DIR/registry/stacks.json")
   fi
 
-  for skill in stack-detection stack-loader testing-universal; do
+  for skill in stack-detection stack-loader testing-universal intent-router; do
     if [[ ! -f "$KIT_DIR/skills/$skill/SKILL.md" ]]; then
       err "missing core skill: skills/$skill/SKILL.md"
     else

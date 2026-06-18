@@ -10,6 +10,7 @@
     "stack-detection",
     "stack-loader",
     "testing-universal",
+    "intent-router",
     "stacks/django",
     "stacks/elixir",
     "stacks/fastapi",

@@ -12,6 +12,7 @@ skills:
   - stack-detection
   - stack-loader
   - testing-universal
+  - intent-router
   # Stack profiles (tooling + DoD overlay per stack)
   - stacks/django
   - stacks/elixir
