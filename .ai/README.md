@@ -14,6 +14,7 @@ See [TRACKER.md](../docs/guidelines/TRACKER.md) for `work_ref`, `spec_key`, trac
 | Spec archive | `.ai/archive/{spec_key}-spec.v{X}.md` | spec_key |
 | Analysis | `.ai/work/{work_ref}-analysis.md` | work_ref |
 | Plan | `.ai/work/{work_ref}-plan.md` | work_ref |
+| Handoff | `.ai/work/{work_ref}-handoff.md` | work_ref — comprehension gate |
 | Verification | `.ai/work/{work_ref}-verification.md` | work_ref |
 | PR draft | `.ai/pr-summary.md` | — |
 
@@ -50,6 +51,7 @@ Still supported. Prefer `specs/` + `work/` for new projects.
   archive/export-csv-spec.v1.0.md
   work/GH-42-analysis.md
   work/GH-58-plan.md
+  work/GH-58-handoff.md
   work/GH-58-verification.md
   pr-summary.md
 ```
@@ -76,9 +78,10 @@ See [TRACKER.md](../docs/guidelines/TRACKER.md#optional-tracker-cache-phase-2).
 2. **Spec** → new v1.0 or bump by spec_key — [SPECS.md](../docs/guidelines/SPECS.md)
 3. **Plan** → `work/{work_ref}-plan.md`, get human approval
 4. **Implement** → TDD; tests trace to spec AC IDs
-5. **Verify** → [VERIFICATION.md](../docs/guidelines/VERIFICATION.md) → `work/{work_ref}-verification.md`
-6. **Review** → [REVIEW.md](../docs/guidelines/REVIEW.md)
-7. **PR** → copy from `pr-summary.md`
+5. **Comprehension** → [COMPREHENSION.md](../docs/guidelines/COMPREHENSION.md) → `work/{work_ref}-handoff.md`
+6. **Verify** → [VERIFICATION.md](../docs/guidelines/VERIFICATION.md) → `work/{work_ref}-verification.md`
+7. **Review** → [REVIEW.md](../docs/guidelines/REVIEW.md)
+8. **PR** → copy from `pr-summary.md`
 
 ## Kit repo note
 

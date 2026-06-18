@@ -8,8 +8,9 @@ Structured flow from task to merge. Works with any AI assistant — read [AGENTS
 2. **Spec before code** — write acceptance criteria; get human approval. See [SPECS.md](SPECS.md).
 3. **Plan before code** — implementation plan after approved spec (non-trivial work).
 4. **TDD by default** — tests trace to spec acceptance criteria. See [TESTING.md](TESTING.md).
-5. **Review before commit** — completion verification by a **separate agent** first. See [VERIFICATION.md](VERIFICATION.md), then [REVIEW.md](REVIEW.md).
-6. **Guidelines compound** — when AI repeats a mistake, update the relevant guideline.
+5. **Comprehension before verify** — human understands what ships; handoff + Q&A. See [COMPREHENSION.md](COMPREHENSION.md).
+6. **Review before commit** — completion verification by a **separate agent** first. See [VERIFICATION.md](VERIFICATION.md), then [REVIEW.md](REVIEW.md).
+7. **Guidelines compound** — when AI repeats a mistake, update the relevant guideline.
 
 ## Intent classification
 
@@ -17,9 +18,9 @@ Classify every request before acting:
 
 | Intent | Spec | Workflow |
 |--------|------|----------|
-| Feature (new) | Create v1.0 | Spec → Plan → TDD → Verification → Review → PR |
+| Feature (new) | Create v1.0 | Spec → Plan → TDD → Comprehension → Verification → Review → PR |
 | Feature (update) | Bump version, actualize | Same |
-| Bug (fix) | Bump version, actualize ACs | Analyze → Spec update → Fix → Verification → PR |
+| Bug (fix) | Bump version, actualize ACs | Analyze → Spec update → Fix → Comprehension → Verification → PR |
 | Refactor | Only if behaviour changes | Test baseline → … |
 | Audit | — | Scan → Report → Fix plan |
 | Question | — | Read code, explain — no commits |
@@ -38,6 +39,7 @@ Store session planning files in the **target project** (not in this kit repo). S
   work/
     GH-58-analysis.md         # intake for current task (work_ref)
     GH-58-plan.md
+    GH-58-handoff.md          # comprehension gate (tier ≥ standard)
     GH-58-verification.md
   pr-summary.md
 
@@ -138,7 +140,20 @@ Follow [GIT.md](GIT.md).
 - Match [CODING.md](CODING.md) and project conventions.
 - Small commits per [COMMITS.md](COMMITS.md).
 
-### 6. Completion verification
+### 6. Comprehension gate
+
+**Mandatory for tier standard and strict** — see [COMPREHENSION.md](COMPREHENSION.md):
+
+1. Writer produces `.ai/work/{work_ref}-handoff.md` (what changed, data flow, key files, decisions).
+2. Agent generates comprehension Q&A (3 or 5 questions); **human answers** in own words.
+3. Human runs **manual-verify** acceptance criteria from the spec.
+4. Human completes **Human sign-off** in the handoff (files read, one-sentence explain, date).
+
+Skip only when tier is **minimal** or human explicitly lowers tier with confirm.
+
+**Do not commit** until sign-off is complete for the active tier.
+
+### 7. Completion verification
 
 **Mandatory.** Launch a **verifier agent in a new session** — see [VERIFICATION.md](VERIFICATION.md):
 
@@ -150,11 +165,11 @@ Follow [GIT.md](GIT.md).
 
 Save report to `.ai/work/{work_ref}-verification.md` (or legacy `issue-{n}-verification.md`, or `task-verification.md`). **Do not commit while verdict is FAIL.**
 
-### 7. Review
+### 8. Review
 
 Follow [REVIEW.md](REVIEW.md) for security checklist and DoD (verifier may combine with step 6 in one fresh session).
 
-### 8. Pull request
+### 9. Pull request
 
 - Draft summary in `.ai/pr-summary.md`.
 - Open PR with test plan checklist.
