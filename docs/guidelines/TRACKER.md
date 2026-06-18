@@ -211,12 +211,12 @@ The cache **resolves references**; **analysis + spec** remain the contract. Neve
 - Team always pastes ticket body into analysis
 - Phase 1.5 paste-only is enough
 
-### Phase 2 scripts (planned)
+### Phase 2 scripts
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/sync-tracker-cache.sh` | Write `.ai/tracker-cache.json` (start: `gh issue list`; later Linear/Jira) |
-| `scripts/intake-work-item.sh` | Fetch **one** item → `work/{ref}-analysis.md` (primary) |
+| `scripts/intake-work-item.sh` | Fetch **one** item → `work/{ref}-analysis.md` (paste, `gh issue view`) |
+| `scripts/sync-tracker-cache.sh` | *(planned)* Write `.ai/tracker-cache.json` |
 
 **Priority:** single-item intake before full-list sync. Cache is a convenience layer, not source of truth.
 
@@ -230,16 +230,15 @@ Include `work_ref` where humans search:
 
 Spec content does not depend on which tracker you use.
 
-## Phase 2 automation (not required now)
+## Phase 2 automation
 
-| Component | Purpose |
-|-----------|---------|
-| `skills/work-intake/` | Parse work_ref; suggest `.ai/` paths; read cache if present |
-| `scripts/intake-work-item.sh` | **One task** → `work/{ref}-analysis.md` (paste, gh view, export) |
-| `scripts/sync-tracker-cache.sh` | Optional snapshot → `.ai/tracker-cache.json` (id, title, status) |
-| `skills/tracker-sync/` | Optional projection: spec summary → ticket comment |
-
-Phase 1.5 needs **documentation only** — paste intake is enough.
+| Component | Status | Purpose |
+|-----------|--------|---------|
+| `skills/work-intake/` | shipped | Parse work_ref; suggest `.ai/` paths; run intake script |
+| `scripts/intake-work-item.sh` | shipped | One task → `work/{ref}-analysis.md` (paste, gh view) |
+| `skills/resolve-task/` | shipped | Full pipeline from work_ref |
+| `scripts/sync-tracker-cache.sh` | planned | Optional snapshot → `.ai/tracker-cache.json` |
+| `skills/tracker-sync/` | planned | Optional projection: spec summary → ticket comment |
 
 ## Quick decision tree
 

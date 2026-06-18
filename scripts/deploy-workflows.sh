@@ -14,7 +14,7 @@ KIT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SCOPE="project"
 DRY_RUN=false
 
-WORKFLOW_SKILLS=(feature fix plan review ship)
+WORKFLOW_SKILLS=(feature fix plan review ship resolve-task)
 
 for arg in "$@"; do
   case "$arg" in

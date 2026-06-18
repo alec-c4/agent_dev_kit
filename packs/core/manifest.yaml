@@ -18,6 +18,8 @@ skills:
   - plan
   - review
   - ship
+  - work-intake
+  - resolve-task
   # Stack profiles (tooling + DoD overlay per stack)
   - stacks/django
   - stacks/elixir

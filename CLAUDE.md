@@ -25,8 +25,11 @@ Installed to `~/.claude/commands/` and `~/.claude/skills/` via `./scripts/kit in
 | `/plan` | [skills/plan/SKILL.md](skills/plan/SKILL.md) | Plan only (approved spec required) |
 | `/review` | [skills/review/SKILL.md](skills/review/SKILL.md) | [REVIEW.md](docs/guidelines/REVIEW.md) checklist |
 | `/ship` | [skills/ship/SKILL.md](skills/ship/SKILL.md) | PR summary — confirm before push/merge |
+| `/resolve-task` | [skills/resolve-task/SKILL.md](skills/resolve-task/SKILL.md) | Intake → feature/fix pipeline end-to-end |
 
 Natural language uses the **same steps** — commands bypass intent classification only.
+
+**Intake:** `./scripts/kit intake GH-58 --paste` — see [TRACKER.md](docs/guidelines/TRACKER.md).
 
 ## Permissions
 
