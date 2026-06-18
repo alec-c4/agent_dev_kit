@@ -1,3 +1,6 @@
+# Local pack verification notes (optional; never commit)
+packs/*/VERIFICATION.local.md
+
 # Local Claude Code overrides (never commit)
 .claude/
 

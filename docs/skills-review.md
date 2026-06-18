@@ -1,6 +1,6 @@
 # Skills pack review process
 
-How to verify a skill pack before merge: **automated checks → agent doc review → human sign-off**.
+How to verify a skill pack before merge: **automated checks → agent doc review → human sign-off in the PR**.
 
 Applies to `packs/core/` (Phase 2 [P0]) and future pattern packs from stash.
 
@@ -8,11 +8,11 @@ Applies to `packs/core/` (Phase 2 [P0]) and future pattern packs from stash.
 
 | Layer | Who | Tool / artifact |
 |-------|-----|-----------------|
-| 1. Structure | CI / agent | `./scripts/kit validate-skills --pack=core` |
+| 1. Structure | CI / agent | `./scripts/kit validate-skills --pack=<pack>` |
 | 2. Content | Agent | Compare SKILL.md to kit guidelines + official framework docs |
-| 3. Sign-off | Human | `packs/<pack>/VERIFICATION.md` — mark **Human: OK** per skill |
+| 3. Sign-off | Human | PR review — checklist in PR description (not committed to repo) |
 
-Do not merge a pack until layer 3 is complete for every skill in the manifest (or explicitly waived with reason).
+Do not merge a pack until layer 3 is complete for every skill in the manifest (or explicitly waived with reason in the PR).
 
 ## Layer 1 — Automated validation
 
@@ -29,6 +29,8 @@ Checks:
 - Stack skills have `profile.yaml`
 - Relative markdown links in SKILL.md resolve
 
+CI runs the same checks via [.github/workflows/validate.yml](../.github/workflows/validate.yml).
+
 ## Layer 2 — Agent content review
 
 For **each skill** in the pack manifest:
@@ -38,9 +40,7 @@ For **each skill** in the pack manifest:
    - Relevant `docs/guidelines/*.md` (no stack detail duplicated in guidelines)
    - `docs/stack-detection.md` for detection/load skills
    - Official framework docs for stack profiles (commands, conventions)
-3. Record in `packs/<pack>/VERIFICATION.md`:
-   - **Agent:** OK / FIX / N/A
-   - One-line note (doc source, fix applied, or waiver)
+3. Note in the PR (agent column): **OK** / **FIX** / **N/A** plus one-line rationale.
 4. Fix clear errors in SKILL.md; do not expand scope into pattern skills not in this pack.
 
 ### Review checklist per skill
@@ -53,20 +53,20 @@ For **each skill** in the pack manifest:
 | Links to guidelines valid? | Broken paths |
 | `user-invokable: false` on internal skills? | User should not `$stack-loader` manually |
 
-## Layer 3 — Human sign-off
+## Layer 3 — Human sign-off (PR only)
 
-Human spot-checks (batch is fine — one session per pack):
+Human spot-checks (batch is fine — one session per pack). Record in the **PR description**, not in git:
 
-1. Skim `packs/core/VERIFICATION.md` agent column.
-2. Open **2–3 skills you use most** (e.g. `stack-detection`, your stack profile) — read full SKILL.md.
-3. Run deploy dry-run:
+```markdown
+## Skills pack sign-off
 
-```bash
-./scripts/kit deploy-skills --pack=core --scope=project --dry-run
+- [ ] CI green (`validate` + `validate-skills`)
+- [ ] Reviewed full text of 2–3 skills I use most
+- [ ] `./scripts/kit deploy-skills --pack=core --dry-run` — paths look correct
+- [ ] Pack approved for merge — YYYY-MM-DD
 ```
 
-4. Mark **Human: OK** (or note issues) in VERIFICATION.md.
-5. Optional: in target app, invoke skill via Codex `$stack-detection` or Antigravity skills list.
+Optional local notes (gitignored): copy [docs/examples/pack-verification.local.md.example](examples/pack-verification.local.md.example) to `packs/<pack>/VERIFICATION.local.md` in your clone only.
 
 ## Deploy after approval
 
@@ -82,7 +82,7 @@ Paths: [tool-adapters.md](tool-adapters.md).
 
 1. Add `packs/<id>/manifest.yaml` — list only skills that exist under `skills/`.
 2. Run compile + validate-skills.
-3. Copy `packs/core/VERIFICATION.md` as template; fill agent + human columns.
-4. Full `./scripts/kit validate` before PR.
+3. Open PR with the sign-off checklist above.
+4. Full `./scripts/kit validate` before merge.
 
 Pattern skills from stash (rails-core-patterns, etc.) ship in **separate packs** after core is signed off.
