@@ -53,6 +53,14 @@ jobs:
           ./scripts/kit validate-skills --pack=node
           ./scripts/kit validate-skills --pack=python
           ./scripts/kit validate-skills --pack=go
+          ./scripts/kit validate-skills --pack=elixir
+          ./scripts/kit validate-skills --pack=devops
+          ./scripts/kit validate-skills --pack=astro
+          ./scripts/kit validate-skills --pack=tauri
+          ./scripts/kit validate-skills --pack=swift
+          ./scripts/kit validate-skills --pack=kotlin
+          ./scripts/kit validate-skills --pack=react-native
+          ./scripts/kit validate-skills --pack=flutter
 
       - name: Validate kit (full)
         run: ./scripts/kit validate

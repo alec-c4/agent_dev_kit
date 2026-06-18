@@ -1,0 +1,24 @@
+---
+id: swift
+label: Swift
+language: swift
+framework: swift
+tooling:
+  test:
+  - swift test
+  lint:
+  - swiftlint
+  build:
+  - swift build
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - swift-patterns
+mcp_suggest: []
+dod_overlay:
+- id: no_force_unwrap
+  label: No force-unwrap or try! on fallible paths in production code
+- id: secrets_keychain
+  label: Credentials and tokens in Keychain — not UserDefaults or source

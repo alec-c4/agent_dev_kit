@@ -33,6 +33,9 @@ Read `skills/stack-detection/SKILL.md` and `skills/stack-loader/SKILL.md` for th
 
 - `tooling` — test, lint, security, typecheck commands
 - `skills` — required/recommended/conditional pattern skills
+- `if_gem` — load skills when gem in Gemfile (e.g. `turbo-rails` → `hotwire`)
+- `if_file` — load skills when file exists and optional `content_match` (e.g. `api_only` in `config/application.rb`)
+- `if_package_dep` — load skills when npm dep present (e.g. `@inertiajs/svelte` → `svelte-patterns`)
 - `dod_overlay` — stack-specific Definition of Done items
 - `mcp_suggest` — optional MCP hints
 

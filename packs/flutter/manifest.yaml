@@ -1,0 +1,12 @@
+# Flutter stack pack — iOS, Android, web, and desktop from Dart
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: flutter
+name: Flutter Pack
+description: Flutter patterns — widgets, state, navigation, platform channels, and testing.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - flutter-patterns

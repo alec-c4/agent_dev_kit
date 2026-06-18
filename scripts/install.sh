@@ -293,7 +293,7 @@ deploy_skill_packs() {
   if [[ -z "$pack_list" ]]; then
     pack_list="core,patterns,topics"
   elif [[ "$pack_list" == "all" ]]; then
-    pack_list="core,patterns,topics,rails,node,python,go,elixir"
+    pack_list="core,patterns,topics,rails,node,python,go,elixir,devops,astro,tauri,swift,kotlin,react-native,flutter"
   fi
   local args=(--pack="$pack_list" --scope="$scope")
   [[ "$also_claude" == true ]] && args+=(--also-claude)

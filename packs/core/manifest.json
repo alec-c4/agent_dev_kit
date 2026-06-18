@@ -32,6 +32,12 @@
     "stacks/rails",
     "stacks/rust",
     "stacks/svelte",
-    "stacks/sveltekit"
+    "stacks/sveltekit",
+    "stacks/astro",
+    "stacks/tauri",
+    "stacks/swift",
+    "stacks/kotlin",
+    "stacks/react-native",
+    "stacks/flutter"
   ]
 }

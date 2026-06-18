@@ -1,0 +1,12 @@
+{
+  "id": "astro",
+  "name": "Astro Pack",
+  "description": "Astro content sites and hybrid rendering patterns.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "astro-patterns"
+  ]
+}

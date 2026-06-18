@@ -1,0 +1,12 @@
+{
+  "id": "kotlin",
+  "name": "Kotlin Pack",
+  "description": "Kotlin patterns — Gradle, coroutines, null safety, Android and server apps.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "kotlin-patterns"
+  ]
+}

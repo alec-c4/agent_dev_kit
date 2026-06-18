@@ -123,8 +123,20 @@ def gemfile_has_gem(gemfile: str, gem_name: str) -> bool:
 def matches_stack(stack_id: str, spec: dict, cwd: Path, stacks: dict) -> bool:
     detect = spec.get("detect") or {}
     files = detect.get("files") or []
-    if not all((cwd / f).is_file() for f in files):
+    any_files = detect.get("any_files") or []
+    any_glob = detect.get("any_glob") or []
+
+    if files and not all((cwd / f).is_file() for f in files):
         return False
+
+    if any_files or any_glob:
+        matched = any((cwd / f).is_file() for f in any_files)
+        if any_glob:
+            matched = matched or any(
+                p.is_file() for g in any_glob for p in cwd.glob(g)
+            )
+        if not files and not matched:
+            return False
 
     if dep := detect.get("package_dep"):
         if dep not in package_deps(cwd):
@@ -138,6 +150,15 @@ def matches_stack(stack_id: str, spec: dict, cwd: Path, stacks: dict) -> bool:
         combined = ""
         for name in files:
             combined += read_text(cwd / name) + "\n"
+        if not files:
+            for name in any_files:
+                p = cwd / name
+                if p.is_file():
+                    combined += read_text(p) + "\n"
+            for pattern in any_glob:
+                for p in cwd.glob(pattern):
+                    if p.is_file():
+                        combined += read_text(p) + "\n"
         manage = cwd / "manage.py"
         if manage.is_file():
             combined += read_text(manage)
@@ -156,7 +177,7 @@ def matches_stack(stack_id: str, spec: dict, cwd: Path, stacks: dict) -> bool:
                 return False
 
     if stack_id == "node":
-        for other in ("nextjs", "nuxt", "sveltekit", "svelte"):
+        for other in ("nextjs", "nuxt", "sveltekit", "svelte", "astro", "react-native"):
             other_spec = stacks.get(other)
             if other_spec and matches_stack(other, other_spec, cwd, stacks):
                 return False
@@ -194,6 +215,22 @@ def resolve_skills(profile: dict, cwd: Path) -> list[str]:
         if gemfile_has_gem(gemfile, gem):
             for s in skill_list:
                 add(s)
+
+    deps = package_deps(cwd)
+    for dep, skill_list in (skills_cfg.get("if_package_dep") or {}).items():
+        if dep in deps:
+            for s in skill_list:
+                add(s)
+
+    for rel, rule in (skills_cfg.get("if_file") or {}).items():
+        path = cwd / rel
+        if not path.is_file():
+            continue
+        if match := rule.get("content_match"):
+            if match.lower() not in read_text(path).lower():
+                continue
+        for s in rule.get("skills") or []:
+            add(s)
 
     return out
 

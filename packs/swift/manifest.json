@@ -1,0 +1,12 @@
+{
+  "id": "swift",
+  "name": "Swift Pack",
+  "description": "Swift and Apple platform patterns — SPM, SwiftUI, concurrency, testing.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "swift-patterns"
+  ]
+}

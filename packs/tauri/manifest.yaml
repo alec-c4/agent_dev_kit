@@ -1,0 +1,12 @@
+# Tauri stack pack — desktop apps (Rust + web frontend)
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: tauri
+name: Tauri Pack
+description: Tauri desktop app patterns — Rust backend and webview frontend.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - tauri-patterns

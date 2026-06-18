@@ -1,0 +1,40 @@
+{
+  "id": "tauri",
+  "label": "Tauri",
+  "language": "rust",
+  "framework": "tauri",
+  "tooling": {
+    "test": [
+      "cargo test --manifest-path src-tauri/Cargo.toml",
+      "npm test"
+    ],
+    "lint": [
+      "cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings"
+    ],
+    "security": [
+      "cargo audit --manifest-path src-tauri/Cargo.toml"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "tauri-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "ipc_rust_boundary",
+      "label": "Filesystem, network, and OS access via Tauri commands in Rust — not from webview"
+    },
+    {
+      "id": "capabilities_least_privilege",
+      "label": "Tauri capabilities / allowlist reviewed for each new command"
+    }
+  ]
+}

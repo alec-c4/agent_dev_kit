@@ -36,11 +36,11 @@ Ready to install and use today:
 
 | Pack | Skills | Role |
 |------|--------|------|
-| [core](packs/core/) | 26 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
-| [patterns](packs/patterns/) | 15 | Framework patterns (Rails, Next.js, Django, Elixir, Go, …) |
+| [core](packs/core/) | 32 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
+| [patterns](packs/patterns/) | 30 | Framework and DevOps patterns (Rails variants, Flutter, Docker, …) |
 | [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
 
-**Stack packs** (optional slices — see [packs/README.md](packs/README.md)): `rails`, `node`, `python`, `go`, `elixir`. Install with `./scripts/kit install --pack=core,rails`.
+**Stack packs** (optional slices — see [packs/README.md](packs/README.md)): `rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter`. Install with `./scripts/kit install --pack=core,rails`.
 
 **Tracker workflow** — paste or `gh` intake → `.ai/work/{ref}-analysis.md`; optional `./scripts/kit sync-tracker` for a local issue index. See [TRACKER.md](docs/guidelines/TRACKER.md).
 

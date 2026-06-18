@@ -1,0 +1,12 @@
+# Kotlin stack pack — JVM, Android, and Gradle Kotlin projects
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: kotlin
+name: Kotlin Pack
+description: Kotlin patterns — Gradle, coroutines, null safety, Android and server apps.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - kotlin-patterns

@@ -55,7 +55,7 @@ Default install deploys **core**, **patterns**, and **topics**. See [packs/READM
 | Everything including stack slices | `./scripts/kit install --target=all --pack=all` |
 | Deploy one pack later | `./scripts/kit deploy-skills --pack=rails --scope=project` |
 
-Stack packs (`rails`, `node`, `python`, `go`, `elixir`) are subsets of pattern skills for smaller installs.
+Stack packs (`rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter`) are subsets of pattern skills for smaller installs.
 
 ## 6. Hooks (opt-in)
 

@@ -1,0 +1,12 @@
+# React Native stack pack — iOS and Android mobile apps
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: react-native
+name: React Native Pack
+description: React Native patterns — navigation, native modules, platform APIs, and mobile testing.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - react-native-patterns
