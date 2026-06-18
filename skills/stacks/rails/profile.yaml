@@ -16,8 +16,6 @@ tooling:
   - bundle audit check
   optional:
   - bundle exec i18n-tasks health
-  - npm run build
-  - bin/vite build
 skills:
   required:
   - stack-detection
@@ -29,32 +27,10 @@ skills:
   if_test_dir:
   - rails-testing-minitest
   if_gem:
-    importmap-rails:
-    - rails-importmaps
-    jsbundling-rails:
-    - rails-js-bundling
-    cssbundling-rails:
-    - rails-js-bundling
-    vite_rails:
-    - rails-js-bundling
-    shakapacker:
-    - rails-js-bundling
     inertia_rails:
     - inertia
     turbo-rails:
     - hotwire
-  if_file:
-    config/application.rb:
-      content_match: api_only
-      skills:
-      - rails-api
-  if_package_dep:
-    "@inertiajs/react":
-    - react-patterns
-    "@inertiajs/vue3":
-    - vue-patterns
-    "@inertiajs/svelte":
-    - svelte-patterns
 mcp_suggest:
 - rails-mcp
 dod_overlay:

@@ -3,7 +3,7 @@
 
 id: rails
 name: Rails Pack
-description: Rails patterns — importmap/Hotwire, API-only, jsbundling/Vite, Inertia (React/Vue/Svelte), testing.
+description: Rails 8 patterns, Hotwire, Inertia, and RSpec/Minitest testing skills.
 version: "1.0"
 depends_on:
   - core
@@ -12,10 +12,5 @@ skills:
   - rails-core-patterns
   - rails-testing-rspec
   - rails-testing-minitest
-  - rails-importmaps
-  - rails-api
-  - rails-js-bundling
   - hotwire
   - inertia
-  - react-patterns
-  - vue-patterns

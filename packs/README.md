@@ -9,9 +9,9 @@ Install subsets with `./scripts/kit install --pack=core,rails` or deploy after i
 | Pack | ID | Skills | Use when |
 |------|-----|--------|----------|
 | Universal Core | `core` | 32 | Always — stack profiles + workflow |
-| Stack Patterns | `patterns` | 30 | All framework and DevOps pattern skills |
+| Stack Patterns | `patterns` | 25 | All framework and DevOps pattern skills |
 | Cross-cutting Topics | `topics` | 4 | Security, LLM, RAG, MCP |
-| Rails | `rails` | 10 | Importmap, Hotwire, API, jsbundling/Vite, Inertia + React/Vue/Svelte |
+| Rails | `rails` | 5 | Rails / Hotwire / Inertia projects |
 | Frontend / Node | `node` | 4 | Next.js, Nuxt, SvelteKit, Svelte |
 | Python | `python` | 2 | Django, FastAPI |
 | Go | `go` | 1 | Go services |
