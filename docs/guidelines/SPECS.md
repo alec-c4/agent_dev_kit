@@ -163,8 +163,10 @@ One paragraph — user-visible outcome.
 Stable IDs persist across versions where behaviour unchanged. New ACs get next id.
 
 - [ ] **AC-1:** Given …, when …, then …
-- [ ] **AC-2:** Given …, when …, then … (sad path)
+- [ ] **AC-2:** Given …, when …, then … (sad path) *(human-verify)* — human runs manually; recorded in handoff
 - [ ] **AC-3:** … *(added in v1.1)*
+
+Tag **`*(human-verify)*`** on ACs the human must execute (browser, curl, console). See [COMPREHENSION.md](COMPREHENSION.md). Standard tier: at least one per task. Strict tier: tag all ACs that define user-visible behaviour.
 
 ## Edge cases
 - …

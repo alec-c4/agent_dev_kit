@@ -28,7 +28,7 @@ See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge o
 
 ## What's included (Phase 1)
 
-- **9 guideline docs** — `docs/guidelines/` (universal workflow + tracker-agnostic intake)
+- **9 guideline docs** — `docs/guidelines/` (universal workflow + tracker-agnostic intake + comprehension gate)
 - **13 stack skills** — `skills/stacks/<id>/` (tooling, DoD, routing)
 - **3 core skills** — stack-detection, stack-loader, testing-universal
 - **Slim registry** — detection only + universal DoD
@@ -81,6 +81,7 @@ skills/stacks/<id>/ — technology-specific tooling and DoD
 | [SPECS.md](docs/guidelines/SPECS.md) | Spec-first — acceptance criteria before code |
 | [Spec examples](docs/examples/specs/README.md) | Sample specs v1.0, v1.1, archive |
 | [WORKFLOW.md](docs/guidelines/WORKFLOW.md) | Issue → spec → plan → implement → verify → PR |
+| [COMPREHENSION.md](docs/guidelines/COMPREHENSION.md) | Handoff, Q&A, human sign-off — avoid skill degradation |
 | [CODING.md](docs/guidelines/CODING.md) | Code style and quality |
 | [TESTING.md](docs/guidelines/TESTING.md) | TDD and coverage |
 | [VERIFICATION.md](docs/guidelines/VERIFICATION.md) | Completion gate — tests, lint, docs (separate agent) |

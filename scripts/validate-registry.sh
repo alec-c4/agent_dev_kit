@@ -99,6 +99,14 @@ if [[ "$PHASE" == "1" ]]; then
     ok "docs/guidelines/TRACKER.md"
   fi
 
+  if [[ ! -f "$KIT_DIR/docs/guidelines/COMPREHENSION.md" ]]; then
+    err "missing docs/guidelines/COMPREHENSION.md"
+  elif [[ ! -f "$KIT_DIR/docs/examples/work/GH-58-handoff.example.md" ]]; then
+    err "missing docs/examples/work/GH-58-handoff.example.md"
+  else
+    ok "human comprehension gate (COMPREHENSION.md + handoff example)"
+  fi
+
   if [[ ! -f "$KIT_DIR/scripts/kit" ]]; then
     err "missing scripts/kit CLI wrapper"
   elif [[ ! -f "$KIT_DIR/docs/shell-commands.md" ]]; then

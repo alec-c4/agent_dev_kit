@@ -16,6 +16,9 @@ cache_statuses:             # provider-specific open states to include
 # Intent routing UX (optional) — see docs/guidelines/INTENT-ROUTING.md
 ux_hints: true              # one-line tip for /feature etc. after plain-text workflow start
 
+# Human comprehension gate — see docs/guidelines/COMPREHENSION.md
+comprehension_gate: standard   # minimal | standard | strict
+
 # Linear example (uncomment and adjust):
 # provider: linear
 # work_ref_format: "LIN-{team}-{n}"
