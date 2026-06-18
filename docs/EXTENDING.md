@@ -43,15 +43,10 @@ stacks:
 
 5. Compile:
 
-```bash
-bash scripts/compile_registry.sh
-```
-
-6. Test:
-
-```bash
-bash scripts/detect-stack.sh /path/to/app --write-profile
-bash scripts/validate-registry.sh --phase=1
+```text
+./scripts/kit compile
+./scripts/kit detect-stack /path/to/app --write-profile
+./scripts/kit validate --phase=1
 ```
 
 ## Add a cross-cutting topic
@@ -73,7 +68,7 @@ Stack-specific topic content lives under `skills/` — not in guidelines.
 
 1. Create `packs/my-pack/manifest.json` with `depends_on: ["core"]` and a `skills` list.
 2. Add skills under `skills/`.
-3. Run `bash scripts/install.sh --pack=my-pack`.
+3. Run `./scripts/kit install --pack=my-pack` (Phase 2+).
 
 ## Project-level overrides
 
@@ -90,4 +85,4 @@ my-app/.claude/
 - Put tooling commands or framework conventions in `docs/guidelines/` — use stack skills.
 - Bloat `registry/stacks.yaml` beyond detection + `stack_skill`.
 - Duplicate tooling in `commands/` — use `stack-loader` and stack profiles.
-- Commit profile/registry YAML without running `compile_registry.sh`.
+- Commit profile/registry YAML without running `./scripts/kit compile`.

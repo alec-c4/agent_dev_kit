@@ -14,7 +14,7 @@ The kit is **stack-agnostic**. Detection signals live in `registry/stacks.yaml`.
 
 ```bash
 bash scripts/detect-stack.sh --write-profile
-# or: bash "$HOME/.claude/scripts/detect-stack.sh" --write-profile"
+# or: ./scripts/kit detect-stack --write-profile
 ```
 
 2. Read `.claude/stack.profile.json` in the target project.

@@ -8,7 +8,7 @@ Claude Code loads `CLAUDE.md` automatically. **Canonical instructions:** [AGENTS
 
 1. Read [AGENTS.md](AGENTS.md) for workflow and guidelines index.
 2. Non-trivial task: write `.ai/*-spec.md` first — [docs/guidelines/SPECS.md](docs/guidelines/SPECS.md).
-3. Detect stack: `bash scripts/detect-stack.sh --write-profile` → load `skills/stacks/<id>/`.
+3. Detect stack: `./scripts/kit detect-stack --write-profile` → load `skills/stacks/<id>/`.
 4. Follow [docs/guidelines/WORKFLOW.md](docs/guidelines/WORKFLOW.md).
 5. Task complete → **verifier agent** (new session): [docs/guidelines/VERIFICATION.md](docs/guidelines/VERIFICATION.md).
 
