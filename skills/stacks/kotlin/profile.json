@@ -1,0 +1,39 @@
+{
+  "id": "kotlin",
+  "label": "Kotlin",
+  "language": "kotlin",
+  "framework": "kotlin",
+  "tooling": {
+    "test": [
+      "./gradlew test"
+    ],
+    "lint": [
+      "./gradlew check"
+    ],
+    "build": [
+      "./gradlew build"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "kotlin-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "no_force_nonnull",
+      "label": "No `!!` on nullable values in production code paths"
+    },
+    {
+      "id": "coroutine_cancellation",
+      "label": "Long-running coroutine work respects cancellation and uses appropriate dispatchers"
+    }
+  ]
+}

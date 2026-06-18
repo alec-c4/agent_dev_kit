@@ -1,7 +1,7 @@
 {
   "id": "rails",
   "name": "Rails Pack",
-  "description": "Rails 8 patterns, Hotwire, Inertia, and RSpec/Minitest testing skills.",
+  "description": "Rails patterns — importmap/Hotwire, API-only, jsbundling/Vite, Inertia (React/Vue/Svelte), testing.",
   "version": "1.0",
   "depends_on": [
     "core"
@@ -10,7 +10,12 @@
     "rails-core-patterns",
     "rails-testing-rspec",
     "rails-testing-minitest",
+    "rails-importmaps",
+    "rails-api",
+    "rails-js-bundling",
     "hotwire",
-    "inertia"
+    "inertia",
+    "react-patterns",
+    "vue-patterns"
   ]
 }

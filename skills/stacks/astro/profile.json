@@ -1,0 +1,40 @@
+{
+  "id": "astro",
+  "label": "Astro",
+  "language": "typescript",
+  "framework": "astro",
+  "tooling": {
+    "test": [
+      "npm test"
+    ],
+    "lint": [
+      "npm run check",
+      "npx astro check"
+    ],
+    "deps_audit": [
+      "npm audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "astro-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "islands_minimal",
+      "label": "Client islands only where interactivity is required; prefer static Astro components"
+    },
+    {
+      "id": "secrets_server_side",
+      "label": "API keys and secrets in server routes/endpoints, not client bundles"
+    }
+  ]
+}

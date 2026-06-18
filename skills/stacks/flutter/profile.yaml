@@ -1,0 +1,27 @@
+---
+id: flutter
+label: Flutter
+language: dart
+framework: flutter
+tooling:
+  test:
+  - flutter test
+  lint:
+  - dart analyze
+  - flutter analyze
+  format:
+  - dart format --set-exit-if-changed .
+  build:
+  - flutter build apk --debug
+skills:
+  required:
+  - stack-detection
+  - testing-universal
+  recommended:
+  - flutter-patterns
+mcp_suggest: []
+dod_overlay:
+- id: const_and_builders
+  label: Long lists use builders/slivers; prefer const widgets where values are stable
+- id: no_secrets_in_source
+  label: API keys and tokens not hardcoded in Dart source committed to the repo

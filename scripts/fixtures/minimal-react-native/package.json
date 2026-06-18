@@ -1,0 +1,8 @@
+{
+  "name": "minimal-react-native",
+  "private": true,
+  "dependencies": {
+    "react": "18.2.0",
+    "react-native": "0.74.0"
+  }
+}

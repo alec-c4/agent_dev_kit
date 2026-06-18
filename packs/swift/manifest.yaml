@@ -1,0 +1,12 @@
+# Swift stack pack — iOS, macOS, and Swift Package Manager projects
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: swift
+name: Swift Pack
+description: Swift and Apple platform patterns — SPM, SwiftUI, concurrency, testing.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - swift-patterns

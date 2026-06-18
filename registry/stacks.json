@@ -7,12 +7,18 @@
     "nuxt",
     "sveltekit",
     "svelte",
+    "astro",
+    "react-native",
+    "flutter",
     "node",
     "fastapi",
     "django",
     "flask",
     "python",
     "go",
+    "tauri",
+    "swift",
+    "kotlin",
     "rust"
   ],
   "stacks": {
@@ -126,6 +132,64 @@
         ]
       },
       "stack_skill": "stacks/go"
+    },
+    "astro": {
+      "detect": {
+        "files": [
+          "package.json"
+        ],
+        "package_dep": "astro"
+      },
+      "stack_skill": "stacks/astro"
+    },
+    "react-native": {
+      "detect": {
+        "files": [
+          "package.json"
+        ],
+        "package_dep": "react-native"
+      },
+      "stack_skill": "stacks/react-native"
+    },
+    "flutter": {
+      "detect": {
+        "files": [
+          "pubspec.yaml"
+        ],
+        "content_match": "flutter"
+      },
+      "stack_skill": "stacks/flutter"
+    },
+    "tauri": {
+      "detect": {
+        "files": [
+          "src-tauri/Cargo.toml"
+        ]
+      },
+      "stack_skill": "stacks/tauri"
+    },
+    "swift": {
+      "detect": {
+        "any_files": [
+          "Package.swift",
+          "Project.swift"
+        ],
+        "any_glob": [
+          "*.xcodeproj/project.pbxproj"
+        ]
+      },
+      "stack_skill": "stacks/swift"
+    },
+    "kotlin": {
+      "detect": {
+        "any_files": [
+          "build.gradle.kts",
+          "build.gradle",
+          "pom.xml"
+        ],
+        "content_match": "kotlin"
+      },
+      "stack_skill": "stacks/kotlin"
     },
     "rust": {
       "detect": {

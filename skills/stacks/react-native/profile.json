@@ -1,0 +1,47 @@
+{
+  "id": "react-native",
+  "label": "React Native",
+  "language": "typescript",
+  "framework": "react-native",
+  "tooling": {
+    "test": [
+      "npm test",
+      "npx jest"
+    ],
+    "lint": [
+      "npx eslint .",
+      "npm run lint"
+    ],
+    "typecheck": [
+      "npx tsc --noEmit"
+    ],
+    "security": [
+      "npm audit"
+    ],
+    "deps_audit": [
+      "npm audit --audit-level=high"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ],
+    "recommended": [
+      "react-native-patterns"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "list_performance",
+      "label": "Long lists use virtualized list components with stable keys — not ScrollView of unbounded items"
+    },
+    {
+      "id": "no_secrets_in_bundle",
+      "label": "API keys and tokens not embedded in JS source committed to the repo"
+    }
+  ]
+}

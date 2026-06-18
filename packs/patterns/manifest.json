@@ -12,8 +12,13 @@
     "rails-core-patterns",
     "rails-testing-rspec",
     "rails-testing-minitest",
+    "rails-importmaps",
+    "rails-api",
+    "rails-js-bundling",
     "hotwire",
     "inertia",
+    "react-patterns",
+    "vue-patterns",
     "nextjs-patterns",
     "nuxt-patterns",
     "svelte-patterns",
@@ -21,6 +26,16 @@
     "django-patterns",
     "fastapi-patterns",
     "elixir-phoenix-patterns",
-    "go-service-patterns"
+    "go-service-patterns",
+    "docker-patterns",
+    "kubernetes-patterns",
+    "ansible-patterns",
+    "terraform-patterns",
+    "astro-patterns",
+    "tauri-patterns",
+    "swift-patterns",
+    "kotlin-patterns",
+    "react-native-patterns",
+    "flutter-patterns"
   ]
 }

@@ -16,6 +16,14 @@ tooling:
 skills:
   required: [stack-detection, testing-universal]
   recommended: [my-stack-patterns]
+  if_gem:
+    some-gem: [some-pattern-skill]
+  if_file:
+    config/application.rb:
+      content_match: api_only
+      skills: [my-api-patterns]
+  if_package_dep:
+    react: [react-patterns]
 dod_overlay:
   - id: my_custom_check
     label: Describe stack-specific DoD item
@@ -73,7 +81,7 @@ Stack-specific topic content lives under `skills/` — not in guidelines.
 
 Community packs: copy [packs/community/_template/](packs/community/_template/) → `packs/community/<id>/`.
 
-Official stack packs: `rails`, `node`, `python`, `go`, `elixir` — see [packs/README.md](../packs/README.md).
+Official stack packs: `rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter` — see [packs/README.md](../packs/README.md).
 
 ## Project-level overrides
 

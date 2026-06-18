@@ -144,7 +144,7 @@ if [[ "$PHASE" == "1" ]]; then
     ok "topics skills pack (packs/topics)"
   fi
 
-  for sp in rails node python go elixir; do
+  for sp in rails node python go elixir devops astro tauri swift kotlin react-native flutter; do
     if [[ ! -f "$KIT_DIR/packs/$sp/manifest.json" ]]; then
       warn "missing packs/$sp/manifest.json — run: bash scripts/compile_registry.sh"
     else
@@ -351,6 +351,42 @@ if [[ -d "$FIXTURE_ELIXIR" ]]; then
     ok "detect_stack fixture elixir"
   else
     err "detect_stack fixture did not detect elixir"
+  fi
+fi
+
+FIXTURE_SWIFT="$KIT_DIR/scripts/fixtures/minimal-swift"
+if [[ -d "$FIXTURE_SWIFT" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_SWIFT" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "swift"' >/dev/null; then
+    ok "detect_stack fixture swift"
+  else
+    err "detect_stack fixture did not detect swift"
+  fi
+fi
+
+FIXTURE_KOTLIN="$KIT_DIR/scripts/fixtures/minimal-kotlin"
+if [[ -d "$FIXTURE_KOTLIN" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_KOTLIN" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "kotlin"' >/dev/null; then
+    ok "detect_stack fixture kotlin"
+  else
+    err "detect_stack fixture did not detect kotlin"
+  fi
+fi
+
+FIXTURE_REACT_NATIVE="$KIT_DIR/scripts/fixtures/minimal-react-native"
+if [[ -d "$FIXTURE_REACT_NATIVE" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_REACT_NATIVE" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "react-native"' >/dev/null; then
+    ok "detect_stack fixture react-native"
+  else
+    err "detect_stack fixture did not detect react-native"
+  fi
+fi
+
+FIXTURE_FLUTTER="$KIT_DIR/scripts/fixtures/minimal-flutter"
+if [[ -d "$FIXTURE_FLUTTER" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_FLUTTER" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "flutter"' >/dev/null; then
+    ok "detect_stack fixture flutter"
+  else
+    err "detect_stack fixture did not detect flutter"
   fi
 fi
 

@@ -8,6 +8,8 @@ user-invokable: false
 
 Load after [stacks/rails](../stacks/rails/SKILL.md). Tooling from `profile.yaml`.
 
+**Frontend variant?** Check `skills_to_load` from detect-stack — importmap/Hotwire, API-only, jsbundling, or Inertia + React/Vue/Svelte (see [stacks/rails](../stacks/rails/SKILL.md)).
+
 ## Structure
 
 - **Compact namespacing:** `class Billing::InvoicePresenter` in `billing/invoice_presenter.rb` — no nested `module` blocks.

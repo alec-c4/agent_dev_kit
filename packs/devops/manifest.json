@@ -1,0 +1,15 @@
+{
+  "id": "devops",
+  "name": "DevOps Pack",
+  "description": "Docker, Kubernetes, Ansible, and Terraform pattern skills.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "docker-patterns",
+    "kubernetes-patterns",
+    "ansible-patterns",
+    "terraform-patterns"
+  ]
+}

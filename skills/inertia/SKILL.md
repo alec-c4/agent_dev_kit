@@ -6,7 +6,17 @@ user-invokable: false
 
 # Inertia.js patterns
 
-Load when Inertia gem/package detected ([stacks/rails](../stacks/rails/profile.yaml) or Node stack).
+Load when Inertia gem/package detected ([stacks/rails](../stacks/rails/profile.yaml) `if_gem: inertia_rails` or Node stack).
+
+## Rails variants
+
+| Frontend | package.json signal | Also load |
+|----------|---------------------|-----------|
+| React | `@inertiajs/react` | [react-patterns](../react-patterns/SKILL.md) |
+| Vue 3 | `@inertiajs/vue3` | [vue-patterns](../vue-patterns/SKILL.md) |
+| Svelte | `@inertiajs/svelte` | [svelte-patterns](../svelte-patterns/SKILL.md) |
+
+Rails often pairs Inertia with **jsbundling/esbuild** or **Vite** — see [rails-js-bundling](../rails-js-bundling/SKILL.md). Not used with **importmap-only** stacks.
 
 ## Server
 
