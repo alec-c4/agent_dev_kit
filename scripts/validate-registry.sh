@@ -345,6 +345,45 @@ if [[ -d "$FIXTURE_RAILS" ]]; then
   fi
 fi
 
+FIXTURE_RAILS_IMPORTMAP="$KIT_DIR/scripts/fixtures/minimal-rails-importmap"
+if [[ -d "$FIXTURE_RAILS_IMPORTMAP" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_RAILS_IMPORTMAP" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '
+    .primary_stack == "rails"
+    and (.skills_to_load | index("rails-importmaps"))
+    and (.skills_to_load | index("hotwire"))
+  ' >/dev/null; then
+    ok "detect_stack fixture rails-importmap"
+  else
+    err "detect_stack fixture rails-importmap skills mismatch"
+  fi
+fi
+
+FIXTURE_RAILS_API="$KIT_DIR/scripts/fixtures/minimal-rails-api"
+if [[ -d "$FIXTURE_RAILS_API" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_RAILS_API" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '
+    .primary_stack == "rails"
+    and (.skills_to_load | index("rails-api"))
+  ' >/dev/null; then
+    ok "detect_stack fixture rails-api"
+  else
+    err "detect_stack fixture rails-api skills mismatch"
+  fi
+fi
+
+FIXTURE_RAILS_INERTIA="$KIT_DIR/scripts/fixtures/minimal-rails-inertia"
+if [[ -d "$FIXTURE_RAILS_INERTIA" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_RAILS_INERTIA" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '
+    .primary_stack == "rails"
+    and (.skills_to_load | index("inertia"))
+    and (.skills_to_load | index("rails-js-bundling"))
+    and (.skills_to_load | index("react-patterns"))
+  ' >/dev/null; then
+    ok "detect_stack fixture rails-inertia-react"
+  else
+    err "detect_stack fixture rails-inertia-react skills mismatch"
+  fi
+fi
+
 FIXTURE_ELIXIR="$KIT_DIR/scripts/fixtures/minimal-elixir"
 if [[ -d "$FIXTURE_ELIXIR" ]]; then
   if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_ELIXIR" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "elixir"' >/dev/null; then
