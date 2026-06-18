@@ -18,6 +18,7 @@ From the kit repo root (works in fish, zsh, bash):
 
 ```text
 ./scripts/kit install --target=all
+./scripts/kit install --target=both --with-hooks --with-review-gate
 ./scripts/kit compile
 ./scripts/kit validate --phase=1
 ./scripts/kit validate-skills --pack=core
