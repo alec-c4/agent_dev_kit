@@ -29,7 +29,7 @@ Never skip analysis because cache has a row.
 
 1. **Parse work_ref** from user message or command args. Sanitize for paths (`/` and spaces → `-`).
 2. **Read** `.ai/tracker.yaml` if present — `provider`, `work_filename`, `spec_filename`, `url_template`.
-3. **Optional cache** — if `.ai/tracker-cache.json` exists, enrich title/link in analysis header; do not replace ticket body without paste/fetch.
+3. **Optional cache** — run `./scripts/kit sync-tracker` to refresh `.ai/tracker-cache.json`; enrich title/link in analysis header; do not replace ticket body without paste/fetch.
 4. **Run intake script:**
 
 ```bash

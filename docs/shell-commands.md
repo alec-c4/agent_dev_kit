@@ -26,6 +26,7 @@ From the kit repo root (works in fish, zsh, bash):
 ./scripts/kit intake GH-58 --paste --dry-run <<'EOF'
 Ticket title and body
 EOF
+./scripts/kit sync-tracker --dry-run
 ./scripts/kit detect-stack --write-profile
 ./scripts/kit sync-rules
 ./scripts/kit shell-info

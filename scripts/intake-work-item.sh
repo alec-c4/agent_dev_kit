@@ -121,6 +121,51 @@ fetch_github() {
   return 0
 }
 
+enrich_from_cache() {
+  local cache_path="$PROJECT_DIR/.ai/tracker-cache.json"
+  if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
+    read -r cache_path <<EOF
+$(python3 - "$PROJECT_DIR/.ai/tracker.yaml" <<'PY'
+from pathlib import Path
+import sys
+try:
+    import yaml
+    data = yaml.safe_load(Path(sys.argv[1]).read_text()) or {}
+    print(Path(".ai") / (data.get("cache_file") or "tracker-cache.json"))
+except ImportError:
+    print(".ai/tracker-cache.json")
+PY
+EOF
+)
+    cache_path="$PROJECT_DIR/$cache_path"
+  fi
+  [[ -f "$cache_path" ]] || return 0
+  read -r CACHE_TITLE CACHE_URL CACHE_STATUS <<EOF
+$(python3 - "$cache_path" "$WORK_REF" <<'PY'
+import json, sys
+from pathlib import Path
+data = json.loads(Path(sys.argv[1]).read_text())
+ref = sys.argv[2]
+for item in data.get("items") or []:
+    if item.get("work_ref") == ref:
+        print(item.get("title") or "")
+        print(item.get("url") or "")
+        print(item.get("status") or "")
+        break
+else:
+    print("")
+    print("")
+    print("")
+PY
+EOF
+)
+  [[ -z "$TITLE" && -n "$CACHE_TITLE" ]] && TITLE="$CACHE_TITLE"
+  [[ -z "$TRACKER_LINK" && -n "$CACHE_URL" ]] && TRACKER_LINK="$CACHE_URL"
+  if [[ -n "$CACHE_STATUS" && "$SOURCE" != gh* ]]; then
+    SOURCE="${SOURCE:+$SOURCE; }tracker-cache ($CACHE_STATUS)"
+  fi
+}
+
 if load_paste; then
   :
 elif [[ "$TRACKER_PROVIDER" == "github" ]] || [[ "$WORK_REF" =~ ^[Gg][Hh]-[0-9]+$ ]] || [[ "$WORK_REF" =~ ^[0-9]+$ ]]; then
@@ -139,6 +184,8 @@ else
 fi
 
 [[ -n "$BODY" ]] || { echo "ERROR: empty intake body" >&2; exit 1; }
+
+enrich_from_cache
 
 if [[ -z "$TITLE" ]]; then
   TITLE="$(printf '%s' "$BODY" | head -n 1 | sed 's/^#\+ //;s/^//')"

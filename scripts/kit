@@ -12,6 +12,7 @@
 #   ./scripts/kit deploy-skills --pack=core [--scope=global|project|both]
 #   ./scripts/kit deploy-workflows [--scope=global|project|both]
 #   ./scripts/kit intake <work_ref> [--paste] [--file=path] [--dry-run]
+#   ./scripts/kit sync-tracker [--dry-run]
 #   ./scripts/kit detect-stack [--write-profile] [path]
 #   ./scripts/kit sync-rules [--dry-run] [--rules-dir DIR ...]
 #   ./scripts/kit shell-info [--json]
@@ -66,6 +67,9 @@ case "$CMD" in
     ;;
   intake)
     exec "$RUNNER" "$KIT_DIR/scripts/intake-work-item.sh" "$@"
+    ;;
+  sync-tracker)
+    exec "$RUNNER" "$KIT_DIR/scripts/sync-tracker-cache.sh" "$@"
     ;;
   detect-stack)
     exec "$RUNNER" "$KIT_DIR/scripts/detect-stack.sh" "$@"

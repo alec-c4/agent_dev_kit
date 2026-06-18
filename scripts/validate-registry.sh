@@ -117,14 +117,22 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing scripts/deploy-workflows.sh"
   elif [[ ! -f "$KIT_DIR/scripts/intake-work-item.sh" ]]; then
     err "missing scripts/intake-work-item.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/sync-tracker-cache.sh" ]]; then
+    err "missing scripts/sync-tracker-cache.sh"
   else
-    ok "core skills pack (packs/core + deploy-skills + validate-skills + deploy-workflows + intake)"
+    ok "core skills pack (packs/core + deploy-skills + validate-skills + deploy-workflows + intake + sync-tracker)"
   fi
 
   if [[ ! -f "$KIT_DIR/packs/patterns/manifest.json" ]]; then
     warn "missing packs/patterns/manifest.json — run: bash scripts/compile_registry.sh"
   else
     ok "patterns skills pack (packs/patterns)"
+  fi
+
+  if [[ ! -f "$KIT_DIR/packs/topics/manifest.json" ]]; then
+    warn "missing packs/topics/manifest.json — run: bash scripts/compile_registry.sh"
+  else
+    ok "topics skills pack (packs/topics)"
   fi
 
   if [[ ! -d "$KIT_DIR/agents" ]] || [[ ! -f "$KIT_DIR/agents/developer.md" ]]; then
@@ -274,6 +282,7 @@ done
 # ── agents: required frontmatter ──────────────────────────────────────────────
 for agent in "$KIT_DIR"/agents/*.md; do
   [[ -f "$agent" ]] || continue
+  [[ "$(basename "$agent")" == "README.md" ]] && continue
   if ! grep -q '^name:' "$agent"; then
     err "agent missing name: $(basename "$agent")"
   fi
