@@ -64,7 +64,7 @@ Not shipped yet; planned next:
 
 | Item | Notes |
 |------|-------|
-| **Docs polish** | Full installation guide, project scaffolds |
+| **Docs polish** | Project scaffolds (`templates/project-*`) |
 | **Linear / Jira cache** | `sync-tracker` today supports GitHub only; other providers via paste/export |
 | **Antigravity hooks** | Reuse shell scripts when IDE hook API is stable |
 | **Copilot instructions** | `.github/instructions/` pattern-scoped rules (last) |
@@ -123,6 +123,7 @@ skills/stacks/<id>/ — technology-specific tooling and DoD
 | [GIT.md](docs/guidelines/GIT.md) | Branching and merge policy |
 | [Shell commands](docs/shell-commands.md) | `./scripts/kit` from any shell |
 | [Hooks](docs/hooks.md) | Claude Code + Cursor shell hooks (opt-in install) |
+| [Installation](docs/installation.md) | Install targets, packs, hooks, verify |
 
 ## Architecture
 
