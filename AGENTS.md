@@ -1,6 +1,6 @@
 # Agent Dev Kit
 
-Universal developer kit for AI-assisted product engineering. Works with **Cursor**, **Claude Code**, **Copilot**, **Windsurf**, and other assistants.
+Universal developer kit for AI-assisted product engineering. Works with **Cursor**, **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Copilot**, **Windsurf**, and other assistants.
 
 Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, user rules win.**
 
@@ -61,8 +61,11 @@ See [.ai/README.md](.ai/README.md).
 | Any assistant | **AGENTS.md** (this file) | — |
 | Cursor | `templates/cursor/rules/kit-*.mdc` + `kit-user-rules.manifest.json` | `./scripts/kit install --target=cursor` |
 | Claude Code | [CLAUDE.md](CLAUDE.md) | `./scripts/kit install --target=claude` |
+| OpenAI Codex CLI | **AGENTS.md** (native) | `./scripts/kit install --target=codex` |
+| Google Antigravity | [GEMINI.md](GEMINI.md) + **AGENTS.md** | `./scripts/kit install --target=antigravity` |
+| All supported | — | `./scripts/kit install --target=all` |
 
-Guidelines in `docs/guidelines/` are canonical — adapters only route to them.
+Full matrix: [docs/tool-adapters.md](docs/tool-adapters.md).
 
 ## Do not
 
