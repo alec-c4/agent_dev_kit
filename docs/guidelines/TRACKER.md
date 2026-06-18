@@ -216,7 +216,7 @@ The cache **resolves references**; **analysis + spec** remain the contract. Neve
 | Script | Purpose |
 |--------|---------|
 | `scripts/intake-work-item.sh` | Fetch **one** item → `work/{ref}-analysis.md` (paste, `gh issue view`) |
-| `scripts/sync-tracker-cache.sh` | *(planned)* Write `.ai/tracker-cache.json` |
+| `scripts/sync-tracker-cache.sh` | Write `.ai/tracker-cache.json` (GitHub via `gh`) |
 
 **Priority:** single-item intake before full-list sync. Cache is a convenience layer, not source of truth.
 
@@ -237,8 +237,8 @@ Spec content does not depend on which tracker you use.
 | `skills/work-intake/` | shipped | Parse work_ref; suggest `.ai/` paths; run intake script |
 | `scripts/intake-work-item.sh` | shipped | One task → `work/{ref}-analysis.md` (paste, gh view) |
 | `skills/resolve-task/` | shipped | Full pipeline from work_ref |
-| `scripts/sync-tracker-cache.sh` | planned | Optional snapshot → `.ai/tracker-cache.json` |
-| `skills/tracker-sync/` | planned | Optional projection: spec summary → ticket comment |
+| `scripts/sync-tracker-cache.sh` | shipped | Optional snapshot → `.ai/tracker-cache.json` |
+| `skills/tracker-sync/` | shipped | Optional projection: spec summary → ticket comment |
 
 ## Quick decision tree
 

@@ -18,6 +18,7 @@
     "ship",
     "work-intake",
     "resolve-task",
+    "tracker-sync",
     "stacks/django",
     "stacks/elixir",
     "stacks/fastapi",

@@ -293,7 +293,7 @@ deploy_skill_packs() {
   local scope="$1"
   local also_claude="${2:-false}"
   local sync_ag="${3:-false}"
-  for pack in core patterns; do
+  for pack in core patterns topics; do
     [[ -f "$REPO_DIR/packs/$pack/manifest.json" ]] || continue
     deploy_skills_pack "$pack" "$scope" "$also_claude" "$sync_ag"
   done

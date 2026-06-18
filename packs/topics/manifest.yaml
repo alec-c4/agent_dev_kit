@@ -1,0 +1,17 @@
+# Topics pack — cross-cutting skills (security, LLM, RAG, MCP)
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: topics
+name: Cross-cutting Topics
+description: Topic skills referenced from registry/topics.yaml stack_files. Requires core pack.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - security-best-practices
+  - llm-integration
+  - rag-implementation
+  - mcp-server-integration
+
+# Review: docs/skills-review.md (PR sign-off checklist)

@@ -43,3 +43,9 @@ jobs:
 
       - name: Validate patterns skills pack
         run: ./scripts/kit validate-skills --pack=patterns
+
+      - name: Validate topics skills pack
+        run: ./scripts/kit validate-skills --pack=topics
+
+      - name: Validate kit (full)
+        run: ./scripts/kit validate
