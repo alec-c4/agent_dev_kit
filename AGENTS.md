@@ -27,6 +27,7 @@ Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, us
 | [docs/examples/specs/](docs/examples/specs/README.md) | Worked spec examples (new, fix, archive) |
 | [docs/guidelines/WORKFLOW.md](docs/guidelines/WORKFLOW.md) | Task flow, planning, PR |
 | [docs/guidelines/INTENT-ROUTING.md](docs/guidelines/INTENT-ROUTING.md) | Plain text vs slash commands — classify, clarify, hints |
+| [docs/guidelines/COMPREHENSION.md](docs/guidelines/COMPREHENSION.md) | Human comprehension gate — handoff, Q&A, anti-degradation |
 | [docs/guidelines/CODING.md](docs/guidelines/CODING.md) | Implementation |
 | [docs/guidelines/TESTING.md](docs/guidelines/TESTING.md) | Tests, TDD |
 | [docs/guidelines/VERIFICATION.md](docs/guidelines/VERIFICATION.md) | Task done — separate agent: tests, lint, docs |

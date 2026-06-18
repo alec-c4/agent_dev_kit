@@ -2,7 +2,7 @@
 
 Before a task is considered **done**, a **separate verifier agent** must run — fresh session, no writer chat history.
 
-This gate runs **after implementation**, **before commit or PR**. It complements [REVIEW.md](REVIEW.md) (security, spec ACs, DoD); verification focuses on **executable checks** and **documentation truth**.
+This gate runs **after** [comprehension sign-off](COMPREHENSION.md) and **after implementation**, **before commit or PR**. It complements [REVIEW.md](REVIEW.md) (security, spec ACs, DoD); verification focuses on **executable checks** and **documentation truth**.
 
 ## When to run
 
@@ -20,6 +20,7 @@ Skip only for trivial changes (typo, comment) when the human agrees.
 2. **Read inputs:**
    - `.ai/*-spec.md` (if exists)
    - `.ai/*-plan.md` (if exists)
+   - `.ai/*-handoff.md` (if tier ≥ standard — see [COMPREHENSION.md](COMPREHENSION.md))
    - `git diff` / staged diff
    - Relevant docs touched or that should have been updated (README, API docs, config reference)
 3. **Run commands** — resolve from stack profile, never guess:
@@ -40,6 +41,7 @@ bash scripts/detect-stack.sh --write-profile
 | 2 | **Linter clean** | Run `tooling.lint` (and `tooling.typecheck` if defined). No new errors in changed files. |
 | 3 | **Docs updated** | Every public behaviour, API, CLI flag, or config change has a matching doc update in the same task. |
 | 4 | **Implementation matches docs** | Docs describe what the code actually does — no stale examples, wrong flags, or missing endpoints. |
+| 5 | **Comprehension gate** | For tier **standard** or **strict**: handoff exists, Q&A answered, manual-verify ACs recorded, **Human sign-off** with date. FAIL if missing or agent-filled. Skip for **minimal** tier. |
 
 Optional when profile defines them: `tooling.security`, `tooling.deps_audit`.
 
@@ -62,7 +64,20 @@ For each change in the diff, ask:
 
 ## Spec conformance
 
-When `.ai/*-spec.md` exists, verify each acceptance criterion — see [SPECS.md](SPECS.md). Include results in the verification report.
+When `.ai/*-spec.md` exists, verify each acceptance criterion — see [SPECS.md](SPECS.md). Include results in the verification report. Agent-verified ACs only; `human-verify` ACs are confirmed via handoff manual verification table.
+
+## Comprehension conformance
+
+When `.ai/*-handoff.md` exists, verify:
+
+| Check | PASS when |
+|-------|-----------|
+| Handoff present | File exists for work_ref |
+| Q&A complete | Each question has **Human answer** filled by human |
+| Manual verify | At least one `human-verify` AC recorded for standard tier |
+| Sign-off | `Signed:` date present; **Files I read** lists ≥1 path |
+
+**FAIL** if sign-off is missing for standard/strict tier, or if answers clearly were pasted by the agent without human attempt.
 
 ## Output format
 
@@ -97,6 +112,13 @@ Save as `.ai/issue-{n}-verification.md` or `.ai/task-verification.md`:
 | AC | Status | Evidence |
 |----|--------|----------|
 | AC-1 | PASS/FAIL/PARTIAL | |
+
+## Comprehension
+
+| Check | Status | Evidence |
+|-------|--------|----------|
+| Handoff + sign-off | PASS/FAIL/SKIP | path to handoff |
+| Manual-verify ACs | PASS/FAIL/SKIP | handoff table |
 
 ## Blockers
 

@@ -19,8 +19,9 @@ Before loading kit guidelines, read `~/.cursor/kit-user-rules.manifest.json` —
 3. **Spec first** — write `.ai/*-spec.md`, get human approval ([SPECS.md](../agent_dev_kit/docs/guidelines/SPECS.md)).
 4. **Plan** — write `.ai/*-plan.md` with Detail: minimal | standard | detailed; wait for approval before production code.
 5. **TDD** — implement per [TESTING.md](../agent_dev_kit/docs/guidelines/TESTING.md).
-6. **Verification** — separate agent session before commit ([VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md)).
-7. **Review** — [REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md) before commit or PR.
+6. **Comprehension** — handoff + Q&A + human sign-off before verify ([COMPREHENSION.md](../agent_dev_kit/docs/guidelines/COMPREHENSION.md)).
+7. **Verification** — separate agent session before commit ([VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md)).
+8. **Review** — [REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md) before commit or PR.
 
 ## Guidelines
 

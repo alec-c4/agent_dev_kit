@@ -2,7 +2,7 @@
 
 Review is a **signal**, not an authoritative verdict. Re-running review on the same diff may differ — use severity to prioritize.
 
-**Prerequisite:** [VERIFICATION.md](VERIFICATION.md) must pass in a separate agent session before review (tests, lint, docs sync). Review adds security, DoD, and code quality on top.
+**Prerequisite:** [VERIFICATION.md](VERIFICATION.md) must pass in a separate agent session before review (tests, lint, docs sync). [COMPREHENSION.md](COMPREHENSION.md) sign-off must be complete for tier ≥ standard before verification runs.
 
 ## When to review
 
