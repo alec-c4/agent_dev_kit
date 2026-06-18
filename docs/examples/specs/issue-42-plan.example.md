@@ -1,7 +1,8 @@
-# Plan: CSV export for record list (#42)
+# Plan: CSV export for record list
 
 **Detail:** standard  
-**Spec:** issue-42-spec.md **v1.0** (approved)
+**Work ref:** GH-42  
+**Spec:** specs/export-csv-spec.md **v1.0** (approved) — legacy alias `issue-42-spec.md`
 
 ## Summary
 
@@ -34,4 +35,4 @@ From profile: `stacks/rails` — `bundle exec rspec`, `standardrb`
 ## Success criteria
 
 - [ ] AC-1–AC-4 from spec v1.0
-- [ ] `.ai/issue-42-verification.md` PASS before PR
+- [ ] `.ai/work/GH-42-verification.md` PASS before PR (legacy: `issue-42-verification.md`)
