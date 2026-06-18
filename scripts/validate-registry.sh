@@ -78,7 +78,36 @@ if [[ "$PHASE" == "1" ]]; then
       ok "core skill $skill"
     fi
   done
-  for name in stacks topics dod; do
+
+  if [[ ! -f "$KIT_DIR/registry/cursor-user-rules.json" ]]; then
+    err "missing registry/cursor-user-rules.json — run: bash scripts/compile_registry.sh"
+  else
+    ok "registry/cursor-user-rules.json"
+  fi
+
+  if [[ ! -f "$KIT_DIR/scripts/sync-cursor-user-rules.sh" ]]; then
+    err "missing scripts/sync-cursor-user-rules.sh"
+  elif [[ ! -f "$KIT_DIR/templates/cursor/rules/kit-user-rules.mdc" ]]; then
+    err "missing templates/cursor/rules/kit-user-rules.mdc"
+  else
+    ok "cursor user-rules dedup (sync script + kit-user-rules.mdc)"
+  fi
+
+  if [[ ! -f "$KIT_DIR/docs/guidelines/TRACKER.md" ]]; then
+    err "missing docs/guidelines/TRACKER.md"
+  else
+    ok "docs/guidelines/TRACKER.md"
+  fi
+
+  if [[ ! -f "$KIT_DIR/scripts/kit" ]]; then
+    err "missing scripts/kit CLI wrapper"
+  elif [[ ! -f "$KIT_DIR/docs/shell-commands.md" ]]; then
+    err "missing docs/shell-commands.md"
+  else
+    ok "shell-agnostic kit CLI (scripts/kit + docs/shell-commands.md)"
+  fi
+
+  for name in stacks topics dod cursor-user-rules; do
     yaml="$KIT_DIR/registry/${name}.yaml"
     json="$KIT_DIR/registry/${name}.json"
     [[ -f "$yaml" && -f "$json" ]] || continue
