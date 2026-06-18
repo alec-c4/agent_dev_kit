@@ -1,0 +1,32 @@
+{
+  "id": "rust",
+  "label": "Rust",
+  "language": "rust",
+  "framework": "rust",
+  "tooling": {
+    "test": [
+      "cargo test"
+    ],
+    "lint": [
+      "cargo clippy -- -D warnings"
+    ],
+    "security": [
+      "cargo audit"
+    ]
+  },
+  "skills": {
+    "required": [
+      "stack-detection",
+      "testing-universal"
+    ]
+  },
+  "mcp_suggest": [
+
+  ],
+  "dod_overlay": [
+    {
+      "id": "no_unwrap_production",
+      "label": "No `.unwrap()` / `.expect()` on fallible paths in production code paths"
+    }
+  ]
+}

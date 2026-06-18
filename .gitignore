@@ -1,0 +1,13 @@
+# Local Claude Code overrides (never commit)
+.claude/
+
+# Editor / language server (machine-specific)
+.ruby-lsp/
+
+# Python
+.venv*/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

@@ -1,0 +1,19 @@
+---
+description: Kit review checklist before commit or PR. Run after verification passes.
+globs: "**/*.{rb,ts,tsx,js,jsx,py,go,ex,exs,svelte}"
+alwaysApply: false
+---
+
+# Kit review
+
+**Prerequisite:** [VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md) must pass in a **separate agent session** before review.
+
+Before commit or PR, follow [docs/guidelines/REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md):
+
+1. Answer all four security questions on the diff.
+2. Check spec conformance when `.ai/*-spec.md` exists.
+3. Run DoD checklist from [registry/dod.yaml](../agent_dev_kit/registry/dod.yaml).
+4. Use fixed review output format from REVIEW.md.
+5. Wait for explicit developer approval before commit.
+
+Defer to user TDD and semantic-commit rules when present.
