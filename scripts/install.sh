@@ -3,13 +3,16 @@
 #
 # Usage:
 #   ./scripts/install.sh --target=both              # Claude Code + Cursor (default)
+#   ./scripts/install.sh --target=all               # claude + cursor + codex + antigravity
 #   ./scripts/install.sh --target=claude            # Claude Code (~/.claude/)
 #   ./scripts/install.sh --target=cursor            # Cursor (~/.cursor/agent_dev_kit + kit rules)
-#   ./scripts/install.sh --target=both --project    # current repo
-#   ./scripts/install.sh --dry-run --target=both
-#   ./scripts/kit install --target=both   # same; works from fish/zsh/bash
+#   ./scripts/install.sh --target=codex             # OpenAI Codex (~/.codex/ or $CODEX_HOME)
+#   ./scripts/install.sh --target=antigravity       # Google Antigravity (~/.gemini/)
+#   ./scripts/install.sh --target=all --project     # current repo
+#   ./scripts/install.sh --dry-run --target=codex
+#   ./scripts/kit install --target=all              # same; works from fish/zsh/bash
 #
-# Canonical entry: AGENTS.md. CLAUDE.md is a Claude Code adapter only.
+# Canonical entry: AGENTS.md. CLAUDE.md and GEMINI.md are thin adapters only.
 
 set -euo pipefail
 
@@ -19,6 +22,7 @@ TARGET="both"
 SCOPE="global"
 MODE="symlink"
 DRY_RUN=false
+FORCE=false
 
 for arg in "$@"; do
   case "$arg" in
@@ -26,8 +30,9 @@ for arg in "$@"; do
     --project) SCOPE="project" ;;
     --copy) MODE="copy" ;;
     --dry-run) DRY_RUN=true ;;
+    --force) FORCE=true ;;
     --help|-h)
-      sed -n '2,12p' "$0"
+      sed -n '2,16p' "$0"
       exit 0
       ;;
     *)
@@ -38,12 +43,12 @@ for arg in "$@"; do
 done
 
 case "$TARGET" in
-  claude|cursor|both) ;;
+  claude|cursor|both|codex|antigravity|all) ;;
   *)
-    echo "ERROR: --target must be claude, cursor, or both" >&2
+    echo "ERROR: --target must be claude, cursor, both, codex, antigravity, or all" >&2
     exit 1
     ;;
-esac
+  esac
 
 log() { echo "  $*"; }
 
@@ -88,6 +93,45 @@ deploy_dir() {
   link_or_copy "$REPO_DIR/$1" "$2/$1"
 }
 
+deploy_file_to() {
+  link_or_copy "$REPO_DIR/$1" "$2"
+}
+
+deploy_optional_file() {
+  local src_name="$1" dest_path="$2"
+  if [[ -e "$dest_path" && "$FORCE" != true ]]; then
+    log "skip (exists): $dest_path — use --force to replace"
+    return
+  fi
+  link_or_copy "$REPO_DIR/$src_name" "$dest_path"
+}
+
+deploy_kit_tree() {
+  local base="$1"
+  deploy_dir "docs" "$base"
+  deploy_dir "registry" "$base"
+  deploy_dir "scripts" "$base"
+  deploy_dir "skills" "$base"
+  deploy_dir ".ai" "$base"
+}
+
+install_project_agents_scaffold() {
+  local base="$1"
+  log "Project .agents/ scaffold → $base/.agents/"
+  if $DRY_RUN; then
+    echo "  [dry] mkdir $base/.agents/skills $base/.agents/workflows"
+    echo "  [dry] write README stubs in .agents/skills and .agents/workflows"
+    return
+  fi
+  maybe mkdir -p "$base/.agents/skills" "$base/.agents/workflows"
+  if [[ ! -f "$base/.agents/skills/README.md" ]]; then
+    cp "$REPO_DIR/templates/project-agents/skills-README.md" "$base/.agents/skills/README.md"
+  fi
+  if [[ ! -f "$base/.agents/workflows/README.md" ]]; then
+    cp "$REPO_DIR/templates/project-agents/workflows-README.md" "$base/.agents/workflows/README.md"
+  fi
+}
+
 install_claude() {
   local base="$1"
   log "Claude Code adapter → $base"
@@ -98,6 +142,48 @@ install_claude() {
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
   deploy_dir ".ai" "$base"
+}
+
+install_codex() {
+  local base="${CODEX_HOME:-$HOME/.codex}"
+  log "Codex CLI → $base (AGENTS.md + kit tree; \$CODEX_HOME=${CODEX_HOME:-default})"
+  deploy_optional_file "AGENTS.md" "$base/AGENTS.md"
+  deploy_kit_tree "$base"
+  log "Codex: debug merged instructions with: codex --print-instructions"
+}
+
+install_codex_project() {
+  local base="$1"
+  log "Codex project → $base"
+  deploy_file "AGENTS.md" "$base"
+  deploy_dir "docs" "$base"
+  deploy_dir "registry" "$base"
+  deploy_dir "scripts" "$base"
+  deploy_dir "skills" "$base"
+  deploy_dir ".ai" "$base"
+  install_project_agents_scaffold "$base"
+}
+
+install_antigravity() {
+  local base="$HOME/.gemini"
+  log "Antigravity → $base (AGENTS.md + GEMINI.md + kit tree)"
+  deploy_optional_file "AGENTS.md" "$base/AGENTS.md"
+  deploy_optional_file "GEMINI.md" "$base/GEMINI.md"
+  deploy_kit_tree "$base"
+  log "Antigravity CLI skills path: $base/antigravity-cli/skills/ (copy from ~/.agents/skills if CLI misses skills)"
+}
+
+install_antigravity_project() {
+  local base="$1"
+  log "Antigravity project → $base"
+  deploy_file "AGENTS.md" "$base"
+  deploy_optional_file "GEMINI.md" "$base/GEMINI.md"
+  deploy_dir "docs" "$base"
+  deploy_dir "registry" "$base"
+  deploy_dir "scripts" "$base"
+  deploy_dir "skills" "$base"
+  deploy_dir ".ai" "$base"
+  install_project_agents_scaffold "$base"
 }
 
 install_cursor_rules_global() {
@@ -172,10 +258,17 @@ sync_cursor_user_rules_project() {
   bash "$REPO_DIR/scripts/kit" sync-rules "${args[@]}"
 }
 
+want_claude() { [[ "$TARGET" == "claude" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }
+want_cursor() { [[ "$TARGET" == "cursor" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }
+want_codex() { [[ "$TARGET" == "codex" || "$TARGET" == "all" ]]; }
+want_antigravity() { [[ "$TARGET" == "antigravity" || "$TARGET" == "all" ]]; }
+
 if [[ "$SCOPE" == "project" ]]; then
   CLAUDE_BASE="$(pwd)"
+  PROJECT_BASE="$(pwd)"
 else
   CLAUDE_BASE="$HOME/.claude"
+  PROJECT_BASE=""
 fi
 
 echo "Agent Dev Kit install"
@@ -185,20 +278,38 @@ echo "  scope:   $SCOPE"
 echo "  mode:    $MODE"
 echo "  entry:   AGENTS.md"
 $DRY_RUN && echo "  dry-run: yes"
+$FORCE && echo "  force:   yes"
 echo
 
-if [[ "$TARGET" == "claude" || "$TARGET" == "both" ]]; then
+if want_claude; then
   install_claude "$CLAUDE_BASE"
 fi
 
-if [[ "$TARGET" == "cursor" || "$TARGET" == "both" ]]; then
+if want_cursor; then
   if [[ "$SCOPE" == "project" ]]; then
-    install_cursor_project "$(pwd)"
+    install_cursor_project "$PROJECT_BASE"
   else
     install_cursor_global
+  fi
+fi
+
+if want_codex; then
+  if [[ "$SCOPE" == "project" ]]; then
+    install_codex_project "$PROJECT_BASE"
+  else
+    install_codex
+  fi
+fi
+
+if want_antigravity; then
+  if [[ "$SCOPE" == "project" ]]; then
+    install_antigravity_project "$PROJECT_BASE"
+  else
+    install_antigravity
   fi
 fi
 
 echo
 log "Done. Restart your AI tool to pick up changes."
 log "Canonical instructions: AGENTS.md → docs/guidelines/"
+log "Tool matrix: docs/tool-adapters.md"

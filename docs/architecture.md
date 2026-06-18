@@ -10,7 +10,7 @@ Agent Dev Kit is **stack-agnostic** and **LLM-agnostic**. Universal rules live i
 | Stack detection signals | Minimal (file markers) | `registry/stacks.yaml` |
 | Tooling, DoD overlay, skill routing | Yes | `skills/stacks/<id>/profile.yaml` |
 | Framework patterns, security per stack | Yes | `skills/*` (packs) |
-| Entry points | No | `AGENTS.md` (canonical), `CLAUDE.md` (Claude Code adapter) |
+| Entry points | No | `AGENTS.md` (canonical); adapters: `CLAUDE.md`, `GEMINI.md`, Cursor `.mdc` |
 
 **Rule:** if it mentions a concrete technology (RSpec, Brakeman, pytest, ESLint, Phoenix, …), it belongs in a **skill**, not in guidelines or slim registry files.
 
@@ -18,7 +18,7 @@ Agent Dev Kit is **stack-agnostic** and **LLM-agnostic**. Universal rules live i
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  AGENTS.md (+ CLAUDE.md adapter)   (routers)             │
+│  AGENTS.md (+ CLAUDE.md, GEMINI.md adapters)   (routers)             │
 └───────────────────────────┬─────────────────────────────┘
                             │
 ┌───────────────────────────▼─────────────────────────────┐
@@ -66,6 +66,8 @@ Global Cursor rules and project rules override kit defaults when stricter.
 **Tracker-agnostic intake:** [TRACKER.md](guidelines/TRACKER.md) — `.ai/` is source of truth; external tracker optional.
 
 **Shell:** Kit CLI `./scripts/kit` (bash inside) — [shell-commands.md](shell-commands.md). Interactive `$SHELL` syntax defers to user rules (`fish-shell.mdc`, etc.).
+
+**Tool adapters:** [tool-adapters.md](tool-adapters.md) — Codex, Antigravity, Cursor, Claude Code install map in `registry/tool-targets.yaml`.
 
 ## Extending
 

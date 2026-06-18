@@ -30,7 +30,7 @@ print('wrote $json')
   fi
 }
 
-for name in stacks topics dod cursor-user-rules; do
+for name in stacks topics dod cursor-user-rules tool-targets; do
   compile_one "$name"
 done
 

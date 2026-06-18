@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "targets": {
+    "claude": {
+      "global_base": "~/.claude",
+      "adapter_file": "CLAUDE.md",
+      "deploy": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "docs/",
+        "registry/",
+        "scripts/",
+        "skills/",
+        ".ai/"
+      ]
+    },
+    "cursor": {
+      "global_kit_link": "~/.cursor/agent_dev_kit",
+      "global_rules": "~/.cursor/rules",
+      "project_rules": ".cursor/rules",
+      "deploy": [
+        "AGENTS.md",
+        "docs/",
+        "registry/",
+        "scripts/",
+        "skills/",
+        ".ai/"
+      ]
+    },
+    "codex": {
+      "global_base": "~/.codex",
+      "global_override": "AGENTS.override.md",
+      "skills_global": "~/.agents/skills",
+      "skills_project": ".agents/skills",
+      "deploy": [
+        "AGENTS.md",
+        "docs/",
+        "registry/",
+        "scripts/",
+        "skills/",
+        ".ai/"
+      ],
+      "notes": [
+        "AGENTS.md merge order: global ~/.codex then project root → CWD",
+        "Debug loaded instructions: codex --print-instructions",
+        "Default project_doc_max_bytes: 32768 — keep global AGENTS.md thin"
+      ]
+    },
+    "antigravity": {
+      "global_base": "~/.gemini",
+      "adapter_file": "GEMINI.md",
+      "global_agents": "~/.gemini/AGENTS.md",
+      "skills_global": "~/.gemini/config/skills",
+      "skills_global_cli": "~/.gemini/antigravity-cli/skills",
+      "skills_project": ".agents/skills",
+      "workflows_project": ".agents/workflows",
+      "deploy": [
+        "AGENTS.md",
+        "GEMINI.md",
+        "docs/",
+        "registry/",
+        "scripts/",
+        "skills/",
+        ".ai/"
+      ],
+      "notes": [
+        "Precedence: GEMINI.md overrides AGENTS.md in Antigravity only",
+        "Antigravity CLI may not see ~/.agents/skills — copy to antigravity-cli/skills if needed"
+      ]
+    },
+    "all": {
+      "includes": [
+        "claude",
+        "cursor",
+        "codex",
+        "antigravity"
+      ]
+    },
+    "both": {
+      "includes": [
+        "claude",
+        "cursor"
+      ]
+    }
+  }
+}

@@ -17,7 +17,7 @@ Kit docs use `./scripts/kit` — not fish-only or bash-only chains for kit maint
 From the kit repo root (works in fish, zsh, bash):
 
 ```text
-./scripts/kit install --target=both
+./scripts/kit install --target=all
 ./scripts/kit compile
 ./scripts/kit validate --phase=1
 ./scripts/kit detect-stack --write-profile

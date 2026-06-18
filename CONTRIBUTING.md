@@ -55,7 +55,9 @@ See [docs/EXTENDING.md](docs/EXTENDING.md) and [docs/architecture.md](docs/archi
 ./scripts/kit install --dry-run --target=both
 ./scripts/kit install --target=cursor
 ./scripts/kit install --target=claude
-./scripts/kit install --target=both --project   # current repo
+./scripts/kit install --target=codex
+./scripts/kit install --target=antigravity
+./scripts/kit install --target=all --project   # current repo
 ```
 
 ## Questions
