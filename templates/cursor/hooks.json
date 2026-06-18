@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "__KIT_HOOKS__/cursor/block-dangerous.sh",
+        "failClosed": false
+      },
+      {
+        "command": "__KIT_HOOKS__/cursor/protect-secrets.sh",
+        "failClosed": false
+      },
+      {
+        "command": "__KIT_HOOKS__/cursor/check-branch-protection.sh",
+        "matcher": "git (commit|push)",
+        "failClosed": false
+      },
+      {
+        "command": "__KIT_HOOKS__/cursor/check-commit-scope.sh",
+        "matcher": "git commit",
+        "failClosed": false
+      },
+      {
+        "command": "__KIT_HOOKS__/cursor/enforce-review-before-commit.sh",
+        "matcher": "git commit",
+        "failClosed": false
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "__KIT_HOOKS__/cursor/clear-review-flag.sh",
+        "matcher": "git commit"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "__KIT_HOOKS__/cursor/auto-format.sh"
+      }
+    ],
+    "sessionStart": [
+      {
+        "command": "__KIT_HOOKS__/cursor/warm-stack-profile.sh"
+      }
+    ]
+  }
+}

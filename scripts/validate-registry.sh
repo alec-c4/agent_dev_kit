@@ -122,6 +122,10 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing scripts/sync-tracker-cache.sh"
   elif [[ ! -f "$KIT_DIR/scripts/validate-handoff.sh" ]]; then
     err "missing scripts/validate-handoff.sh"
+  elif [[ ! -f "$KIT_DIR/scripts/deploy-hooks.sh" ]]; then
+    err "missing scripts/deploy-hooks.sh"
+  elif [[ ! -f "$KIT_DIR/hooks/block-dangerous.sh" ]]; then
+    err "missing hooks/block-dangerous.sh"
   elif [[ ! -f "$KIT_DIR/skills/comprehension-check/SKILL.md" ]]; then
     err "missing skills/comprehension-check/SKILL.md"
   else
@@ -308,6 +312,20 @@ for hook in "$KIT_DIR"/hooks/*.sh; do
   fi
 done
 ok "hooks"
+
+# ── hook smoke tests ────────────────────────────────────────────────────────────
+if [[ -f "$KIT_DIR/hooks/block-dangerous.sh" ]]; then
+  if printf '%s' '{"tool_input":{"command":"rm -rf /tmp/foo"}}' | bash "$KIT_DIR/hooks/block-dangerous.sh" >/dev/null 2>&1; then
+    err "block-dangerous.sh should block rm -rf"
+  else
+    ok "hook smoke: block-dangerous rejects rm -rf"
+  fi
+  if printf '%s' '{"tool_input":{"command":"git status"}}' | bash "$KIT_DIR/hooks/block-dangerous.sh" >/dev/null 2>&1; then
+    ok "hook smoke: block-dangerous allows git status"
+  else
+    err "block-dangerous.sh blocked benign git status"
+  fi
+fi
 
 # ── detect-stack dry run on fixtures ──────────────────────────────────────────
 FIXTURE_RAILS="$KIT_DIR/scripts/fixtures/minimal-rails"
