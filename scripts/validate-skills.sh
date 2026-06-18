@@ -36,8 +36,16 @@ err() { echo "ERROR: $*" >&2; ERRORS=$((ERRORS + 1)); }
 warn() { echo "WARN: $*" >&2; WARNINGS=$((WARNINGS + 1)); }
 ok() { echo "  ok: $*"; }
 
+trim_ws() {
+  local s="$1"
+  s="${s#"${s%%[![:space:]]*}"}"
+  s="${s%"${s##*[![:space:]]}"}"
+  printf '%s' "$s"
+}
+
 report_line() {
-  [[ -n "$REPORT" ]] && echo "$1" >> "$REPORT"
+  [[ -n "$REPORT" ]] || return 0
+  echo "$1" >> "$REPORT"
 }
 
 init_report() {
@@ -120,6 +128,8 @@ while IFS= read -r skill; do
   else
     name="${parsed%%---SPLIT---*}"
     desc="${parsed#*---SPLIT---}"
+    name="$(trim_ws "$name")"
+    desc="$(trim_ws "$desc")"
     if [[ -z "$name" ]]; then
       err "$skill: frontmatter missing name"
       fm_ok="FAIL"
