@@ -40,3 +40,6 @@ jobs:
 
       - name: Validate core skills pack
         run: ./scripts/kit validate-skills --pack=core
+
+      - name: Validate patterns skills pack
+        run: ./scripts/kit validate-skills --pack=patterns

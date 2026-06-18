@@ -121,6 +121,18 @@ if [[ "$PHASE" == "1" ]]; then
     ok "core skills pack (packs/core + deploy-skills + validate-skills + deploy-workflows + intake)"
   fi
 
+  if [[ ! -f "$KIT_DIR/packs/patterns/manifest.json" ]]; then
+    warn "missing packs/patterns/manifest.json — run: bash scripts/compile_registry.sh"
+  else
+    ok "patterns skills pack (packs/patterns)"
+  fi
+
+  if [[ ! -d "$KIT_DIR/agents" ]] || [[ ! -f "$KIT_DIR/agents/developer.md" ]]; then
+    err "missing agents/ personas (Phase 2 P6)"
+  else
+    ok "Claude Code agents (agents/*.md)"
+  fi
+
   if [[ ! -f "$KIT_DIR/scripts/kit" ]]; then
     err "missing scripts/kit CLI wrapper"
   elif [[ ! -f "$KIT_DIR/docs/shell-commands.md" ]]; then
@@ -224,6 +236,7 @@ done
 for skill_dir in "$KIT_DIR"/skills/*/; do
   [[ -d "$skill_dir" ]] || continue
   name=$(basename "$skill_dir")
+  [[ "$name" == "stacks" ]] && continue
   if [[ ! -f "$skill_dir/SKILL.md" ]]; then
     err "empty skill directory (no SKILL.md): skills/$name"
   fi

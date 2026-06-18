@@ -1,0 +1,28 @@
+# Pattern pack — stack-specific patterns (not in core, not in guidelines)
+# Compile: bash scripts/compile_registry.sh → manifest.json
+
+id: patterns
+name: Stack Patterns
+description: Framework pattern skills referenced from stack profiles. Requires core pack.
+version: "1.0"
+depends_on:
+  - core
+
+skills:
+  - systematic-debugging
+  - changelog
+  - rails-core-patterns
+  - rails-testing-rspec
+  - rails-testing-minitest
+  - hotwire
+  - inertia
+  - nextjs-patterns
+  - nuxt-patterns
+  - svelte-patterns
+  - sveltekit-patterns
+  - django-patterns
+  - fastapi-patterns
+  - elixir-phoenix-patterns
+  - go-service-patterns
+
+# Review: docs/skills-review.md (PR sign-off checklist)
