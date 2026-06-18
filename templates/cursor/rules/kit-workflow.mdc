@@ -9,9 +9,12 @@ Read before non-trivial tasks when Agent Dev Kit is installed.
 
 **User global rules** (`~/.cursor/rules/`) take precedence when stricter.
 
+Before loading kit guidelines, read `~/.cursor/kit-user-rules.manifest.json` — see [kit-user-rules.mdc policy](../agent_dev_kit/docs/cursor-user-rules.md).
+
 ## Flow
 
-1. Classify intent (feature / bug / refactor / audit).
+0. Classify user message — [INTENT-ROUTING.md](../agent_dev_kit/docs/guidelines/INTENT-ROUTING.md) (text and `/feature` share the same pipeline; clarify if ambiguous).
+1. Set **work_ref** / **spec_key** when a ticket exists — [TRACKER.md](../agent_dev_kit/docs/guidelines/TRACKER.md).
 2. Follow [docs/guidelines/WORKFLOW.md](../agent_dev_kit/docs/guidelines/WORKFLOW.md).
 3. **Spec first** — write `.ai/*-spec.md`, get human approval ([SPECS.md](../agent_dev_kit/docs/guidelines/SPECS.md)).
 4. **Plan** — write `.ai/*-plan.md` with Detail: minimal | standard | detailed; wait for approval before production code.
