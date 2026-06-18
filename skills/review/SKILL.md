@@ -24,6 +24,7 @@ user-invokable: true
 3. Check six areas: security, correctness, tests, docs, DoD (`registry/dod.yaml` + stack overlay), scope.
 4. Output findings: blockers vs suggestions.
 5. Do **not** commit unless human confirms after blockers are resolved.
+6. On explicit human approval, when review gate is installed: `bash hooks/mark-review-passed.sh` (or `--target=claude|cursor|agents`).
 
 ## First message
 

@@ -10,6 +10,7 @@
 #   ./scripts/install.sh --target=antigravity       # Google Antigravity (~/.gemini/)
 #   ./scripts/install.sh --target=all --project     # current repo
 #   ./scripts/install.sh --dry-run --target=codex
+#   ./scripts/install.sh --with-hooks [--with-review-gate] [--merge-settings]
 #   ./scripts/kit install --target=all              # same; works from fish/zsh/bash
 #
 # Canonical entry: AGENTS.md. CLAUDE.md and GEMINI.md are thin adapters only.
@@ -23,6 +24,9 @@ SCOPE="global"
 MODE="symlink"
 DRY_RUN=false
 FORCE=false
+WITH_HOOKS=false
+WITH_REVIEW_GATE=false
+MERGE_SETTINGS=false
 
 for arg in "$@"; do
   case "$arg" in
@@ -31,6 +35,9 @@ for arg in "$@"; do
     --copy) MODE="copy" ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
+    --with-hooks) WITH_HOOKS=true ;;
+    --with-review-gate) WITH_HOOKS=true; WITH_REVIEW_GATE=true ;;
+    --merge-settings) MERGE_SETTINGS=true ;;
     --help|-h)
       sed -n '2,16p' "$0"
       exit 0
@@ -143,6 +150,9 @@ install_project_agents_scaffold() {
   deploy_dir "skills" "$base"
   deploy_dir "agents" "$base"
   deploy_dir ".ai" "$base"
+  if $WITH_HOOKS; then
+    deploy_dir "hooks" "$base"
+  fi
 }
 
 install_codex() {
@@ -357,6 +367,22 @@ else
   deploy_skill_packs global "$(want_claude && echo true || echo false)" "$(want_antigravity && echo true || echo false)"
   if want_claude; then
     deploy_workflows global
+  fi
+fi
+
+if $WITH_HOOKS; then
+  HOOK_TARGET="both"
+  if want_claude && ! want_cursor; then HOOK_TARGET="claude"; fi
+  if want_cursor && ! want_claude; then HOOK_TARGET="cursor"; fi
+  hook_args=(--scope="$SCOPE" --target="$HOOK_TARGET")
+  $WITH_REVIEW_GATE && hook_args+=(--review-gate)
+  $MERGE_SETTINGS && hook_args+=(--merge-settings)
+  $DRY_RUN && hook_args+=(--dry-run)
+  log "Hooks → scope=$SCOPE target=$HOOK_TARGET"
+  if $DRY_RUN; then
+    echo "  [dry] deploy-hooks.sh ${hook_args[*]}"
+  else
+    bash "$REPO_DIR/scripts/deploy-hooks.sh" "${hook_args[@]}"
   fi
 fi
 

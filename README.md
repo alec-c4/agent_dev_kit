@@ -50,6 +50,8 @@ Ready to install and use today:
 
 **Registry & validation** — slim detection registry, universal DoD, `./scripts/kit validate` (CI on push).
 
+**Hooks (opt-in)** — shared shell hooks for Claude Code and Cursor (`./scripts/kit install --with-hooks`). See [hooks.md](docs/hooks.md).
+
 **Cursor dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` skips guidelines already in your user rules.
 
 **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human sign-off in PR).
@@ -60,8 +62,8 @@ Not shipped yet; planned next:
 
 | Item | Notes |
 |------|-------|
-| **Hooks** | Shared shell hooks for Claude Code, Cursor, and Antigravity (secrets, branch protection, format) |
-| **Review gate** | Opt-in `.claude/review-passed` / `.cursor/review-passed` before commit |
+| **Review gate docs** | Hooks ship; document team rollout for `--with-review-gate` |
+| **Antigravity hooks** | Reuse shell scripts when IDE hook API is stable |
 | **Copilot instructions** | `.github/instructions/` pattern-scoped rules |
 | **Stack packs** | Dedicated `packs/rails`, `node`, `python`, `go` + community template |
 | **Docs polish** | Full installation guide, hooks reference, project scaffolds |
@@ -120,6 +122,7 @@ skills/stacks/<id>/ — technology-specific tooling and DoD
 | [COMMITS.md](docs/guidelines/COMMITS.md) | Conventional commits |
 | [GIT.md](docs/guidelines/GIT.md) | Branching and merge policy |
 | [Shell commands](docs/shell-commands.md) | `./scripts/kit` from any shell |
+| [Hooks](docs/hooks.md) | Claude Code + Cursor shell hooks (opt-in install) |
 
 ## Architecture
 

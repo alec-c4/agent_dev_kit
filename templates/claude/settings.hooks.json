@@ -1,0 +1,61 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/block-dangerous.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/protect-secrets.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/check-branch-protection.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/check-commit-scope.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/enforce-review-before-commit.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/auto-format.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/clear-review-flag.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash __CLAUDE_HOOKS__/warm-stack-profile.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
