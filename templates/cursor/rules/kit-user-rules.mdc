@@ -1,0 +1,23 @@
+---
+description: Kit dedup — skip kit guidelines already covered by user ~/.cursor/rules. Read manifest before loading docs.
+alwaysApply: true
+---
+
+# Kit + user Cursor rules
+
+User global rules in `~/.cursor/rules/` **win on conflict**. Kit supplements them; it does not replace them.
+
+## Before loading kit guidelines
+
+1. Read `~/.cursor/kit-user-rules.manifest.json`.
+2. **Do not read** files listed in `skip_kit_guidelines` — user rules already cover those topics.
+3. **Always load** files in `always_load_kit_guidelines` (spec-first workflow, verification, review).
+4. Load `optional_kit_guidelines` from the manifest only when the task needs them and no user rule applies.
+
+Regenerate manifest after adding or renaming user rules:
+
+```text
+./scripts/kit sync-rules
+```
+
+Optional local overrides: `~/.cursor/kit-user-rules.local.yaml` — see [docs/cursor-user-rules.md](../agent_dev_kit/docs/cursor-user-rules.md).

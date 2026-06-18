@@ -7,6 +7,7 @@
 #   ./scripts/install.sh --target=cursor            # Cursor (~/.cursor/agent_dev_kit + kit rules)
 #   ./scripts/install.sh --target=both --project    # current repo
 #   ./scripts/install.sh --dry-run --target=both
+#   ./scripts/kit install --target=both   # same; works from fish/zsh/bash
 #
 # Canonical entry: AGENTS.md. CLAUDE.md is a Claude Code adapter only.
 
@@ -131,6 +132,16 @@ install_cursor_global() {
   log "Cursor → ~/.cursor/${KIT_LINK_NAME} (kit link) + ~/.cursor/rules/kit-*.mdc"
   link_or_copy "$REPO_DIR" "$HOME/.cursor/${KIT_LINK_NAME}"
   install_cursor_rules_global "$HOME/.cursor/rules"
+  sync_cursor_user_rules
+}
+
+sync_cursor_user_rules() {
+  log "Cursor user-rules manifest → ~/.cursor/kit-user-rules.manifest.json"
+  if $DRY_RUN; then
+    echo "  [dry] ./scripts/kit sync-rules"
+    return
+  fi
+  "$REPO_DIR/scripts/kit" sync-rules
 }
 
 install_cursor_project() {
@@ -144,6 +155,21 @@ install_cursor_project() {
   deploy_dir ".ai" "$base"
   maybe mkdir -p "$base/.cursor"
   install_cursor_rules_project "$base/.cursor/rules"
+  sync_cursor_user_rules_project "$base"
+}
+
+sync_cursor_user_rules_project() {
+  local base="$1"
+  log "Cursor user-rules manifest (global + project rules)"
+  if $DRY_RUN; then
+    echo "  [dry] sync-cursor-user-rules.sh --rules-dir $HOME/.cursor/rules --rules-dir $base/.cursor/rules"
+    return
+  fi
+  local args=(--rules-dir "$HOME/.cursor/rules")
+  if [[ -d "$base/.cursor/rules" ]]; then
+    args+=(--rules-dir "$base/.cursor/rules")
+  fi
+  bash "$REPO_DIR/scripts/kit" sync-rules "${args[@]}"
 }
 
 if [[ "$SCOPE" == "project" ]]; then

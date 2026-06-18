@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "kit_rule_prefix": "kit-",
+  "always_load": [
+    "docs/guidelines/SPECS.md",
+    "docs/guidelines/WORKFLOW.md",
+    "docs/guidelines/VERIFICATION.md",
+    "docs/guidelines/REVIEW.md"
+  ],
+  "topics": {
+    "tdd": {
+      "user_rule_patterns": [
+        "^tdd\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+        "docs/guidelines/TESTING.md"
+      ]
+    },
+    "semantic_commits": {
+      "user_rule_patterns": [
+        "^semantic-commits\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+        "docs/guidelines/COMMITS.md"
+      ]
+    },
+    "git_branching": {
+      "user_rule_patterns": [
+        "^git-branching-flow\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+        "docs/guidelines/GIT.md"
+      ]
+    },
+    "coding_style": {
+      "user_rule_patterns": [
+        ".*-code-style\\.mdc$",
+        "^coding\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+        "docs/guidelines/CODING.md"
+      ]
+    },
+    "documentation": {
+      "user_rule_patterns": [
+        "^documentation-standards\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+
+      ]
+    },
+    "request_validation": {
+      "user_rule_patterns": [
+        "^request-validation\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+
+      ]
+    },
+    "fish_shell": {
+      "user_rule_patterns": [
+        "^fish-shell\\.mdc$"
+      ],
+      "skip_kit_guidelines": [
+
+      ]
+    }
+  }
+}
