@@ -18,6 +18,10 @@ Claude Code loads `CLAUDE.md` automatically. **Canonical instructions:** [AGENTS
 
 Installed to `~/.claude/commands/` and `~/.claude/skills/` via `./scripts/kit install --target=claude` (or `--target=all`).
 
+## Agents (optional personas)
+
+Installed to `~/.claude/agents/` — see [agents/](agents/README.md): developer, architect, auditor, explore, orchestrator.
+
 | Command | Skill source | Workflow |
 |---------|--------------|----------|
 | `/feature` | [skills/feature/SKILL.md](skills/feature/SKILL.md) | Spec → plan → TDD → comprehension → verify → review → PR |

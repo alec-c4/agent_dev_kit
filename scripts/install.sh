@@ -132,7 +132,7 @@ install_project_agents_scaffold() {
   fi
 }
 
-install_claude() {
+  install_claude() {
   local base="$1"
   log "Claude Code adapter → $base"
   deploy_file "AGENTS.md" "$base"
@@ -141,6 +141,7 @@ install_claude() {
   deploy_dir "registry" "$base"
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
+  deploy_dir "agents" "$base"
   deploy_dir ".ai" "$base"
 }
 
@@ -271,20 +272,31 @@ deploy_workflows() {
 }
 
 deploy_skills_pack() {
-  local scope="$1"
-  local also_claude="${2:-false}"
-  local sync_ag="${3:-false}"
-  local args=(--pack=core --scope="$scope")
+  local pack="$1"
+  local scope="$2"
+  local also_claude="${3:-false}"
+  local sync_ag="${4:-false}"
+  local args=(--pack="$pack" --scope="$scope")
   [[ "$also_claude" == true ]] && args+=(--also-claude)
   [[ "$sync_ag" == true ]] && args+=(--sync-antigravity-cli)
   $DRY_RUN && args+=(--dry-run)
   [[ "$MODE" == copy ]] && args+=(--copy)
-  log "Skills pack core → .agents/skills ($scope)"
+  log "Skills pack $pack → .agents/skills ($scope)"
   if $DRY_RUN; then
     echo "  [dry] deploy-skills.sh ${args[*]}"
     return
   fi
   bash "$REPO_DIR/scripts/deploy-skills.sh" "${args[@]}"
+}
+
+deploy_skill_packs() {
+  local scope="$1"
+  local also_claude="${2:-false}"
+  local sync_ag="${3:-false}"
+  for pack in core patterns; do
+    [[ -f "$REPO_DIR/packs/$pack/manifest.json" ]] || continue
+    deploy_skills_pack "$pack" "$scope" "$also_claude" "$sync_ag"
+  done
 }
 
 want_claude() { [[ "$TARGET" == "claude" || "$TARGET" == "both" || "$TARGET" == "all" ]]; }
@@ -339,10 +351,10 @@ if want_antigravity; then
 fi
 
 if [[ "$SCOPE" == "project" ]]; then
-  deploy_skills_pack project false false
+  deploy_skill_packs project false false
   deploy_workflows project
 else
-  deploy_skills_pack global "$(want_claude && echo true || echo false)" "$(want_antigravity && echo true || echo false)"
+  deploy_skill_packs global "$(want_claude && echo true || echo false)" "$(want_antigravity && echo true || echo false)"
   if want_claude; then
     deploy_workflows global
   fi

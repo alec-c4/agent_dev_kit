@@ -1,0 +1,26 @@
+{
+  "id": "patterns",
+  "name": "Stack Patterns",
+  "description": "Framework pattern skills referenced from stack profiles. Requires core pack.",
+  "version": "1.0",
+  "depends_on": [
+    "core"
+  ],
+  "skills": [
+    "systematic-debugging",
+    "changelog",
+    "rails-core-patterns",
+    "rails-testing-rspec",
+    "rails-testing-minitest",
+    "hotwire",
+    "inertia",
+    "nextjs-patterns",
+    "nuxt-patterns",
+    "svelte-patterns",
+    "sveltekit-patterns",
+    "django-patterns",
+    "fastapi-patterns",
+    "elixir-phoenix-patterns",
+    "go-service-patterns"
+  ]
+}

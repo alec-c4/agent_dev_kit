@@ -39,6 +39,7 @@ See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge o
 - **Cursor user-rules dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` (skip duplicate guidelines)
 
 - **Core skills pack** — `packs/core/` (24 skills) → `./scripts/kit deploy-skills --pack=core`
+- **Patterns pack** — `packs/patterns/` (15 skills) → `./scripts/kit deploy-skills --pack=patterns` (depends on core)
 - **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human)
 
 ## Quick start
