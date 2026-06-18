@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# kit — Agent Dev Kit CLI (works from fish, zsh, bash, or any $SHELL)
+#
+# Kit maintenance scripts are bash. This wrapper runs them with bash explicitly
+# so your interactive shell does not matter.
+#
+# Usage:
+#   ./scripts/kit install [--target=cursor|claude|both] [--project] [--dry-run]
+#   ./scripts/kit compile
+#   ./scripts/kit validate [--phase=1]
+#   ./scripts/kit detect-stack [--write-profile] [path]
+#   ./scripts/kit sync-rules [--dry-run] [--rules-dir DIR ...]
+#   ./scripts/kit shell-info [--json]
+#   ./scripts/kit run <script-name.sh> [args...]
+#
+# Examples (same from fish, zsh, or bash):
+#   ./scripts/kit install --target=both
+#   ./scripts/kit validate --phase=1
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/kit-env.sh
+source "$SCRIPT_DIR/lib/kit-env.sh"
+
+KIT_DIR="$(kit_root)"
+RUNNER="$(kit_bash)"
+
+usage() {
+  sed -n '3,18p' "$0"
+  echo
+  echo "Interactive shell: $(kit_interactive_shell_name) (\${SHELL:-unknown})"
+  echo "Kit runs scripts with: $RUNNER"
+}
+
+if [[ $# -lt 1 ]]; then
+  usage >&2
+  exit 1
+fi
+
+CMD="$1"
+shift
+
+case "$CMD" in
+  install)
+    exec "$RUNNER" "$KIT_DIR/scripts/install.sh" "$@"
+    ;;
+  compile)
+    exec "$RUNNER" "$KIT_DIR/scripts/compile_registry.sh" "$@"
+    ;;
+  validate)
+    exec "$RUNNER" "$KIT_DIR/scripts/validate-registry.sh" "$@"
+    ;;
+  detect-stack)
+    exec "$RUNNER" "$KIT_DIR/scripts/detect-stack.sh" "$@"
+    ;;
+  sync-rules)
+    exec "$RUNNER" "$KIT_DIR/scripts/sync-cursor-user-rules.sh" "$@"
+    ;;
+  shell-info)
+    exec "$RUNNER" "$KIT_DIR/scripts/detect-shell.sh" "$@"
+    ;;
+  run)
+    if [[ $# -lt 1 ]]; then
+      echo "ERROR: kit run requires a script name (e.g. install.sh)" >&2
+      exit 1
+    fi
+    script="$1"
+    shift
+    [[ "$script" == *.sh ]] || script="${script}.sh"
+    exec "$RUNNER" "$KIT_DIR/scripts/$script" "$@"
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    echo "ERROR: unknown kit command: $CMD" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
