@@ -23,6 +23,9 @@ From the kit repo root (works in fish, zsh, bash):
 ./scripts/kit validate-skills --pack=core
 ./scripts/kit deploy-skills --pack=core --scope=project --dry-run
 ./scripts/kit deploy-workflows --scope=project --dry-run
+./scripts/kit intake GH-58 --paste --dry-run <<'EOF'
+Ticket title and body
+EOF
 ./scripts/kit detect-stack --write-profile
 ./scripts/kit sync-rules
 ./scripts/kit shell-info

@@ -16,6 +16,8 @@
     "plan",
     "review",
     "ship",
+    "work-intake",
+    "resolve-task",
     "stacks/django",
     "stacks/elixir",
     "stacks/fastapi",

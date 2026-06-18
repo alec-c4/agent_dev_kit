@@ -24,8 +24,11 @@ Deployed to `./.agents/workflows/` via `./scripts/kit install --target=antigravi
 | `plan` | [skills/plan/SKILL.md](skills/plan/SKILL.md) | `/plan` |
 | `review` | [skills/review/SKILL.md](skills/review/SKILL.md) | `/review` |
 | `ship` | [skills/ship/SKILL.md](skills/ship/SKILL.md) | `/ship` |
+| `resolve-task` | [skills/resolve-task/SKILL.md](skills/resolve-task/SKILL.md) | `/resolve-task` |
 
-Codex uses `$feature`, `$fix`, … from `.agents/skills/` after `./scripts/kit deploy-skills --pack=core`.
+Codex uses `$feature`, `$resolve-task`, … from `.agents/skills/` after `./scripts/kit deploy-skills --pack=core`.
+
+**Intake:** `./scripts/kit intake <work_ref> --paste` before spec when using tickets.
 
 ## Antigravity-specific
 

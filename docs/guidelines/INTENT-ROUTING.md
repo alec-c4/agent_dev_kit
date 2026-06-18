@@ -125,7 +125,7 @@ Slash command or typed phrase + human «yes» — both acceptable.
 | `skills/intent-router/SKILL.md` | Classification table, confidence rules, hint policy |
 | `skills/{feature,fix,plan,review,ship}/SKILL.md` | Explicit workflow shortcuts (same table as commands) |
 | `commands/README.md` | Index of workflow shortcuts |
-| `commands/resolve-task.md` | Full pipeline from work_ref or pasted ticket |
+| `commands/resolve-task.md` | Full pipeline from work_ref or pasted ticket — see `skills/resolve-task/SKILL.md` |
 | `.ai/tracker.yaml` | `ux_hints: true/false` |
 | `kit-workflow.mdc` | Link INTENT-ROUTING.md Step 0 |
 
