@@ -384,6 +384,19 @@ if [[ -d "$FIXTURE_RAILS_INERTIA" ]]; then
   fi
 fi
 
+FIXTURE_RAILS_INERTIA_SVELTE="$KIT_DIR/scripts/fixtures/minimal-rails-inertia-svelte"
+if [[ -d "$FIXTURE_RAILS_INERTIA_SVELTE" ]]; then
+  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_RAILS_INERTIA_SVELTE" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '
+    .primary_stack == "rails"
+    and (.skills_to_load | index("inertia"))
+    and (.skills_to_load | index("svelte-patterns"))
+  ' >/dev/null; then
+    ok "detect_stack fixture rails-inertia-svelte"
+  else
+    err "detect_stack fixture rails-inertia-svelte skills mismatch"
+  fi
+fi
+
 FIXTURE_ELIXIR="$KIT_DIR/scripts/fixtures/minimal-elixir"
 if [[ -d "$FIXTURE_ELIXIR" ]]; then
   if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_ELIXIR" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "elixir"' >/dev/null; then

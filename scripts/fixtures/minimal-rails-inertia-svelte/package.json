@@ -1,0 +1,8 @@
+{
+  "name": "minimal-rails-inertia-svelte",
+  "private": true,
+  "dependencies": {
+    "@inertiajs/svelte": "2.0.0",
+    "svelte": "5.0.0"
+  }
+}
