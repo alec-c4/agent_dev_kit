@@ -107,7 +107,19 @@ if [[ "$PHASE" == "1" ]]; then
     ok "shell-agnostic kit CLI (scripts/kit + docs/shell-commands.md)"
   fi
 
-  for name in stacks topics dod cursor-user-rules; do
+  if [[ ! -f "$KIT_DIR/registry/tool-targets.json" ]]; then
+    err "missing registry/tool-targets.json — run: bash scripts/compile_registry.sh"
+  elif [[ ! -f "$KIT_DIR/docs/tool-adapters.md" ]]; then
+    err "missing docs/tool-adapters.md"
+  elif [[ ! -f "$KIT_DIR/GEMINI.md" ]]; then
+    err "missing GEMINI.md (Antigravity adapter)"
+  elif [[ ! -f "$KIT_DIR/templates/project-agents/skills-README.md" ]]; then
+    err "missing templates/project-agents/ scaffold"
+  else
+    ok "tool adapters (tool-targets + GEMINI.md + tool-adapters.md)"
+  fi
+
+  for name in stacks topics dod cursor-user-rules tool-targets; do
     yaml="$KIT_DIR/registry/${name}.yaml"
     json="$KIT_DIR/registry/${name}.json"
     [[ -f "$yaml" && -f "$json" ]] || continue
