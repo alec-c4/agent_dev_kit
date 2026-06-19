@@ -6,9 +6,26 @@ from pathlib import Path
 from typing import Any
 
 
+def _line_indent(line: str) -> int:
+    return len(line) - len(line.lstrip(" "))
+
+
 def parse_simple_kit_config(text: str) -> dict[str, Any]:
     config: dict[str, Any] = {}
-    section_stack: list[str] = []
+    section_stack: list[tuple[int, str]] = []
+
+    def current_path() -> list[str]:
+        return [key for _, key in section_stack]
+
+    def pop_to_indent(indent: int) -> None:
+        while section_stack and section_stack[-1][0] >= indent:
+            section_stack.pop()
+
+    def nested_container(path: list[str]) -> dict[str, Any]:
+        cursor: dict[str, Any] = config
+        for section in path:
+            cursor = cursor.setdefault(section, {})
+        return cursor
 
     def set_value(key: str, raw: str) -> None:
         if raw.lower() in {"true", "false"}:
@@ -17,34 +34,36 @@ def parse_simple_kit_config(text: str) -> dict[str, Any]:
             value = []
         else:
             value = raw.strip('"').strip("'")
-        cursor: dict[str, Any] = config
-        for section in section_stack:
-            cursor = cursor.setdefault(section, {})
-        cursor[key] = value
+        nested_container(current_path())[key] = value
 
     for line in text.splitlines():
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
             continue
-        if stripped.endswith(":") and not stripped.startswith("-"):
-            key = stripped[:-1]
-            if section_stack and section_stack[-1] == key:
-                section_stack.pop()
-            else:
-                section_stack.append(key)
-            continue
+
+        indent = _line_indent(line)
+
         if stripped.startswith("- "):
             item = stripped[2:].strip().strip('"').strip("'")
-            cursor: dict[str, Any] = config
-            for section in section_stack[:-1]:
-                cursor = cursor.setdefault(section, {})
-            list_key = section_stack[-1] if section_stack else "items"
-            cursor.setdefault(list_key, [])
-            if isinstance(cursor[list_key], list):
-                cursor[list_key].append(item)
+            path = current_path()
+            if not path:
+                continue
+            parent = nested_container(path[:-1])
+            list_key = path[-1]
+            items = parent.setdefault(list_key, [])
+            if isinstance(items, list):
+                items.append(item)
             continue
+
+        if stripped.endswith(":") and not stripped.startswith("-"):
+            key = stripped[:-1].strip()
+            pop_to_indent(indent)
+            section_stack.append((indent, key))
+            continue
+
         if ":" in stripped:
             key, raw = stripped.split(":", 1)
+            pop_to_indent(indent)
             set_value(key.strip(), raw.strip())
 
     return config
