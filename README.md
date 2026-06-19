@@ -56,6 +56,8 @@ Ready to install and use today:
 
 **Cursor dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` skips guidelines already in your user rules.
 
+**Tool settings** — `~/.config/agent_dev_kit/config.yaml` + `./scripts/kit configure` syncs permissions and attribution to Cursor and Claude Code. See [tool-settings.md](docs/tool-settings.md).
+
 **Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human sign-off in PR).
 
 ## On the queue

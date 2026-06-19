@@ -46,6 +46,8 @@ Do not add agent attribution to commits or PRs:
 - No `Co-authored-by: Cursor` / `Co-authored-by: Claude` trailers.
 - No "Generated with …" lines in messages or PR bodies.
 
+Disable automatic attribution in Cursor and Claude Code: [tool-settings.md](../tool-settings.md) or `./scripts/kit configure --init-config`.
+
 ## Review before commit (optional gate)
 
 When review hooks are installed (Phase 3), every commit requires an explicit developer approval after review. See [REVIEW.md](REVIEW.md).

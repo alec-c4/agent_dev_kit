@@ -17,6 +17,7 @@
 #   ./scripts/kit validate-handoff <work_ref> [--file=path]
 #   ./scripts/kit detect-stack [--write-profile] [path]
 #   ./scripts/kit sync-rules [--dry-run] [--rules-dir DIR ...]
+#   ./scripts/kit configure [--target=cursor|claude|both] [--init-config] [--disable-attribution] [--dry-run]
 #   ./scripts/kit shell-info [--json]
 #   ./scripts/kit run <script-name.sh> [args...]
 #
@@ -84,6 +85,9 @@ case "$CMD" in
     ;;
   sync-rules)
     exec "$RUNNER" "$KIT_DIR/scripts/sync-cursor-user-rules.sh" "$@"
+    ;;
+  configure)
+    exec python3 "$KIT_DIR/scripts/configure_settings.py" "$@"
     ;;
   shell-info)
     exec "$RUNNER" "$KIT_DIR/scripts/detect-shell.sh" "$@"
