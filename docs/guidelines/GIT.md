@@ -20,6 +20,16 @@ When unsure, use **GitHub Flow**.
 4. Review → merge with `--ff-only`.
 5. Delete the branch after merge.
 
+### Branch hygiene (agents)
+
+Global rule `git-branching-flow.mdc` defines agent branch discipline. Summary:
+
+- Create `feature/*` only for PRs, review isolation, or a named side branch before selective merge
+- Do **not** branch when the user commits or merges directly to default
+- One branch per topic — reuse or delete before creating another
+- After work lands on default: delete local branch, delete remote if pushed, `git fetch --prune`
+- End of session: `git branch --merged master` and delete merged branches
+
 ## Git Flow
 
 1. Feature branches from `develop`.

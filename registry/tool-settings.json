@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "cursor": {
+    "permissions": {
+      "allow": [
+        "Shell(git)",
+        "Shell(./scripts/kit)",
+        "Shell(bash)",
+        "Shell(rg)",
+        "Shell(grep)",
+        "Shell(find)",
+        "Shell(test)",
+        "Shell(echo)",
+        "Shell(cd)",
+        "Shell(npm)",
+        "Shell(node)",
+        "Shell(python3)",
+        "Shell(ruby)",
+        "Shell(bundle)",
+        "Shell(jq)",
+        "Shell(curl)"
+      ],
+      "deny": [
+        "Shell(rm -rf)"
+      ]
+    },
+    "attribution": {
+      "commits": false,
+      "prs": false
+    }
+  },
+  "claude": {
+    "permissions": {
+      "allow": [
+        "Bash(git *)",
+        "Bash(./scripts/kit *)",
+        "Bash(bash *)",
+        "Bash(rg *)",
+        "Bash(grep *)",
+        "Bash(find *)",
+        "Bash(test *)",
+        "Bash(echo *)",
+        "Bash(cd *)",
+        "Bash(npm *)",
+        "Bash(node *)",
+        "Bash(python3 *)",
+        "Bash(ruby *)",
+        "Bash(bundle *)",
+        "Bash(jq *)",
+        "Bash(curl *)",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep"
+      ],
+      "deny": [
+        "Bash(rm -rf *)",
+        "Bash(git push --force*)",
+        "Bash(git push -f*)",
+        "Read(./.env)",
+        "Read(./.env.*)"
+      ]
+    },
+    "attribution": {
+      "commits": false,
+      "prs": false
+    },
+    "includeGitInstructions": true
+  }
+}

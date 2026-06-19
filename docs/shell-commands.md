@@ -31,6 +31,8 @@ EOF
 ./scripts/kit validate-handoff GH-58 --file=docs/examples/work/GH-58-handoff.example.md
 ./scripts/kit detect-stack --write-profile
 ./scripts/kit sync-rules
+./scripts/kit configure --init-config
+./scripts/kit configure --target=claude
 ./scripts/kit shell-info
 ./scripts/kit run install.sh --dry-run --target=cursor
 ```

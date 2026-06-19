@@ -1,0 +1,35 @@
+# Agent Dev Kit user settings
+# Path: ~/.config/agent_dev_kit/config.yaml
+# Apply: ./scripts/kit configure
+#
+# Kit defaults live in registry/tool-settings.yaml (permissions, attribution).
+# This file overrides or extends those defaults for your machine.
+
+attribution:
+  commits: false
+  prs: false
+
+cursor:
+  attribution:
+    commits: false
+    prs: false
+  permissions:
+    allow:
+      # Add Cursor CLI allow patterns (union-merged with kit defaults + existing config):
+      # - Shell(gh)
+      # - Mcp(plugin-svelte-svelte:list-sections)
+    deny:
+      # - Shell(curl *)
+
+claude:
+  attribution:
+    commits: false
+    prs: false
+  permissions:
+    allow:
+      # Add Claude Code allow rules (Bash/read syntax):
+      # - Bash(gh *)
+      # - Bash(mise *)
+    deny:
+      # - Bash(curl *)
+  includeGitInstructions: true
