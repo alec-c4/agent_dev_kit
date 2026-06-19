@@ -46,6 +46,35 @@ for name in stacks topics dod; do
   fi
 done
 
+# ── tool settings configure smoke test ────────────────────────────────────────
+if [[ ! -f "$KIT_DIR/scripts/configure_settings.py" ]]; then
+  err "missing scripts/configure_settings.py"
+elif [[ ! -f "$KIT_DIR/registry/tool-settings.json" ]]; then
+  err "missing registry/tool-settings.json — run: bash scripts/compile_registry.sh"
+elif [[ ! -f "$KIT_DIR/templates/config/config.yaml.example" ]]; then
+  err "missing templates/config/config.yaml.example"
+else
+  tmp_cli="$(mktemp)"
+  tmp_claude="$(mktemp)"
+  if python3 "$KIT_DIR/scripts/configure_settings.py" \
+    --cli-config "$tmp_cli" \
+    --claude-settings "$tmp_claude" \
+    --target=both >/dev/null 2>&1 \
+    && jq -e '
+      .attribution.attributeCommitsToAgent == false
+      and (.permissions.allow | index("Shell(git)"))
+    ' "$tmp_cli" >/dev/null \
+    && jq -e '
+      .attribution.commit == ""
+      and (.permissions.allow | index("Bash(git *)"))
+    ' "$tmp_claude" >/dev/null; then
+    ok "configure tool settings cursor + claude"
+  else
+    err "configure tool settings failed"
+  fi
+  rm -f "$tmp_cli" "$tmp_claude"
+fi
+
 if [[ "$PHASE" == "1" ]]; then
   echo "Phase 1 mode — registry + stack skill profiles only"
   echo ""
@@ -178,7 +207,7 @@ if [[ "$PHASE" == "1" ]]; then
     ok "tool adapters (tool-targets + GEMINI.md + tool-adapters.md)"
   fi
 
-  for name in stacks topics dod cursor-user-rules tool-targets; do
+  for name in stacks topics dod cursor-user-rules tool-targets tool-settings; do
     yaml="$KIT_DIR/registry/${name}.yaml"
     json="$KIT_DIR/registry/${name}.json"
     [[ -f "$yaml" && -f "$json" ]] || continue

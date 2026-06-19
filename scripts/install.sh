@@ -11,6 +11,7 @@
 #   ./scripts/install.sh --target=all --project     # current repo
 #   ./scripts/install.sh --dry-run --target=codex
 #   ./scripts/install.sh --with-hooks [--with-review-gate] [--merge-settings]
+#   ./scripts/install.sh --disable-attribution   # Cursor + Claude: no commit/PR agent attribution
 #   ./scripts/install.sh --pack=core,patterns,topics   # default when omitted
 #   ./scripts/install.sh --pack=core,rails             # minimal Rails-focused install
 #   ./scripts/kit install --target=all              # same; works from fish/zsh/bash
@@ -20,6 +21,8 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=lib/kit-env.sh
+source "$REPO_DIR/scripts/lib/kit-env.sh"
 KIT_LINK_NAME="agent_dev_kit"
 TARGET="both"
 SCOPE="global"
@@ -29,6 +32,7 @@ FORCE=false
 WITH_HOOKS=false
 WITH_REVIEW_GATE=false
 MERGE_SETTINGS=false
+DISABLE_ATTRIBUTION=false
 PACKS=""
 
 for arg in "$@"; do
@@ -41,6 +45,7 @@ for arg in "$@"; do
     --with-hooks) WITH_HOOKS=true ;;
     --with-review-gate) WITH_HOOKS=true; WITH_REVIEW_GATE=true ;;
     --merge-settings) MERGE_SETTINGS=true ;;
+    --disable-attribution) DISABLE_ATTRIBUTION=true ;;
     --pack=*) PACKS="${arg#--pack=}" ;;
     --help|-h)
       sed -n '2,16p' "$0"
@@ -157,6 +162,7 @@ install_project_agents_scaffold() {
   if $WITH_HOOKS; then
     deploy_dir "hooks" "$base"
   fi
+  apply_tool_settings
 }
 
 install_codex() {
@@ -234,6 +240,7 @@ install_cursor_global() {
   link_or_copy "$REPO_DIR" "$HOME/.cursor/${KIT_LINK_NAME}"
   install_cursor_rules_global "$HOME/.cursor/rules"
   sync_cursor_user_rules
+  apply_tool_settings
 }
 
 sync_cursor_user_rules() {
@@ -243,6 +250,24 @@ sync_cursor_user_rules() {
     return
   fi
   "$REPO_DIR/scripts/kit" sync-rules
+}
+
+apply_tool_settings() {
+  local config_args=(--init-config) target="both"
+  if $DISABLE_ATTRIBUTION; then
+    config_args+=(--disable-attribution)
+  fi
+  if want_cursor && ! want_claude; then
+    target="cursor"
+  elif want_claude && ! want_cursor; then
+    target="claude"
+  fi
+  log "Tool settings → Cursor/Claude configs (see docs/tool-settings.md)"
+  if $DRY_RUN; then
+    echo "  [dry] ./scripts/kit configure --target=$target ${config_args[*]}"
+    return
+  fi
+  "$REPO_DIR/scripts/kit" configure --target="$target" "${config_args[@]}"
 }
 
 install_cursor_project() {
@@ -257,6 +282,7 @@ install_cursor_project() {
   maybe mkdir -p "$base/.cursor"
   install_cursor_rules_project "$base/.cursor/rules"
   sync_cursor_user_rules_project "$base"
+  apply_tool_settings
 }
 
 sync_cursor_user_rules_project() {

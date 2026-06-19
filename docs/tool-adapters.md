@@ -57,6 +57,7 @@ Global files: `~/.gemini/AGENTS.md`, `~/.gemini/GEMINI.md`. Project: repo root `
 ### Cursor and Claude Code
 
 - Cursor: `AGENTS.md` + optional `kit-*.mdc` rules; user `~/.cursor/rules/` win when stricter.
+- Tool settings: `~/.config/agent_dev_kit/config.yaml` — see [tool-settings.md](tool-settings.md) (permissions, attribution).
 - Claude Code: `CLAUDE.md` adapter + `AGENTS.md`; slash commands in Phase 2.
 
 ## Skills and workflows (Phase 2+)

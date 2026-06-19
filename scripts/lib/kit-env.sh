@@ -33,6 +33,19 @@ kit_interactive_shell_name() {
   esac
 }
 
+kit_config_dir() {
+  local xdg="${XDG_CONFIG_HOME:-$HOME/.config}"
+  echo "$xdg/agent_dev_kit"
+}
+
+kit_config_file() {
+  echo "$(kit_config_dir)/config.yaml"
+}
+
+kit_config_present() {
+  [[ -f "$(kit_config_file)" ]]
+}
+
 run_kit_script() {
   local script_name="$1"
   shift
