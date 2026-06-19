@@ -47,8 +47,12 @@ def parse_bool(value: str) -> bool:
     raise argparse.ArgumentTypeError(f"expected boolean, got: {value}")
 
 
+def config_example_path() -> Path:
+    return KIT_DIR / "templates" / "config" / "config.yaml.example"
+
+
 def init_config_from_example(config_path: Path, *, dry_run: bool) -> None:
-    example = KIT_DIR / "templates" / "config" / "config.yaml.example"
+    example = config_example_path()
     if not example.is_file():
         raise SystemExit(f"Missing template: {example}")
     if config_path.is_file():
@@ -59,6 +63,16 @@ def init_config_from_example(config_path: Path, *, dry_run: bool) -> None:
     config_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(example, config_path)
     print(f"initialized {config_path} from kit template")
+
+
+def load_user_config(config_path: Path, *, fallback_example: bool) -> dict[str, Any]:
+    if config_path.is_file():
+        return load_yaml(config_path)
+    if fallback_example:
+        example = config_example_path()
+        if example.is_file():
+            return load_kit_config(example)
+    return {}
 
 
 def main() -> None:
@@ -127,10 +141,14 @@ def main() -> None:
     config_path = resolve_kit_config_path(
         args.config.expanduser() if args.config else None
     )
-    if args.init_config or args.disable_attribution:
+    init_requested = args.init_config or args.disable_attribution
+    if init_requested:
         init_config_from_example(config_path, dry_run=args.dry_run)
 
-    user_config = load_yaml(config_path)
+    user_config = load_user_config(
+        config_path,
+        fallback_example=init_requested and not config_path.is_file(),
+    )
     registry = load_registry_defaults()
     kit_cursor = registry.get("cursor") or {}
     kit_claude = registry.get("claude") or {}
@@ -140,12 +158,14 @@ def main() -> None:
     global_attr = user_config.get("attribution") or {}
     cursor_attr_source = {
         "attribution": {
+            **(kit_cursor.get("attribution") or {}),
             **global_attr,
             **(user_cursor.get("attribution") or {}),
         }
     }
     claude_attr_source = {
         "attribution": {
+            **(kit_claude.get("attribution") or {}),
             **global_attr,
             **(user_claude.get("attribution") or {}),
         }
