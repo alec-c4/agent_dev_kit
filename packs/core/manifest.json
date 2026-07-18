@@ -3,9 +3,7 @@
   "name": "Universal Core",
   "description": "Stack detection, stack profiles, and universal testing. Required baseline before pattern packs.",
   "version": "1.0",
-  "depends_on": [
-
-  ],
+  "depends_on": [],
   "skills": [
     "stack-detection",
     "stack-loader",

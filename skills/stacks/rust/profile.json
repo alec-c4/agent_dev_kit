@@ -20,9 +20,7 @@
       "testing-universal"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "no_unwrap_production",

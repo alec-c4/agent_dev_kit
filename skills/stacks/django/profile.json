@@ -24,9 +24,7 @@
       "django-patterns"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "orm_optimization",
