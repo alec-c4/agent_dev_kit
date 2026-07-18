@@ -82,6 +82,19 @@ add_pack_order() {
   ORDERED_PACKS+=("$pack")
 }
 
+resolve_path() {
+  (cd "$1" 2>/dev/null && pwd -P) || printf ''
+}
+
+claude_skills_same_as_kit() {
+  local base="$HOME/.claude/skills"
+  local resolved kit_resolved
+  [[ -e "$base" ]] || return 1
+  resolved="$(resolve_path "$base")"
+  kit_resolved="$(resolve_path "$KIT_DIR/skills")"
+  [[ -n "$resolved" && -n "$kit_resolved" && "$resolved" == "$kit_resolved" ]]
+}
+
 link_or_copy() {
   local src="$1" dest="$2"
   if $DRY_RUN; then
@@ -123,7 +136,13 @@ deploy_all_bases() {
   if [[ "$SCOPE" == "global" || "$SCOPE" == "both" ]]; then
     deploy_manifest_to "$manifest" "$HOME/.agents/skills" "global ~/.agents/skills"
     $SYNC_AG_CLI && deploy_manifest_to "$manifest" "$HOME/.gemini/antigravity-cli/skills" "Antigravity CLI"
-    $ALSO_CLAUDE && deploy_manifest_to "$manifest" "$HOME/.claude/skills" "Claude Code"
+    if $ALSO_CLAUDE; then
+      if claude_skills_same_as_kit; then
+        log "Claude Code skills already linked to kit tree (~/.claude/skills → skills/) — skip per-skill deploy"
+      else
+        deploy_manifest_to "$manifest" "$HOME/.claude/skills" "Claude Code"
+      fi
+    fi
   fi
   if [[ "$SCOPE" == "project" || "$SCOPE" == "both" ]]; then
     deploy_manifest_to "$manifest" "$(pwd)/.agents/skills" "project ./.agents/skills"
