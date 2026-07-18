@@ -76,6 +76,17 @@ else
   rm -f "$tmp_cli" "$tmp_claude"
 fi
 
+# ── documentation i18n ───────────────────────────────────────────────────────
+if [[ -x "$KIT_DIR/scripts/validate-docs-i18n.sh" ]]; then
+  if bash "$KIT_DIR/scripts/validate-docs-i18n.sh"; then
+    ok "docs i18n (locales registry + translations)"
+  else
+    err "docs i18n validation failed"
+  fi
+elif [[ ! -f "$KIT_DIR/registry/locales.json" ]]; then
+  err "missing registry/locales.json — run: bash scripts/compile_registry.sh"
+fi
+
 if [[ "$PHASE" == "1" ]]; then
   echo "Phase 1 mode — registry + stack skill profiles only"
   echo ""
@@ -211,7 +222,7 @@ if [[ "$PHASE" == "1" ]]; then
     ok "tool adapters (tool-targets + GEMINI.md + tool-adapters.md)"
   fi
 
-  for name in stacks topics dod cursor-user-rules tool-targets tool-settings; do
+  for name in stacks topics dod cursor-user-rules tool-targets tool-settings locales; do
     yaml="$KIT_DIR/registry/${name}.yaml"
     json="$KIT_DIR/registry/${name}.json"
     [[ -f "$yaml" && -f "$json" ]] || continue
