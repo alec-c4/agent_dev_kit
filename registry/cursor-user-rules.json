@@ -4,6 +4,7 @@
   "always_load": [
     "docs/guidelines/SPECS.md",
     "docs/guidelines/WORKFLOW.md",
+    "docs/guidelines/COMPREHENSION.md",
     "docs/guidelines/VERIFICATION.md",
     "docs/guidelines/REVIEW.md"
   ],
@@ -45,25 +46,19 @@
       "user_rule_patterns": [
         "^documentation-standards\\.mdc$"
       ],
-      "skip_kit_guidelines": [
-
-      ]
+      "skip_kit_guidelines": []
     },
     "request_validation": {
       "user_rule_patterns": [
         "^request-validation\\.mdc$"
       ],
-      "skip_kit_guidelines": [
-
-      ]
+      "skip_kit_guidelines": []
     },
     "fish_shell": {
       "user_rule_patterns": [
         "^fish-shell\\.mdc$"
       ],
-      "skip_kit_guidelines": [
-
-      ]
+      "skip_kit_guidelines": []
     }
   }
 }

@@ -11,9 +11,10 @@ Agent Dev Kit and your global Cursor rules (`~/.cursor/rules/*.mdc`) can overlap
 ~/.cursor/rules/semantic-commits.mdc
         ↓ matched by registry/cursor-user-rules.yaml
 ~/.cursor/kit-user-rules.manifest.json   (generated)
-        ↓ agent reads manifest
-skip: docs/guidelines/TESTING.md, COMMITS.md, …
-always load: SPECS.md, WORKFLOW.md, VERIFICATION.md, REVIEW.md
+        ↓ agent reads manifest + kit_root
+always load (absolute): ~/.cursor/agent_dev_kit/docs/guidelines/…
+        ↓
+Global kit-*.mdc in ~/.cursor/rules/ apply in every project
 ```
 
 | Layer | Role |
@@ -44,7 +45,7 @@ Output: `~/.cursor/kit-user-rules.manifest.json` (machine-local, not committed).
 | `git-branching-flow.mdc` | `GIT.md` |
 | `*-code-style.mdc`, `coding.mdc` | `CODING.md` |
 
-Always loaded (kit-only): `SPECS.md`, `WORKFLOW.md`, `VERIFICATION.md`, `REVIEW.md`.
+Always loaded (kit-only): `SPECS.md`, `WORKFLOW.md`, `COMPREHENSION.md`, `VERIFICATION.md`, `REVIEW.md`.
 
 Edit `registry/cursor-user-rules.yaml` to add patterns, then:
 

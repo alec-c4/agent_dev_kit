@@ -9,6 +9,7 @@ kit_rule_prefix: kit-
 always_load:
   - docs/guidelines/SPECS.md
   - docs/guidelines/WORKFLOW.md
+  - docs/guidelines/COMPREHENSION.md
   - docs/guidelines/VERIFICATION.md
   - docs/guidelines/REVIEW.md
 

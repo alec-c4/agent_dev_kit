@@ -56,10 +56,19 @@ def scan_rules(rules_dir: Path, kit_prefix: str) -> list[Path]:
     return files
 
 
+def resolve_kit_root() -> Path:
+    linked = Path.home() / ".cursor" / "agent_dev_kit"
+    if linked.is_dir():
+        return linked.resolve()
+    kit_dir = Path(__file__).resolve().parent.parent
+    return kit_dir
+
+
 def build_manifest(
     registry: dict,
     rules_dirs: list[Path],
     local_overlay: dict,
+    kit_root: Path,
 ) -> dict:
     kit_prefix = registry.get("kit_rule_prefix", "kit-")
     always_load = list(registry.get("always_load") or [])
@@ -111,15 +120,21 @@ def build_manifest(
 
     skip_list = sorted(skip_map.values(), key=lambda x: x["path"])
     skip_paths = {item["path"] for item in skip_list}
+    always_load_resolved = [
+        str((kit_root / rel).resolve())
+        for rel in always_load
+    ]
 
     return {
         "version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "kit_root": str(kit_root.resolve()),
         "rules_dirs": [str(d) for d in rules_dirs if d.is_dir()],
         "kit_rule_prefix": kit_prefix,
         "detected_user_rules": detected,
         "skip_kit_guidelines": skip_list,
         "always_load_kit_guidelines": always_load,
+        "always_load_kit_guidelines_resolved": always_load_resolved,
         "optional_kit_guidelines": [
             path
             for path in (
@@ -133,7 +148,9 @@ def build_manifest(
         "policy": (
             "User ~/.cursor/rules win on conflict. "
             "Do not read skip_kit_guidelines unless the human explicitly asks. "
-            "Kit-only workflow (SPECS, WORKFLOW, VERIFICATION, REVIEW) is always in scope."
+            "Always read always_load_kit_guidelines_resolved from kit_root — "
+            "paths are absolute under ~/.cursor/agent_dev_kit. "
+            "Global kit rules apply in every project; project install is optional."
         ),
     }
 
@@ -184,7 +201,8 @@ def main() -> None:
 
     registry = load_json(registry_path)
     overlay = load_local_overlay(args.local_overlay.expanduser())
-    manifest = build_manifest(registry, rules_dirs, overlay)
+    kit_root = resolve_kit_root()
+    manifest = build_manifest(registry, rules_dirs, overlay, kit_root)
 
     payload = json.dumps(manifest, indent=2) + "\n"
     if args.dry_run:
