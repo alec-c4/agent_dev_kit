@@ -56,6 +56,8 @@ Global files: `~/.gemini/AGENTS.md`, `~/.gemini/GEMINI.md`. Project: repo root `
 
 ### Cursor and Claude Code
 
+- **Global install** (`./scripts/kit install --target=cursor`) — `~/.cursor/rules/kit-*.mdc` apply in **every project**, but only in the **Cursor IDE**. The standalone Cursor CLI (`agent`/`cursor-agent` binary) does not read `~/.cursor/rules/`; it only loads project `AGENTS.md` and project `.cursor/rules/*.mdc` — see [cursor-user-rules.md#cursor-cli-vs-cursor-ide](cursor-user-rules.md#cursor-cli-vs-cursor-ide).
+- **Project install** (`--project`, e.g. `./scripts/kit install --target=cursor --project`) — shared `AGENTS.md`, `.agents/skills/`, project `.cursor/rules/` for the team; required for the Cursor CLI to see kit workflow/comprehension rules. Do not overwrite an existing project `docs/` tree.
 - Cursor: `AGENTS.md` + optional `kit-*.mdc` rules; user `~/.cursor/rules/` win when stricter.
 - Tool settings: `~/.config/agent_dev_kit/config.yaml` — see [tool-settings.md](tool-settings.md) (permissions, attribution).
 - Claude Code: `CLAUDE.md` adapter + `AGENTS.md`; slash commands in Phase 2.

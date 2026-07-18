@@ -89,6 +89,20 @@ bash scripts/sync-cursor-user-rules.sh \
 | Wrong file skipped | Adjust patterns in `cursor-user-rules.yaml` or local overlay |
 | Manifest missing | `./scripts/kit sync-rules` |
 
+## Cursor CLI vs Cursor IDE
+
+Everything above (global `~/.cursor/rules/kit-*.mdc`, the manifest, `kit-user-rules.mdc`) is loaded by the **Cursor IDE only**.
+
+The standalone **Cursor CLI (`agent`/`cursor-agent` binary)** does not read `~/.cursor/rules/`. Confirmed by probing the CLI directly: a global `~/.cursor/rules/*.mdc` rule is invisible to `agent` sessions, while a project-local `.cursor/rules/*.mdc` or a project-root `AGENTS.md` is picked up immediately. `~/.cursor/cli-config.json` (permissions, attribution, hooks) is shared by both — only rule/instruction files differ.
+
+Practical effect: `./scripts/kit install --target=cursor` (global) is enough for the IDE, but CLI sessions get **no** kit workflow/comprehension/dedup rules unless the project also has them. For each repo you drive with `agent`, also run:
+
+```text
+./scripts/kit install --target=cursor --project
+```
+
+This deploys `AGENTS.md` and `.cursor/rules/kit-*.mdc` into the project root, which the CLI does read. `./scripts/kit install --target=cursor` (global) prints a reminder about this when it detects `agent`/`cursor-agent` on `PATH`.
+
 ## Claude Code and other tools
 
 This dedup path is **Cursor-specific** (`.mdc` rules + manifest). Claude Code uses `~/.claude/CLAUDE.md` → `AGENTS.md`; defer language in guidelines still applies — agents should not re-load topics already in user instructions.
