@@ -9,10 +9,12 @@ User global rules in `~/.cursor/rules/` **win on conflict**. Kit supplements the
 
 ## Before loading kit guidelines
 
-1. Read `~/.cursor/kit-user-rules.manifest.json`.
+1. Read `~/.cursor/kit-user-rules.manifest.json` — note `kit_root` (usually `~/.cursor/agent_dev_kit`).
 2. **Do not read** files listed in `skip_kit_guidelines` — user rules already cover those topics.
-3. **Always load** files in `always_load_kit_guidelines` (spec-first workflow, verification, review).
+3. **Always read** every path in `always_load_kit_guidelines_resolved` (absolute paths under `kit_root`). Applies in **every project** — no project install required.
 4. Load `optional_kit_guidelines` from the manifest only when the task needs them and no user rule applies.
+
+Global rules `kit-comprehension.mdc` and this file apply to all repos in the **Cursor IDE** when kit is installed with `./scripts/kit install --target=cursor`. The Cursor CLI (`agent` binary) does not read `~/.cursor/rules/` — it needs a project install (`./scripts/kit install --target=cursor --project`) per repo.
 
 Regenerate manifest after adding or renaming user rules:
 

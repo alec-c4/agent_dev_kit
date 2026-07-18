@@ -241,6 +241,18 @@ install_cursor_global() {
   install_cursor_rules_global "$HOME/.cursor/rules"
   sync_cursor_user_rules
   apply_tool_settings
+  warn_cursor_cli_scope
+}
+
+warn_cursor_cli_scope() {
+  if command -v agent >/dev/null 2>&1 || command -v cursor-agent >/dev/null 2>&1; then
+    log "NOTE: Cursor CLI (agent binary) does not read ~/.cursor/rules/*.mdc — only the"
+    log "      Cursor IDE does. The CLI loads AGENTS.md + .cursor/rules/*.mdc from the"
+    log "      current project only. For kit workflow/comprehension rules to apply in"
+    log "      'agent' CLI sessions, also run in each repo:"
+    log "        ./scripts/kit install --target=cursor --project"
+    log "      See docs/cursor-user-rules.md#cursor-cli-vs-cursor-ide."
+  fi
 }
 
 sync_cursor_user_rules() {
