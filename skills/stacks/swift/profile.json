@@ -23,9 +23,7 @@
       "swift-patterns"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "no_force_unwrap",

@@ -25,9 +25,7 @@
       "testing-universal"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "no_any_public_api",

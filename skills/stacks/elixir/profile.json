@@ -30,9 +30,7 @@
       "elixir-phoenix-patterns"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "context_plugs",

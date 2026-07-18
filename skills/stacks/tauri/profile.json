@@ -24,9 +24,7 @@
       "tauri-patterns"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "ipc_rust_boundary",

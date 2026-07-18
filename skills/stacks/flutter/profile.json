@@ -27,9 +27,7 @@
       "flutter-patterns"
     ]
   },
-  "mcp_suggest": [
-
-  ],
+  "mcp_suggest": [],
   "dod_overlay": [
     {
       "id": "const_and_builders",
