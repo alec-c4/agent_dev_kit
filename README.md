@@ -1,5 +1,7 @@
 # Agent Dev Kit
 
+**Languages:** **English** · [Русский](docs/i18n/ru/README.md) · [Español](docs/i18n/es/README.md) · [Translation guide](docs/i18n/README.md)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Universal developer kit for AI-assisted product engineering. **LLM-agnostic** and **stack-agnostic** — works with Cursor, Claude Code, OpenAI Codex, Google Antigravity, Copilot, Windsurf, and others.

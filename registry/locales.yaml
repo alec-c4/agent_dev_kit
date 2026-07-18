@@ -1,0 +1,25 @@
+# Documentation locale registry.
+# Canonical language: English (repo root README.md + docs/).
+# Translations live under docs/i18n/<locale>/ — see docs/i18n/README.md.
+
+default_locale: en
+
+locales:
+  en:
+    label: English
+    native_label: English
+    readme: README.md
+  ru:
+    label: Russian
+    native_label: Русский
+    readme: docs/i18n/ru/README.md
+    translations:
+      - source: README.md
+        path: docs/i18n/ru/README.md
+  es:
+    label: Spanish
+    native_label: Español
+    readme: docs/i18n/es/README.md
+    translations:
+      - source: README.md
+        path: docs/i18n/es/README.md
