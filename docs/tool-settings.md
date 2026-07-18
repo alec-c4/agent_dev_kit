@@ -26,7 +26,7 @@ Kit defaults (permissions, attribution): [registry/tool-settings.yaml](../regist
 Merged fields today:
 
 - `permissions.allow` / `permissions.deny` (and Claude `permissions.ask`)
-- `attribution` (no AI attribution by default — see [COMMITS.md](guidelines/COMMITS.md))
+- `attribution` — no AI attribution by default (see [COMMITS.md](guidelines/COMMITS.md)); written as Cursor `attributeCommitsToAgent`/`attributePRsToAgent` and Claude `attribution.commit`/`attribution.pr` (empty string disables; migrates the deprecated `includeCoAuthoredBy` boolean)
 - Claude: `includeGitInstructions`
 
 Your existing entries stay; kit adds missing recommended rules.

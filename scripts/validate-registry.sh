@@ -66,6 +66,7 @@ else
     ' "$tmp_cli" >/dev/null \
     && jq -e '
       .attribution.commit == ""
+      and (.includeCoAuthoredBy | not)
       and (.permissions.allow | index("Bash(git *)"))
     ' "$tmp_claude" >/dev/null; then
     ok "configure tool settings cursor + claude"
