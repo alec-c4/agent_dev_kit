@@ -10,11 +10,25 @@ Universal developer kit for AI-assisted product engineering. **LLM-agnostic** an
 
 Build the system that tells AI **what** and **how** to build — not just the code itself.
 
-- **Guidelines** (`docs/guidelines/`) hold universal workflow and quality bars.
-- **Skills** hold stack-specific tooling and patterns.
-- **Tool adapters** (`AGENTS.md`, Cursor rules, Claude Code adapter) route assistants to the same source of truth.
+Guidelines, skills, and review criteria are the **product**. Generated code is the output. Knowledge compounds when repeated mistakes become docs and docs become skills — each session starts with accumulated context, not from zero.
 
-Knowledge compounds when repeated mistakes become docs and docs become skills — each session starts with accumulated context, not from zero.
+| Layer | Role |
+|-------|------|
+| **Guidelines** (`docs/guidelines/`) | Universal workflow and quality bars |
+| **Skills** (`packs/`) | Stack-specific tooling and patterns |
+| **Tool adapters** (`AGENTS.md`, Cursor rules, Claude Code adapter) | Route assistants to the same source of truth |
+
+## Principles
+
+The kit is opinionated about **how humans and agents work together**:
+
+1. **Human as control plane** — the developer owns what ships. Agents amplify work; they do not replace understanding. See [COMPREHENSION.md](docs/guidelines/COMPREHENSION.md).
+2. **Force verification, not trust** — highly reliable automation makes people monitor less ([automation-induced complacency](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.00225/full), Ako-Brew et al., 2019). The kit counters this with a separate verifier agent, comprehension Q&A, human sign-off, and optional commit review hooks — not rubber-stamping green CI.
+3. **Spec before code** — acceptance criteria and plan before implementation. See [SPECS.md](docs/guidelines/SPECS.md) and [WORKFLOW.md](docs/guidelines/WORKFLOW.md).
+4. **Test-driven by default** — red → green → refactor unless the task explicitly skips tests. See [TESTING.md](docs/guidelines/TESTING.md).
+5. **Stack in skills, not guidelines** — RSpec, pytest, ESLint, and similar tooling live in skills and stack profiles, not universal docs.
+6. **User rules win** — global Cursor rules and personal preferences override kit defaults when stricter.
+7. **No agent attribution** — commits and PRs stay human-authored. See [COMMITS.md](docs/guidelines/COMMITS.md) and [tool-settings.md](docs/tool-settings.md).
 
 ## Entry point
 
@@ -28,57 +42,85 @@ Knowledge compounds when repeated mistakes become docs and docs become skills �
 
 See [docs/tool-adapters.md](docs/tool-adapters.md) for install paths and merge order.
 
-## What's included
+## Shipped today
 
-Ready to install and use today:
+Ready to install and use:
 
-**Guidelines** — 11 docs in `docs/guidelines/` (workflow, specs, tracker-agnostic intake, comprehension gate, testing, review, git, commits).
+### Guidelines and workflow
 
-**Skill packs** (deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`):
+11 docs in `docs/guidelines/` — workflow, specs, tracker-agnostic intake, comprehension gate, testing, verification, review, git, commits. Key gates:
+
+| Gate | Doc | What it enforces |
+|------|-----|------------------|
+| Comprehension | [COMPREHENSION.md](docs/guidelines/COMPREHENSION.md) | Human understands the change before verify |
+| Verification | [VERIFICATION.md](docs/guidelines/VERIFICATION.md) | Separate agent runs tests, lint, doc truth |
+| Review | [REVIEW.md](docs/guidelines/REVIEW.md) | Security and definition-of-done before merge |
+
+### Skill packs
+
+Deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`:
 
 | Pack | Skills | Role |
 |------|--------|------|
-| [core](packs/core/) | 32 | Stack detection, stack profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
+| [core](packs/core/) | 32 | Stack detection, profiles, intent routing, workflow shortcuts, work intake, comprehension gate |
 | [patterns](packs/patterns/) | 25 | Framework and DevOps patterns (Flutter, Docker, Svelte, …) |
 | [topics](packs/topics/) | 4 | Cross-cutting topics (security, LLM, RAG, MCP) |
 
 **Stack packs** (optional slices — see [packs/README.md](packs/README.md)): `rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter`. Install with `./scripts/kit install --pack=core,rails`.
 
-**Tracker workflow** — paste or `gh` intake → `.ai/work/{ref}-analysis.md`; optional `./scripts/kit sync-tracker` for a local issue index. See [TRACKER.md](docs/guidelines/TRACKER.md).
+### Kit CLI and automation
 
-**Kit CLI** — `./scripts/kit` for install, compile, validate, detect-stack, deploy-skills, deploy-workflows, intake, sync-tracker. See [shell-commands.md](docs/shell-commands.md).
+| Feature | Command / doc |
+|---------|---------------|
+| Install | `./scripts/kit install --target=all` — [installation.md](docs/installation.md) |
+| Validate | `./scripts/kit validate` (CI on push) |
+| Stack detection | `./scripts/kit detect-stack --write-profile` |
+| Tracker intake | `./scripts/kit intake` → `.ai/work/{ref}-analysis.md` — [TRACKER.md](docs/guidelines/TRACKER.md) |
+| Tool settings | `./scripts/kit configure` — permissions and attribution for Cursor + Claude — [tool-settings.md](docs/tool-settings.md) |
+| Shell reference | [shell-commands.md](docs/shell-commands.md) |
 
-**Tool adapters** — Cursor rules, Claude Code (`CLAUDE.md`), Codex (`~/.codex/AGENTS.md`), Antigravity (`GEMINI.md` + `.agents/`). See [tool-adapters.md](docs/tool-adapters.md).
+### Tool adapters and agents
 
-**Claude Code agents** — `agents/` personas (developer, architect, auditor, explore, orchestrator).
+- **Cursor** — path-scoped `kit-*.mdc` rules + user-rules dedup
+- **Claude Code** — [CLAUDE.md](CLAUDE.md) adapter + `agents/` personas (developer, architect, auditor, explore, orchestrator)
+- **Codex** — `~/.codex/AGENTS.md`
+- **Antigravity** — [GEMINI.md](GEMINI.md) + `.agents/`
 
-**Registry & validation** — slim detection registry, universal DoD, `./scripts/kit validate` (CI on push).
+See [tool-adapters.md](docs/tool-adapters.md).
 
-**Hooks (opt-in)** — shared shell hooks for Claude Code and Cursor (`./scripts/kit install --with-hooks`). See [hooks.md](docs/hooks.md).
+### Hooks (opt-in)
 
-**Cursor dedup** — `sync-cursor-user-rules.sh` + `kit-user-rules.mdc` skips guidelines already in your user rules.
+Shared shell hooks for Claude Code and Cursor — block dangerous commands, protect secrets, optional review gate before commit. See [hooks.md](docs/hooks.md).
 
-**Tool settings** — `~/.config/agent_dev_kit/config.yaml` + `./scripts/kit configure` syncs permissions and attribution to Cursor and Claude Code. See [tool-settings.md](docs/tool-settings.md).
+```bash
+./scripts/kit install --target=both --with-hooks --with-review-gate
+```
 
-**Skills review** — [docs/skills-review.md](docs/skills-review.md) (automated → agent → human sign-off in PR).
+### Registry and quality
 
-## On the queue
+- Slim detection registry (`registry/stacks.yaml`) and universal DoD
+- Skills review process — [skills-review.md](docs/skills-review.md) (automated → agent → human sign-off in PR)
+
+## Roadmap
 
 Not shipped yet; planned next:
 
-| Item | Notes |
-|------|-------|
-| **Docs polish** | Project scaffolds (`templates/project-*`) |
-| **Linear / Jira cache** | `sync-tracker` today supports GitHub only; other providers via paste/export |
-| **Antigravity hooks** | Reuse shell scripts when IDE hook API is stable |
-| **Copilot instructions** | `.github/instructions/` pattern-scoped rules (last) |
+| Phase | Item | Notes |
+|-------|------|-------|
+| **4b** | Skills content depth | Layer 2/3 review for devops, mobile, astro, and remaining packs |
+| **4c** | Pack-dependent MCP presets | `--pack=rails` → merge recommended MCP servers into Cursor/Claude config |
+| **5** | Project scaffolds | `templates/project-*` for new repos |
+| **5** | Linear / Jira cache | `sync-tracker` today supports GitHub only; other providers via paste/export |
+| **5** | Antigravity hooks | Reuse shell scripts when IDE hook API is stable |
+| **5** | Copilot instructions | `.github/instructions/` pattern-scoped rules (last) |
+| **—** | Doc translations | More guideline locales — see [docs/i18n/README.md](docs/i18n/README.md) |
 
-Track implementation outside this repo (not committed here).
+Implementation tracking lives outside this repo (not committed here).
 
 ## Quick start
 
 ```bash
-git clone https://github.com/alexey-poimtsev/claude_dev.git ~/Projects/agent_dev_kit
+git clone https://github.com/alec-c4/agent_dev_kit.git ~/Projects/agent_dev_kit
 cd ~/Projects/agent_dev_kit
 
 ./scripts/kit install --dry-run --target=all
@@ -140,6 +182,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## References
 
 - [How git-flow-next shipped 1.0 with AI](https://git-flow.sh/blog/posts/how-we-shipped-git-flow-next-1-0-with-ai/) — guidelines as the product, skills as executable workflow, compounding context across sessions.
+- [Automation-induced complacency potential](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.00225/full) (Ako-Brew et al., 2019) — reliable automation reduces monitoring; kit gates (comprehension, verification, review hooks) keep the developer checking what AI produces.
 
 ## License
 
