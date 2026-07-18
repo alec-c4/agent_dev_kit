@@ -87,6 +87,9 @@ def attribution_to_cursor(commits: bool, prs: bool) -> dict[str, bool]:
 
 
 def attribution_to_claude(commits: bool, prs: bool) -> dict[str, str] | None:
+    """Claude Code's `attribution.commit`/`attribution.pr` hold the trailer
+    text to add; empty string disables it. `includeCoAuthoredBy` is the
+    deprecated boolean predecessor — superseded by `attribution`."""
     if commits and prs:
         return None
     payload: dict[str, str] = {}
@@ -163,7 +166,7 @@ def build_claude_payload(
     prs: bool,
 ) -> dict[str, Any]:
     payload = deepcopy(existing)
-    payload.pop("includeCoAuthoredBy", None)
+    payload.pop("includeCoAuthoredBy", None)  # deprecated in favor of `attribution`
 
     merged = merge_section(
         {},
