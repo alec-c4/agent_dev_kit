@@ -119,8 +119,11 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing scripts/sync-cursor-user-rules.sh"
   elif [[ ! -f "$KIT_DIR/templates/cursor/rules/kit-user-rules.mdc" ]]; then
     err "missing templates/cursor/rules/kit-user-rules.mdc"
+  elif [[ ! -f "$KIT_DIR/templates/cursor/rules/kit-comprehension.mdc" ]]; then
+    err "missing templates/cursor/rules/kit-comprehension.mdc"
   else
     ok "cursor user-rules dedup (sync script + kit-user-rules.mdc)"
+    ok "cursor global comprehension gate (kit-comprehension.mdc)"
   fi
 
   if [[ ! -f "$KIT_DIR/docs/guidelines/TRACKER.md" ]]; then

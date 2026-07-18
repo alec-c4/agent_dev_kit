@@ -1,0 +1,23 @@
+---
+description: Human comprehension gate — handoff, Q&A, sign-off before commit. Applies globally to every project.
+alwaysApply: true
+---
+
+# Human comprehension gate (global)
+
+Agent Dev Kit is installed globally at `~/.cursor/agent_dev_kit`. In the **Cursor IDE**, this rule applies in **every project** — no per-project kit install required. The **Cursor CLI** (`agent` binary) does not read `~/.cursor/rules/`; run `./scripts/kit install --target=cursor --project` per repo so this gate also applies there.
+
+The developer is the **control plane**. Highly reliable automation reduces monitoring; kit counters that with an explicit human gate before commit.
+
+## Before commit or PR (non-trivial work)
+
+1. Write `.ai/work/{work_ref}-handoff.md` in the **current project repo** (create `.ai/work/` if missing).
+2. Generate **3 comprehension questions** from the handoff — human answers in their own words.
+3. Wait for explicit **human sign-off**. Do not fill sign-off or Q&A for the human.
+4. Only then run verification or commit.
+
+**Default tier:** standard. Skip only when the human explicitly says comprehension minimal (typo, comment-only).
+
+Full rules: [COMPREHENSION.md](../agent_dev_kit/docs/guidelines/COMPREHENSION.md)
+
+Also load via `~/.cursor/kit-user-rules.manifest.json` → `always_load_kit_guidelines_resolved`.

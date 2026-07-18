@@ -25,7 +25,7 @@ cd ~/Projects/agent_dev_kit
 
 | Target | What it configures |
 |--------|-------------------|
-| `cursor` | `~/.cursor/agent_dev_kit` link + `kit-*.mdc` rules |
+| `cursor` | `~/.cursor/agent_dev_kit` link + global `kit-*.mdc` rules (all projects) |
 | `claude` | `~/.claude/` — AGENTS.md, CLAUDE.md, agents, docs |
 | `codex` | `~/.codex/AGENTS.md` + kit tree |
 | `antigravity` | `~/.gemini/AGENTS.md` + GEMINI.md |
@@ -34,15 +34,21 @@ cd ~/Projects/agent_dev_kit
 
 Restart your IDE or CLI after install.
 
-## 4. Project install
+**Global Cursor rules** (`kit-user-rules`, `kit-comprehension`, …) apply in **every repo** automatically. Guidelines load from `~/.cursor/agent_dev_kit` via absolute paths in `~/.cursor/kit-user-rules.manifest.json`.
+
+## 4. Project install (optional)
+
+Use only when the team needs shared artifacts **in git**: root `AGENTS.md`, `.agents/skills/`, project `.cursor/rules/`.
 
 From your **application repo** (not the kit repo):
 
 ```bash
-/path/to/agent_dev_kit/scripts/kit install --target=all --project
+/path/to/agent_dev_kit/scripts/kit install --target=cursor --project
 ```
 
-Deploys `AGENTS.md`, `.agents/skills/`, `.cursor/rules/`, and `.ai/` scaffold into the current directory.
+For Claude slash commands in a project, add `--target=both`. **Warning:** `--target=both --project` symlinks `docs/` into the kit tree — skip if the repo already has its own `docs/` directory.
+
+Do **not** run project install just to get workflow or comprehension rules — global install is enough.
 
 ## 5. Skill packs
 
