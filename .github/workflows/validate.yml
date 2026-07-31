@@ -26,6 +26,10 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/requirements-detect.txt
 
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install system and Python dependencies
         run: |
           sudo apt-get update
@@ -34,6 +38,10 @@ jobs:
 
       - name: Compile registry
         run: ./scripts/kit compile
+
+      - name: Golden parity detect-stack (Bun vs Python)
+        run: bun test
+        working-directory: packages/kit-runtime
 
       - name: Validate kit (phase 1)
         run: ./scripts/kit validate --phase=1

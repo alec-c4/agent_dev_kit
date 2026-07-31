@@ -1,0 +1,24 @@
+# Configurable quality gates — universal catalog
+# Project overlay: .ai/kit.yaml → gates[]
+# Consumed by: verification/review skills, future kit status gate view
+version: 1
+
+defaults:
+  - id: tests
+    label: Automated tests (happy + sad paths)
+    severity: block
+  - id: code_quality
+    label: Lint and project coding standards
+    severity: block
+  - id: comprehension
+    label: Human comprehension gate (handoff + sign-off)
+    severity: block
+  - id: duplication
+    label: Duplicate code check
+    severity: warn
+  - id: security
+    label: Security / dependency scan
+    severity: block
+  - id: docs
+    label: Public docs match behaviour
+    severity: block

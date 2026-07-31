@@ -1,0 +1,14 @@
+{
+  "name": "@agent-dev-kit/kit-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "kit-detect-stack": "./src/cli/detect-stack.ts"
+  },
+  "scripts": {
+    "detect-stack": "bun run src/cli/detect-stack.ts",
+    "test": "bun test",
+    "test:golden": "bun test test/detect-stack.golden.test.ts"
+  }
+}

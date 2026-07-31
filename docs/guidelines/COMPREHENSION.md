@@ -142,6 +142,10 @@ Comprehension runs **after** code is ready and **before** the verifier agent. Th
 
 For **strict** tier or every Nth task, update `.ai/project-map.md` — modules, data stores, entry points. Human **edits** the map; agent proposes diff.
 
+## Optional: project principles
+
+`.ai/project-principles.md` — short product NFR / vision / non-negotiables (optional constitution). Specs may reference it under **Constraints**. Not a substitute for stack coding rules.
+
 Phase 2 adds skill `comprehension-check` and `validate-handoff.sh`. Phase 3 adds opt-in hooks blocking commit without sign-off — see [hooks.md](../hooks.md).
 
 ## Automation

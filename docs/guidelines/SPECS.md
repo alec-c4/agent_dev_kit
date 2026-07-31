@@ -143,6 +143,9 @@ Save as `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-sp
 **Spec key:** export-csv
 **Work ref:** GH-42 | LIN-ENG-123 | adhoc-slug
 **Tracker link:** https://… (optional)
+**Milestone:** m1-export (optional — product slice id)
+**Sprint:** 2026-W31 (optional)
+**spec_language:** en (or project `.ai/kit.yaml` `spec_language`; default English)
 **Supersedes:** — (or `1.0` — see archive)
 
 ## Changelog
@@ -150,6 +153,21 @@ Save as `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-sp
 | Version | Date | Author | Summary |
 |---------|------|--------|---------|
 | 1.0 | 2026-06-10 | — | Initial spec |
+
+On **fix/update** bumps, also add delta sections under the new Changelog row context (or after the table):
+
+```markdown
+### Added
+- AC-4: …
+
+### Modified
+- AC-2: …
+
+### Removed
+- AC-3: … (behaviour retired)
+```
+
+Still annotate individual ACs with `*(added|modified|removed vX)*`.
 
 ## Goal
 One paragraph — user-visible outcome.
@@ -178,10 +196,28 @@ Tag **`*(human-verify)*`** on ACs the human must execute (browser, curl, console
 *(optional — non-negotiable technical rules only; not step-by-step how-to)*
 
 - …
+- May reference `.ai/project-principles.md` (optional product NFR / vision) when present.
 
 ## Open questions
 - … (resolve before implementation)
+- Mark unresolved items with **`[NEEDS CLARIFICATION]`** — do not seek approval while any remain.
 ```
+
+### Clarify before approve
+
+If confidence is medium/low, or Open questions contain `[NEEDS CLARIFICATION]`:
+
+1. Run an explicit clarify round (questions in chat or in the spec).
+2. Resolve or remove each `[NEEDS CLARIFICATION]` marker.
+3. Only then present the spec for human approval.
+
+This supplements Step 0 in [INTENT-ROUTING.md](INTENT-ROUTING.md) — clarify is not only one intake question.
+
+### Spec language
+
+- Default: **English** (`spec_language: en`).
+- Override: project `.ai/kit.yaml` → `spec_language`, or the language the human writes the request in when no config exists.
+- Planning artifacts under `.ai/` may use `spec_language`. **Public** committed product docs stay English (or kit i18n) per documentation standards.
 
 For **fix/update**, the Changelog row is mandatory. Annotate changed ACs with `*(added v1.1)*`, `*(modified v1.1)*`, `*(removed v2.0)*`.
 

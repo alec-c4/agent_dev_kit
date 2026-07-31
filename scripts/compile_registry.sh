@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-# compile_registry.sh — Build registry/*.json from *.yaml (for stdlib-only detect-stack)
+# compile_registry.sh — Build registry/*.json from *.yaml
+# Prefers Bun; falls back to ruby, then python3+PyYAML.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KIT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REG="$KIT_DIR/registry"
+BUN_CLI="$KIT_DIR/packages/kit-runtime/src/cli/compile-registry.ts"
+
+if command -v bun &>/dev/null && [[ -f "$BUN_CLI" ]]; then
+  exec bun "$BUN_CLI"
+fi
 
 compile_one() {
   local name="$1"
@@ -25,16 +31,15 @@ Path('$json').write_text(json.dumps(data, indent=2) + chr(10))
 print('wrote $json')
 "
   else
-    echo "ERROR: need ruby or python3+PyYAML" >&2
+    echo "ERROR: need bun, ruby, or python3+PyYAML" >&2
     exit 1
   fi
 }
 
-for name in stacks topics dod cursor-user-rules tool-targets tool-settings locales; do
+for name in stacks topics dod gates cursor-user-rules tool-targets tool-settings locales; do
   compile_one "$name"
 done
 
-# Stack skill profiles (stdlib-friendly detect_stack.py)
 for yaml in "$KIT_DIR"/skills/stacks/*/profile.yaml; do
   [[ -f "$yaml" ]] || continue
   json="${yaml%.yaml}.json"
@@ -54,7 +59,6 @@ print('wrote $json')
   fi
 done
 
-# Pack manifests (official + community; skip template)
 for yaml in "$KIT_DIR"/packs/*/manifest.yaml "$KIT_DIR"/packs/community/*/manifest.yaml; do
   [[ -f "$yaml" ]] || continue
   [[ "$yaml" == *"/_template/"* ]] && continue

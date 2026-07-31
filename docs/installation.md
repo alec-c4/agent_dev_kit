@@ -2,7 +2,7 @@
 
 Install Agent Dev Kit into your AI tools and optionally into a project repo.
 
-**Prerequisites:** bash, `jq` (recommended), Python 3 with PyYAML for `./scripts/kit compile`.
+**Prerequisites:** bash, [Bun](https://bun.sh) (recommended — primary for compile, detect-stack, configure, status/board), `jq` (recommended). Legacy fallback: Ruby or Python 3 + PyYAML when Bun is missing.
 
 ## 1. Get the kit
 

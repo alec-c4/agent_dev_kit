@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 # validate-handoff.sh — Structural checks on comprehension handoff markdown
 #
-# Usage:
-#   ./scripts/validate-handoff.sh GH-58
-#   ./scripts/validate-handoff.sh --file=.ai/work/GH-58-handoff.md
-#   ./scripts/kit validate-handoff GH-58
-#
-# Validates sections and sign-off for standard/strict tiers. Does not judge Q&A quality.
+# Prefers Bun; falls back to python3.
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KIT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_DIR="$(pwd)"
 WORK_REF=""
 HANDOFF_FILE=""
 TIER=""
+BUN_VALIDATE="$KIT_DIR/packages/kit-runtime/src/cli/validate-handoff.ts"
+BUN_WORK_PATH="$KIT_DIR/packages/kit-runtime/src/cli/work-path.ts"
 
 usage() {
   sed -n '2,10p' "$0"
@@ -43,28 +42,18 @@ sanitize_ref() {
   printf '%s' "$s"
 }
 
+kit_resolve() {
+  if command -v bun &>/dev/null && [[ -f "$BUN_WORK_PATH" ]]; then
+    bun "$BUN_WORK_PATH" "$PROJECT_DIR" "$1" "$2" | head -1
+    return
+  fi
+  echo ".ai/work/${1}-${2}.md"
+}
+
 if [[ -z "$HANDOFF_FILE" ]]; then
   [[ -n "$WORK_REF" ]] || { echo "ERROR: work_ref or --file= required" >&2; usage >&2; exit 1; }
   SAFE_REF="$(sanitize_ref "$WORK_REF")"
-  HANDOFF_FILE="$PROJECT_DIR/.ai/work/${SAFE_REF}-handoff.md"
-  if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
-    HANDOFF_FILE="$PROJECT_DIR/$(python3 - "$PROJECT_DIR/.ai/tracker.yaml" "$SAFE_REF" <<'PY'
-import sys
-from pathlib import Path
-ref = sys.argv[2]
-path = Path(".ai") / "work" / f"{ref}-handoff.md"
-try:
-    import yaml
-    data = yaml.safe_load(Path(sys.argv[1]).read_text()) or {}
-    wf = data.get("work_filename") or "work/{work_ref}-{kind}.md"
-    rel = wf.replace("{work_ref}", ref).replace("{kind}", "handoff")
-    path = Path(".ai") / rel
-except ImportError:
-    pass
-print(path)
-PY
-)"
-  fi
+  HANDOFF_FILE="$PROJECT_DIR/$(kit_resolve "$SAFE_REF" handoff)"
 fi
 
 [[ "$HANDOFF_FILE" != /* ]] && HANDOFF_FILE="$PROJECT_DIR/$HANDOFF_FILE"
@@ -73,6 +62,10 @@ fi
   echo "ERROR: handoff not found: $HANDOFF_FILE" >&2
   exit 1
 }
+
+if command -v bun &>/dev/null && [[ -f "$BUN_VALIDATE" ]]; then
+  exec bun "$BUN_VALIDATE" "$HANDOFF_FILE" "$TIER"
+fi
 
 python3 - "$HANDOFF_FILE" "$TIER" <<'PY'
 import re
