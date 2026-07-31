@@ -19,11 +19,16 @@
 #   ./scripts/kit sync-rules [--dry-run] [--rules-dir DIR ...]
 #   ./scripts/kit configure [--target=cursor|claude|both] [--init-config] [--disable-attribution] [--dry-run]
 #   ./scripts/kit shell-info [--json]
+#   ./scripts/kit register [path]
+#   ./scripts/kit status [--project=PATH] [--all] [--json] [--watch]
+#   ./scripts/kit board
 #   ./scripts/kit run <script-name.sh> [args...]
 #
 # Examples (same from fish, zsh, or bash):
 #   ./scripts/kit install --target=both
 #   ./scripts/kit validate --phase=1
+#   ./scripts/kit status --watch
+#   ./scripts/kit board   # http://127.0.0.1:8787/ — explicit start only
 
 set -euo pipefail
 
@@ -34,8 +39,15 @@ source "$SCRIPT_DIR/lib/kit-env.sh"
 KIT_DIR="$(kit_root)"
 RUNNER="$(kit_bash)"
 
+kit_bun() {
+  if ! command -v bun &>/dev/null; then
+    echo "ERROR: bun is required for '$1' (install from https://bun.sh)" >&2
+    exit 1
+  fi
+}
+
 usage() {
-  sed -n '3,18p' "$0"
+  sed -n '3,26p' "$0"
   echo
   echo "Interactive shell: $(kit_interactive_shell_name) (\${SHELL:-unknown})"
   echo "Kit runs scripts with: $RUNNER"
@@ -72,6 +84,9 @@ case "$CMD" in
     exec "$RUNNER" "$KIT_DIR/scripts/intake-work-item.sh" "$@"
     ;;
   sync-tracker)
+    if command -v bun &>/dev/null && [[ -f "$KIT_DIR/packages/kit-runtime/src/cli/sync-tracker-cache.ts" ]]; then
+      exec bun "$KIT_DIR/packages/kit-runtime/src/cli/sync-tracker-cache.ts" "$(pwd)" "$@"
+    fi
     exec "$RUNNER" "$KIT_DIR/scripts/sync-tracker-cache.sh" "$@"
     ;;
   deploy-hooks)
@@ -83,10 +98,38 @@ case "$CMD" in
   detect-stack)
     exec "$RUNNER" "$KIT_DIR/scripts/detect-stack.sh" "$@"
     ;;
+  register)
+    kit_bun register
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/register.ts" "$@"
+    ;;
+  status)
+    kit_bun status
+    # Normalize --project=PATH to --project PATH for the Bun CLI
+    normalized=()
+    for a in "$@"; do
+      if [[ "$a" == --project=* ]]; then
+        normalized+=(--project "${a#--project=}")
+      else
+        normalized+=("$a")
+      fi
+    done
+    if ((${#normalized[@]})); then
+      exec bun "$KIT_DIR/packages/kit-runtime/src/cli/status.ts" "${normalized[@]}"
+    else
+      exec bun "$KIT_DIR/packages/kit-runtime/src/cli/status.ts"
+    fi
+    ;;
+  board)
+    kit_bun board
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/board.ts" "$@"
+    ;;
   sync-rules)
     exec "$RUNNER" "$KIT_DIR/scripts/sync-cursor-user-rules.sh" "$@"
     ;;
   configure)
+    if command -v bun &>/dev/null && [[ -f "$KIT_DIR/packages/kit-runtime/src/cli/configure.ts" ]]; then
+      exec bun "$KIT_DIR/packages/kit-runtime/src/cli/configure.ts" "$@"
+    fi
     exec python3 "$KIT_DIR/scripts/configure_settings.py" "$@"
     ;;
   shell-info)

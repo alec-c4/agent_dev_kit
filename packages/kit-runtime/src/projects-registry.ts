@@ -1,0 +1,147 @@
+import { existsSync, mkdirSync, openSync, closeSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { homedir } from "node:os";
+
+export type ProjectEntry = {
+  id: string;
+  path: string;
+  added_at: string;
+  last_seen_at: string;
+};
+
+export type ProjectsFile = {
+  version: 1;
+  projects: ProjectEntry[];
+};
+
+export function defaultProjectsPath(): string {
+  return join(homedir(), ".config", "agent-dev-kit", "projects.yaml");
+}
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function slugFromPath(path: string): string {
+  const base = path.replace(/\/+$/, "").split("/").pop() || "project";
+  return base.replace(/[^a-zA-Z0-9._-]+/g, "-").toLowerCase();
+}
+
+/** Quote YAML scalars that need it (paths, times with `:`). */
+function yamlScalar(value: string | number): string {
+  const s = String(value);
+  if (/^[\w./@+-]+$/.test(s) && !s.includes(":")) return s;
+  return JSON.stringify(s);
+}
+
+/** Block-style YAML — Bun.YAML.stringify emits JSON-like flow style. */
+export function formatProjectsYaml(data: ProjectsFile): string {
+  const lines = [`version: ${data.version}`, "projects:"];
+  if (!data.projects.length) {
+    lines.push("  []");
+  } else {
+    for (const p of data.projects) {
+      lines.push(`  - id: ${yamlScalar(p.id)}`);
+      lines.push(`    path: ${yamlScalar(p.path)}`);
+      lines.push(`    added_at: ${yamlScalar(p.added_at)}`);
+      lines.push(`    last_seen_at: ${yamlScalar(p.last_seen_at)}`);
+    }
+  }
+  return lines.join("\n") + "\n";
+}
+
+export function loadProjects(filePath: string): ProjectsFile {
+  if (!existsSync(filePath)) {
+    return { version: 1, projects: [] };
+  }
+  const raw = readFileSync(filePath, "utf8");
+  const parsed = Bun.YAML.parse(raw) as ProjectsFile | null;
+  if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.projects)) {
+    return { version: 1, projects: [] };
+  }
+  return parsed;
+}
+
+/** Drop entries whose path no longer exists. */
+export function pruneProjects(data: ProjectsFile): ProjectsFile {
+  return {
+    version: 1,
+    projects: data.projects.filter((p) => existsSync(p.path)),
+  };
+}
+
+/**
+ * Atomic write with exclusive flock via O_EXCL lockfile.
+ * Pattern: write temp → rename; lock via sibling `.lock` using open O_EXCL retry.
+ */
+export function saveProjects(filePath: string, data: ProjectsFile): void {
+  const dir = dirname(filePath);
+  mkdirSync(dir, { recursive: true });
+  const lockPath = `${filePath}.lock`;
+  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+
+  let lockFd: number | null = null;
+  const started = Date.now();
+  while (lockFd === null) {
+    try {
+      lockFd = openSync(lockPath, "wx");
+    } catch {
+      if (Date.now() - started > 5000) {
+        throw new Error(`Timeout acquiring lock ${lockPath}`);
+      }
+      Bun.sleepSync(20);
+    }
+  }
+
+  try {
+    const pruned = pruneProjects(data);
+    writeFileSync(tmpPath, formatProjectsYaml(pruned), "utf8");
+    renameSync(tmpPath, filePath);
+  } finally {
+    try {
+      closeSync(lockFd);
+    } catch {
+      /* ignore */
+    }
+    try {
+      unlinkSync(lockPath);
+    } catch {
+      /* ignore */
+    }
+    try {
+      unlinkSync(tmpPath);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+export function upsertProject(
+  filePath: string,
+  projectPath: string,
+  id?: string,
+): ProjectEntry {
+  const abs = resolve(projectPath);
+  const now = nowIso();
+  const entry: ProjectEntry = {
+    id: id || slugFromPath(abs),
+    path: abs,
+    added_at: now,
+    last_seen_at: now,
+  };
+  try {
+    const data = pruneProjects(loadProjects(filePath));
+    const existing = data.projects.find((p) => p.path === abs);
+    if (existing) {
+      existing.last_seen_at = now;
+      saveProjects(filePath, data);
+      return existing;
+    }
+    data.projects.push(entry);
+    saveProjects(filePath, data);
+    return entry;
+  } catch (e) {
+    console.error(`warning: could not update projects registry (${filePath}): ${e}`);
+    return entry;
+  }
+}

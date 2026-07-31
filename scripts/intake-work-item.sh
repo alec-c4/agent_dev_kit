@@ -57,9 +57,18 @@ sanitize_ref() {
 SAFE_REF="$(sanitize_ref "$WORK_REF")"
 TRACKER_PROVIDER="none"
 OUTPUT=".ai/work/${SAFE_REF}-analysis.md"
+KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BUN_WORK_PATH="$KIT_DIR/packages/kit-runtime/src/cli/work-path.ts"
+BUN_CACHE_PATH="$KIT_DIR/packages/kit-runtime/src/cli/cache-path.ts"
+BUN_CACHE_LOOKUP="$KIT_DIR/packages/kit-runtime/src/cli/cache-lookup.ts"
 
 if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
-  read -r OUTPUT TRACKER_PROVIDER <<EOF
+  if command -v bun &>/dev/null && [[ -f "$BUN_WORK_PATH" ]]; then
+    mapfile -t _wp < <(bun "$BUN_WORK_PATH" "$PROJECT_DIR" "$SAFE_REF" analysis)
+    OUTPUT="${_wp[0]}"
+    TRACKER_PROVIDER="${_wp[1]:-none}"
+  else
+    read -r OUTPUT TRACKER_PROVIDER <<EOF
 $(python3 - "$PROJECT_DIR/.ai/tracker.yaml" "$SAFE_REF" <<'PY'
 import sys
 from pathlib import Path
@@ -79,6 +88,8 @@ print(path)
 print(provider)
 PY
 EOF
+)
+  fi
 fi
 
 TITLE=""
@@ -114,17 +125,29 @@ fetch_github() {
   command -v gh &>/dev/null || return 1
   local json
   json="$(gh issue view "$id" --json title,body,url 2>/dev/null)" || return 1
-  TITLE="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('title',''))")"
-  BODY="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('body') or '')")"
-  TRACKER_LINK="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('url',''))")"
+  if command -v jq &>/dev/null; then
+    TITLE="$(printf '%s' "$json" | jq -r '.title // ""')"
+    BODY="$(printf '%s' "$json" | jq -r '.body // ""')"
+    TRACKER_LINK="$(printf '%s' "$json" | jq -r '.url // ""')"
+  elif command -v bun &>/dev/null; then
+    TITLE="$(printf '%s' "$json" | bun -e 'const d=JSON.parse(await Bun.stdin.text()); process.stdout.write(d.title||"")')"
+    BODY="$(printf '%s' "$json" | bun -e 'const d=JSON.parse(await Bun.stdin.text()); process.stdout.write(d.body||"")')"
+    TRACKER_LINK="$(printf '%s' "$json" | bun -e 'const d=JSON.parse(await Bun.stdin.text()); process.stdout.write(d.url||"")')"
+  else
+    TITLE="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('title',''))")"
+    BODY="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('body') or '')")"
+    TRACKER_LINK="$(printf '%s' "$json" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('url',''))")"
+  fi
   SOURCE="gh issue view $id"
   return 0
 }
-
 enrich_from_cache() {
   local cache_path="$PROJECT_DIR/.ai/tracker-cache.json"
   if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
-    read -r cache_path <<EOF
+    if command -v bun &>/dev/null && [[ -f "$BUN_CACHE_PATH" ]]; then
+      cache_path="$PROJECT_DIR/$(bun "$BUN_CACHE_PATH" "$PROJECT_DIR")"
+    else
+      read -r cache_path <<EOF
 $(python3 - "$PROJECT_DIR/.ai/tracker.yaml" <<'PY'
 from pathlib import Path
 import sys
@@ -137,10 +160,17 @@ except ImportError:
 PY
 EOF
 )
-    cache_path="$PROJECT_DIR/$cache_path"
+      cache_path="$PROJECT_DIR/$cache_path"
+    fi
   fi
   [[ -f "$cache_path" ]] || return 0
-  read -r CACHE_TITLE CACHE_URL CACHE_STATUS <<EOF
+  if command -v bun &>/dev/null && [[ -f "$BUN_CACHE_LOOKUP" ]]; then
+    mapfile -t _cl < <(bun "$BUN_CACHE_LOOKUP" "$cache_path" "$WORK_REF")
+    CACHE_TITLE="${_cl[0]:-}"
+    CACHE_URL="${_cl[1]:-}"
+    CACHE_STATUS="${_cl[2]:-}"
+  else
+    read -r CACHE_TITLE CACHE_URL CACHE_STATUS <<EOF
 $(python3 - "$cache_path" "$WORK_REF" <<'PY'
 import json, sys
 from pathlib import Path
@@ -159,6 +189,7 @@ else:
 PY
 EOF
 )
+  fi
   [[ -z "$TITLE" && -n "$CACHE_TITLE" ]] && TITLE="$CACHE_TITLE"
   [[ -z "$TRACKER_LINK" && -n "$CACHE_URL" ]] && TRACKER_LINK="$CACHE_URL"
   if [[ -n "$CACHE_STATUS" && "$SOURCE" != gh* ]]; then

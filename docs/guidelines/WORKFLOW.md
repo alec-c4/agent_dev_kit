@@ -12,6 +12,29 @@ Structured flow from task to merge. Works with any AI assistant — read [AGENTS
 6. **Review before commit** — completion verification by a **separate agent** first. See [VERIFICATION.md](VERIFICATION.md), then [REVIEW.md](REVIEW.md).
 7. **Guidelines compound** — when AI repeats a mistake, update the relevant guideline.
 
+## Pipeline overview
+
+Work flows from ideas to merge. Product slices use **milestones**; each task has a **pipeline stage**.
+
+```mermaid
+flowchart TB
+  human[Human]
+  backlog[Backlog]
+  milestone[Milestone]
+  intake[Intake]
+  spec[Spec]
+  plan[Plan]
+  implement[Implement]
+  gates[Gate_suite]
+  ship[Ship]
+
+  human --> backlog --> milestone --> intake --> spec --> plan --> implement --> gates --> ship
+  spec -->|clarify| spec
+  gates -->|fail| implement
+```
+
+Live status (optional): `./scripts/kit status --watch` or `./scripts/kit board` (loopback `127.0.0.1` only).
+
 ## Intent classification
 
 Classify every request before acting:
@@ -120,10 +143,20 @@ Detected: [from stack profile]
 
 ### Phase 1 — [name] (S/M/L)
 - [ ] …
+- **Boundary:** *(detailed only)* modules/directories this phase may touch
+- **Depends:** *(detailed only)* prior phases or external systems
+
+## Consistency check
+*(required for standard and detailed — before human plan approval)*
+
+- [ ] Every spec AC ID appears in at least one phase or step
+- [ ] Every phase/step maps to at least one AC (or is explicitly infra/chore with rationale)
+- [ ] No AC left only in the spec
 
 ## Success criteria
 - [ ] All spec AC IDs covered
 - [ ] Tests + lint per VERIFICATION.md
+- [ ] Gate suite from `.ai/kit.yaml` / [registry/gates.yaml](../../registry/gates.yaml) planned
 ```
 
 ### 4. Branch

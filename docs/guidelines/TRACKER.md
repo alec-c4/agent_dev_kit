@@ -67,7 +67,21 @@ If there is no ticket: use `work_ref: adhoc-{short-slug}` and proceed with [task
 
 ## Affected areas
 …
+
+## Decompose (if needed)
+If this ticket spans multiple independent features, list proposed `spec_key` values and milestone — see [INTENT-ROUTING.md](INTENT-ROUTING.md#discovery--decompose).
 ```
+
+## Product hierarchy (optional)
+
+| Layer | Path | Role |
+|-------|------|------|
+| Backlog idea | `.ai/backlog/items/*.md` | Inbox before scheduling |
+| Milestone | `.ai/milestones/{id}.md` | Complete value slice (set of features) |
+| Spec | `.ai/specs/{spec_key}-spec.md` | Behaviour contract |
+| Work | `.ai/work/{work_ref}-*.md` | Current task artifacts |
+
+Do not confuse **milestone** (product delivery) with **pipeline stage** (intake → … → done for one work_ref).
 
 ## Naming
 
