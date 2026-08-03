@@ -2,6 +2,7 @@
 /**
  * kit-status — scan .ai/ work items; optional --watch and --json.
  * Also upserts the current project into the global projects registry.
+ * Honors `.ai/kit.yaml` (`spec_language`, `gates`); rejects `spec_locale`.
  */
 import { resolve } from "node:path";
 import { watch } from "node:fs";
@@ -10,6 +11,7 @@ import {
   loadProjects,
   upsertProject,
 } from "../projects-registry.ts";
+import { loadKitProjectConfig } from "../kit-config.ts";
 import { formatStatusTable, scanProject, type WorkStatus } from "../status.ts";
 
 const args = process.argv.slice(2);
@@ -45,8 +47,33 @@ function collect(): WorkStatus[] {
 }
 
 function emit(rows: WorkStatus[]) {
-  if (json) console.log(JSON.stringify(rows, null, 2));
-  else console.log(formatStatusTable(rows));
+  const kit = loadKitProjectConfig(all ? process.cwd() : project);
+  if (kit.error) {
+    console.error(`warning: ${kit.error}`);
+  }
+  if (json) {
+    console.log(
+      JSON.stringify(
+        {
+          spec_language: kit.config.spec_language,
+          gates: kit.config.gates,
+          kit_yaml: kit.path,
+          work: rows,
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+  const gateIds = kit.config.gates.map((g) =>
+    g.severity ? `${g.id}:${g.severity}` : g.id,
+  );
+  console.error(
+    `spec_language=${kit.config.spec_language}` +
+      (gateIds.length ? ` gates=[${gateIds.join(", ")}]` : " gates=[]"),
+  );
+  console.log(formatStatusTable(rows));
 }
 
 emit(collect());
