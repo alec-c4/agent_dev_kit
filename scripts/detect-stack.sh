@@ -7,7 +7,7 @@
 #   bash scripts/detect-stack.sh --write-profile
 #   bash scripts/detect-stack.sh --write-profile /path/to/app
 #
-# Requires: python3, PyYAML (pip install pyyaml)
+# Prefers Bun (packages/kit-runtime); falls back to python3 + PyYAML.
 
 set -euo pipefail
 
@@ -31,12 +31,17 @@ for arg in "$@"; do
   esac
 done
 
-if ! command -v python3 &>/dev/null; then
-  echo '{"error":"python3 is required for stack detection"}' >&2
-  exit 1
-fi
-
 ARGS=(--cwd "$CWD" --kit-dir "$KIT_DIR")
 $WRITE_PROFILE && ARGS+=(--write-profile)
+
+BUN_CLI="$KIT_DIR/packages/kit-runtime/src/cli/detect-stack.ts"
+if command -v bun &>/dev/null && [[ -f "$BUN_CLI" ]]; then
+  exec bun "$BUN_CLI" "${ARGS[@]}"
+fi
+
+if ! command -v python3 &>/dev/null; then
+  echo '{"error":"bun or python3 is required for stack detection"}' >&2
+  exit 1
+fi
 
 exec python3 "$SCRIPT_DIR/detect_stack.py" "${ARGS[@]}"

@@ -35,8 +35,35 @@ chain_hint() {
 }
 
 if $JSON; then
-  python3 -c "
-import json, os, sys
+  if command -v bun &>/dev/null; then
+    bun -e "
+      const o = {
+        interactive_shell: process.argv[1],
+        interactive_shell_path: process.argv[2],
+        kit_script_runner: 'bash',
+        kit_script_runner_path: process.argv[3],
+        command_chain_hint: process.argv[4],
+        kit_cli: './scripts/kit',
+      };
+      console.log(JSON.stringify(o, null, 2));
+    " "$INTERACTIVE_NAME" "$INTERACTIVE" "$RUNNER" "$(chain_hint)"
+  elif command -v jq &>/dev/null; then
+    jq -n \
+      --arg interactive_shell "$INTERACTIVE_NAME" \
+      --arg interactive_shell_path "$INTERACTIVE" \
+      --arg kit_script_runner_path "$RUNNER" \
+      --arg command_chain_hint "$(chain_hint)" \
+      '{
+        interactive_shell: $interactive_shell,
+        interactive_shell_path: $interactive_shell_path,
+        kit_script_runner: "bash",
+        kit_script_runner_path: $kit_script_runner_path,
+        command_chain_hint: $command_chain_hint,
+        kit_cli: "./scripts/kit"
+      }'
+  else
+    python3 -c "
+import json, sys
 print(json.dumps({
   'interactive_shell': sys.argv[1],
   'interactive_shell_path': sys.argv[2],
@@ -46,6 +73,7 @@ print(json.dumps({
   'kit_cli': './scripts/kit',
 }, indent=2))
 " "$INTERACTIVE_NAME" "$INTERACTIVE" "$RUNNER" "$(chain_hint)"
+  fi
   exit 0
 fi
 

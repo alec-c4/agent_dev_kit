@@ -79,6 +79,11 @@ check_doc_links() {
 
 parse_frontmatter() {
   local skill_md="$1"
+  local bun_cli="$KIT_DIR/packages/kit-runtime/src/cli/parse-skill-frontmatter.ts"
+  if command -v bun &>/dev/null && [[ -f "$bun_cli" ]]; then
+    bun "$bun_cli" "$skill_md" 2>/dev/null || echo "MISSING"
+    return
+  fi
   ruby -ryaml -e "
     text = File.read('$skill_md')
     m = text.match(/\A---\s*\n(.*?)\n---/m)

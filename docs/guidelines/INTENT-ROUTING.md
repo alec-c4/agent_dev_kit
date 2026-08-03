@@ -124,10 +124,21 @@ Slash command or typed phrase + human «yes» — both acceptable.
 |-----------|------|
 | `skills/intent-router/SKILL.md` | Classification table, confidence rules, hint policy |
 | `skills/{feature,fix,plan,review,ship}/SKILL.md` | Explicit workflow shortcuts (same table as commands) |
-| `commands/README.md` | Index of workflow shortcuts |
-| `commands/resolve-task.md` | Full pipeline from work_ref or pasted ticket — see `skills/resolve-task/SKILL.md` |
+| `commands/README.md` | Index of workflow shortcuts (deployed files come from skills) |
+| `skills/resolve-task/SKILL.md` | Full pipeline from work_ref or pasted ticket |
 | `.ai/tracker.yaml` | `ux_hints: true/false` |
 | `kit-workflow.mdc` | Link INTENT-ROUTING.md Step 0 |
+
+## Discovery / decompose
+
+When a request is clearly **several independent features** (different user outcomes, weak coupling):
+
+1. Say so in one line.
+2. Propose multiple `spec_key` values (and optional `.ai/milestones/{id}.md` or `.ai/roadmap.md`).
+3. Do **not** force everything into one oversized spec.
+4. Proceed on the first agreed slice after human confirm.
+
+Small related ACs for one feature stay in one spec.
 
 ## Quick reference for agents
 

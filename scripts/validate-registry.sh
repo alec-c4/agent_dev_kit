@@ -47,8 +47,15 @@ for name in stacks topics dod; do
 done
 
 # ── tool settings configure smoke test ────────────────────────────────────────
-if [[ ! -f "$KIT_DIR/scripts/configure_settings.py" ]]; then
-  err "missing scripts/configure_settings.py"
+CONFIGURE_CMD=()
+if command -v bun &>/dev/null && [[ -f "$KIT_DIR/packages/kit-runtime/src/cli/configure.ts" ]]; then
+  CONFIGURE_CMD=(bun "$KIT_DIR/packages/kit-runtime/src/cli/configure.ts")
+elif [[ -f "$KIT_DIR/scripts/configure_settings.py" ]]; then
+  CONFIGURE_CMD=(python3 "$KIT_DIR/scripts/configure_settings.py")
+fi
+
+if [[ ${#CONFIGURE_CMD[@]} -eq 0 ]]; then
+  err "missing configure (Bun cli/configure.ts or scripts/configure_settings.py)"
 elif [[ ! -f "$KIT_DIR/registry/tool-settings.json" ]]; then
   err "missing registry/tool-settings.json — run: bash scripts/compile_registry.sh"
 elif [[ ! -f "$KIT_DIR/templates/config/config.yaml.example" ]]; then
@@ -56,7 +63,7 @@ elif [[ ! -f "$KIT_DIR/templates/config/config.yaml.example" ]]; then
 else
   tmp_cli="$(mktemp)"
   tmp_claude="$(mktemp)"
-  if python3 "$KIT_DIR/scripts/configure_settings.py" \
+  if "${CONFIGURE_CMD[@]}" \
     --cli-config "$tmp_cli" \
     --claude-settings "$tmp_claude" \
     --target=both >/dev/null 2>&1 \
@@ -380,9 +387,19 @@ if [[ -f "$KIT_DIR/hooks/block-dangerous.sh" ]]; then
 fi
 
 # ── detect-stack dry run on fixtures ──────────────────────────────────────────
+# Prefer Bun detect-stack when available
+kit_detect_stack() {
+  local cwd="$1"
+  if command -v bun &>/dev/null && [[ -f "$KIT_DIR/packages/kit-runtime/src/cli/detect-stack.ts" ]]; then
+    bun "$KIT_DIR/packages/kit-runtime/src/cli/detect-stack.ts" --cwd "$cwd" --kit-dir "$KIT_DIR"
+  else
+    python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$cwd" --kit-dir "$KIT_DIR"
+  fi
+}
+
 FIXTURE_RAILS="$KIT_DIR/scripts/fixtures/minimal-rails"
 if [[ -d "$FIXTURE_RAILS" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_RAILS" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "rails"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_RAILS" 2>/dev/null | jq -e '.primary_stack == "rails"' >/dev/null; then
     ok "detect_stack fixture rails"
   else
     err "detect_stack fixture did not detect rails"
@@ -391,7 +408,7 @@ fi
 
 FIXTURE_ELIXIR="$KIT_DIR/scripts/fixtures/minimal-elixir"
 if [[ -d "$FIXTURE_ELIXIR" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_ELIXIR" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "elixir"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_ELIXIR" 2>/dev/null | jq -e '.primary_stack == "elixir"' >/dev/null; then
     ok "detect_stack fixture elixir"
   else
     err "detect_stack fixture did not detect elixir"
@@ -400,7 +417,7 @@ fi
 
 FIXTURE_SWIFT="$KIT_DIR/scripts/fixtures/minimal-swift"
 if [[ -d "$FIXTURE_SWIFT" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_SWIFT" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "swift"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_SWIFT" 2>/dev/null | jq -e '.primary_stack == "swift"' >/dev/null; then
     ok "detect_stack fixture swift"
   else
     err "detect_stack fixture did not detect swift"
@@ -409,7 +426,7 @@ fi
 
 FIXTURE_KOTLIN="$KIT_DIR/scripts/fixtures/minimal-kotlin"
 if [[ -d "$FIXTURE_KOTLIN" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_KOTLIN" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "kotlin"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_KOTLIN" 2>/dev/null | jq -e '.primary_stack == "kotlin"' >/dev/null; then
     ok "detect_stack fixture kotlin"
   else
     err "detect_stack fixture did not detect kotlin"
@@ -418,7 +435,7 @@ fi
 
 FIXTURE_REACT_NATIVE="$KIT_DIR/scripts/fixtures/minimal-react-native"
 if [[ -d "$FIXTURE_REACT_NATIVE" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_REACT_NATIVE" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "react-native"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_REACT_NATIVE" 2>/dev/null | jq -e '.primary_stack == "react-native"' >/dev/null; then
     ok "detect_stack fixture react-native"
   else
     err "detect_stack fixture did not detect react-native"
@@ -427,7 +444,7 @@ fi
 
 FIXTURE_FLUTTER="$KIT_DIR/scripts/fixtures/minimal-flutter"
 if [[ -d "$FIXTURE_FLUTTER" ]]; then
-  if python3 "$KIT_DIR/scripts/detect_stack.py" --cwd "$FIXTURE_FLUTTER" --kit-dir "$KIT_DIR" 2>/dev/null | jq -e '.primary_stack == "flutter"' >/dev/null; then
+  if kit_detect_stack "$FIXTURE_FLUTTER" 2>/dev/null | jq -e '.primary_stack == "flutter"' >/dev/null; then
     ok "detect_stack fixture flutter"
   else
     err "detect_stack fixture did not detect flutter"

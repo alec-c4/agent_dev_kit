@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 # sync-tracker-cache.sh — Snapshot active tracker items to .ai/tracker-cache.json
-#
-# Usage:
-#   ./scripts/sync-tracker-cache.sh [--dry-run]
-#   ./scripts/kit sync-tracker [--dry-run]
-#
-# Requires: gh CLI + auth when provider is github.
-# Output: .ai/tracker-cache.json (gitignore in target projects)
+# Prefers Bun; falls back to python3.
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KIT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_DIR="$(pwd)"
 DRY_RUN=false
+BUN_CLI="$KIT_DIR/packages/kit-runtime/src/cli/sync-tracker-cache.ts"
 
 for arg in "$@"; do
   case "$arg" in
@@ -26,6 +23,13 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+if command -v bun &>/dev/null && [[ -f "$BUN_CLI" ]]; then
+  if $DRY_RUN; then
+    exec bun "$BUN_CLI" "$PROJECT_DIR" --dry-run
+  fi
+  exec bun "$BUN_CLI" "$PROJECT_DIR"
+fi
 
 TRACKER_YAML="$PROJECT_DIR/.ai/tracker.yaml"
 python3 - "$PROJECT_DIR" "$TRACKER_YAML" "$DRY_RUN" <<'PY'

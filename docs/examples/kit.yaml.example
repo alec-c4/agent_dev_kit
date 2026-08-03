@@ -1,0 +1,11 @@
+# Example project kit config (copy to .ai/kit.yaml)
+spec_language: en
+
+gates:
+  - id: tests
+  - id: code_quality
+  - id: comprehension
+  - id: duplication
+    severity: warn   # or block
+  - id: security
+  - id: docs

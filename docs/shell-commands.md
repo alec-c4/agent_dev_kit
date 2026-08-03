@@ -34,8 +34,19 @@ EOF
 ./scripts/kit configure --init-config
 ./scripts/kit configure --target=claude
 ./scripts/kit shell-info
+./scripts/kit register
+./scripts/kit status
+./scripts/kit status --all --json
+./scripts/kit status --watch
+./scripts/kit board
 ./scripts/kit run install.sh --dry-run --target=cursor
 ```
+
+`status` / `board` / `register` require [Bun](https://bun.sh). Most other kit commands prefer Bun and fall back to Ruby/Python when needed (`detect-stack`, `compile`, `configure`, `sync-rules`, `validate-handoff`, `sync-tracker`).
+
+**Board threat model:** `kit board` binds `127.0.0.1` only, starts only when you run it (no install auto-start), and may expose local `.ai/` content — do not run on shared hosts casually.
+
+Global project list: `~/.config/agent-dev-kit/projects.yaml` (upsert + prune missing paths).
 
 The wrapper always invokes bash for kit scripts. Your `$SHELL` is irrelevant for these.
 
