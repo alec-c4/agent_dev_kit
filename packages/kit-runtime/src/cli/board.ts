@@ -9,6 +9,7 @@ import {
   loadProjects,
   upsertProject,
 } from "../projects-registry.ts";
+import { loadKitProjectConfig } from "../kit-config.ts";
 import { PIPELINE_STAGES, scanProject, type WorkStatus } from "../status.ts";
 
 const HOST = "127.0.0.1";
@@ -25,7 +26,7 @@ function snapshot(): WorkStatus[] {
   return data.projects.flatMap((p) => scanProject(p.path, p.id));
 }
 
-function pageHtml(): string {
+function pageHtml(meta: { spec_language: string; gates: string }): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +46,7 @@ function pageHtml(): string {
 <body>
 <h1>Kit status board</h1>
 <p class="warn">Loopback only (${HOST}). Read-only view of configured project <code>.ai/</code> trees. Not a second tracker.</p>
+<p class="warn">cwd kit.yaml: spec_language=<strong>${meta.spec_language}</strong>; gates=${meta.gates}</p>
 <div class="legend">${PIPELINE_STAGES.map((s) => `<span class="chip">${s}</span>`).join("")}</div>
 <table>
 <thead><tr><th>Project</th><th>Work</th><th>Stage</th><th>Spec</th><th>Updated</th></tr></thead>
@@ -114,7 +116,17 @@ const server = Bun.serve({
       });
     }
     if (url.pathname === "/" || url.pathname === "/index.html") {
-      return new Response(pageHtml(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      const kit = loadKitProjectConfig(process.cwd());
+      const gates = kit.config.gates
+        .map((g) => (g.severity ? `${g.id}:${g.severity}` : g.id))
+        .join(", ") || "(none)";
+      return new Response(
+        pageHtml({
+          spec_language: kit.config.spec_language,
+          gates,
+        }),
+        { headers: { "Content-Type": "text/html; charset=utf-8" } },
+      );
     }
     return new Response("Not found", { status: 404 });
   },
