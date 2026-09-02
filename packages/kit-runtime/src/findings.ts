@@ -161,20 +161,42 @@ export function appendFinding(
   return row;
 }
 
+export type CloseOptions = {
+  /** The caller asserts a sensor passed. Not verifiable — see `verifiedBy`. */
+  fromSensor: boolean;
+  /**
+   * A sensor command the CLI ran itself, with its exit code. When present it is
+   * proof rather than an assertion, and it is recorded on the row.
+   */
+  verifiedBy?: { command: string; exitCode: number };
+};
+
 export function closeFinding(
   projectRoot: string,
   workRef: string,
   id: string,
-  opts: { fromSensor: boolean },
+  opts: CloseOptions,
 ): Finding {
-  if (!opts.fromSensor) {
-    throw new Error("close requires --from-sensor (writers cannot close findings)");
+  if (opts.verifiedBy && opts.verifiedBy.exitCode !== 0) {
+    throw new Error(
+      `sensor failed (exit ${opts.verifiedBy.exitCode}): ${opts.verifiedBy.command} — finding stays open`,
+    );
+  }
+  if (!opts.fromSensor && !opts.verifiedBy) {
+    throw new Error(
+      "close requires --run <sensor command> (preferred) or --from-sensor; writers cannot close findings",
+    );
   }
   const rows = load(projectRoot, workRef);
   const row = rows.find((r) => r.id === id);
   if (!row) throw new Error(`finding ${id} not found`);
   row.status = "closed";
   row.closed = today();
+  // Record how the row was closed so a reader can tell a verified close from
+  // an asserted one.
+  row.evidence = opts.verifiedBy
+    ? `${row.evidence}${row.evidence ? "; " : ""}closed by sensor: ${opts.verifiedBy.command}`
+    : `${row.evidence}${row.evidence ? "; " : ""}closed on assertion (--from-sensor, unverified)`;
   writeRows(projectRoot, workRef, rows);
   return row;
 }

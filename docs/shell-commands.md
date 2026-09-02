@@ -42,7 +42,8 @@ EOF
 ./scripts/kit findings list [work_ref] [--open]
 ./scripts/kit findings append --work-ref GH-58 --fingerprint FP --severity block|warn --summary S --evidence E
 ./scripts/kit findings gate --work-ref GH-58 [--remediation .ai/work/GH-58-plan.md]
-./scripts/kit findings close F-1 --work-ref GH-58 --from-sensor
+./scripts/kit findings close F-1 --work-ref GH-58 --run "bundle exec rspec"   # verified
+./scripts/kit findings close F-1 --work-ref GH-58 --from-sensor              # asserted
 ./scripts/kit findings wontfix F-1 --work-ref GH-58 --human
 ./scripts/kit lessons list [--stack rails]
 ./scripts/kit lessons propose --fingerprint FP --guide G --sensor S [--stack rails]

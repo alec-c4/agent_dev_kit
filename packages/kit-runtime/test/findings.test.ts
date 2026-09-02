@@ -239,3 +239,54 @@ describe("findings gate (AC-3, AC-6)", () => {
     ]);
   });
 });
+
+describe("verified close (AC-5)", () => {
+  const seed = (root: string) =>
+    appendFinding(root, "GH-3", {
+      fingerprint: "fp",
+      stage: "verify",
+      severity: "block",
+      summary: "s",
+      evidence: "e",
+    });
+
+  test("neither assertion nor sensor result refuses the close", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-close-"));
+    seed(root);
+    expect(() => closeFinding(root, "GH-3", "F-1", { fromSensor: false })).toThrow(
+      /writers cannot close findings/,
+    );
+  });
+
+  test("a failing sensor keeps the finding open", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-close-"));
+    seed(root);
+    expect(() =>
+      closeFinding(root, "GH-3", "F-1", {
+        fromSensor: false,
+        verifiedBy: { command: "rspec", exitCode: 1 },
+      }),
+    ).toThrow(/sensor failed \(exit 1\)/);
+    expect(parseFindingsFile(findingsPath(root, "GH-3"))[0].status).toBe("open");
+  });
+
+  test("a passing sensor closes and records the command", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-close-"));
+    seed(root);
+    const row = closeFinding(root, "GH-3", "F-1", {
+      fromSensor: false,
+      verifiedBy: { command: "bundle exec rspec", exitCode: 0 },
+    });
+    expect(row.status).toBe("closed");
+    expect(row.evidence).toContain("closed by sensor: bundle exec rspec");
+  });
+
+  test("an asserted close is marked unverified on the row", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-close-"));
+    seed(root);
+    const row = closeFinding(root, "GH-3", "F-1", { fromSensor: true });
+    expect(row.status).toBe("closed");
+    expect(row.evidence).toContain("unverified");
+  });
+});
+

@@ -14,7 +14,11 @@ Structured flow from task to merge. Works with any AI assistant — read [AGENTS
 
 ## Feedback loop
 
-Before plan, implement, verify, or review: read `.ai/work/{work_ref}-findings.md`. **block** + `open`/`regressed` has the same weight as spec acceptance criteria. Cite every such `F-*` in a remediations table. Writers never set `status: closed` — only `./scripts/kit findings close F-n --work-ref {work_ref} --from-sensor` after the sensor passes, or `./scripts/kit findings wontfix F-n --work-ref {work_ref} --human`. Verification runs `./scripts/kit findings gate --work-ref {work_ref}`, which exits non-zero while any `block` row is still open.
+Before plan, implement, verify, or review: read `.ai/work/{work_ref}-findings.md`. **block** + `open`/`regressed` has the same weight as spec acceptance criteria. Cite every such `F-*` in a remediations table. Writers never set `status: closed`. Close by having the kit run the sensor, so the close is
+proof rather than a claim: `./scripts/kit findings close F-n --work-ref {work_ref} --run "bundle exec rspec"`
+— the row closes only on exit 0 and records the command. `--from-sensor` still closes without
+running anything and is marked unverified on the row; prefer `--run`. A human waives a row with
+`./scripts/kit findings wontfix F-n --work-ref {work_ref} --human`. Verification runs `./scripts/kit findings gate --work-ref {work_ref}`, which exits non-zero while any `block` row is still open.
 
 ## Pipeline overview
 

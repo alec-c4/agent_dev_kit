@@ -4,7 +4,7 @@
  *
  *   kit findings list [work_ref] [--open] [--project PATH]
  *   kit findings append --work-ref R --fingerprint F --stage S --severity block|warn --summary T --evidence E
- *   kit findings close F-n --work-ref R --from-sensor
+ *   kit findings close F-n --work-ref R --run "<sensor command>" | --from-sensor
  *   kit findings wontfix F-n --work-ref R --human
  *   kit findings gate --work-ref R [--remediation PATH]
  */
@@ -66,7 +66,8 @@ if (cmd === "-h" || cmd === "--help" || cmd === "help") {
   console.log(`Usage:
   kit findings list [work_ref] [--open] [--project PATH]
   kit findings append --work-ref R --fingerprint F --stage S --severity block|warn --summary T --evidence E
-  kit findings close F-n --work-ref R --from-sensor
+  kit findings close F-n --work-ref R --run "<sensor command>"   (verified)
+  kit findings close F-n --work-ref R --from-sensor                (asserted)
   kit findings wontfix F-n --work-ref R --human
   kit findings gate --work-ref R [--remediation PATH]`);
   process.exit(0);
@@ -127,8 +128,22 @@ try {
       console.error("close requires F-n and --work-ref");
       process.exit(2);
     }
+    // --run makes the close verifiable: the sensor is executed here and the row
+    // only closes on exit 0. --from-sensor stays as an unverified assertion.
+    const sensorCmd = arg("--run", rest);
+    let verifiedBy: { command: string; exitCode: number } | undefined;
+    if (sensorCmd) {
+      console.error(`running sensor: ${sensorCmd}`);
+      const proc = Bun.spawnSync(["sh", "-c", sensorCmd], {
+        cwd: project,
+        stdout: "inherit",
+        stderr: "inherit",
+      });
+      verifiedBy = { command: sensorCmd, exitCode: proc.exitCode ?? 1 };
+    }
     const row = closeFinding(project, workRef, id, {
       fromSensor: has("--from-sensor", rest),
+      verifiedBy,
     });
     console.log(`${row.id}\t${row.status}`);
     process.exit(0);
