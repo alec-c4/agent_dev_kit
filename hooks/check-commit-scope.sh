@@ -17,8 +17,17 @@ DIR_COUNT="$(echo "$STAGED_FILES" | awk -F/ 'NF>1{print $1} NF==1{print "."}' | 
 
 MSG="$(printf '%s' "$KIT_HOOK_COMMAND" | sed -nE 's/.*-m[[:space:]]+"([^"]+)".*/\1/p' 2>/dev/null)"
 [[ -z "$MSG" ]] && MSG="$(printf '%s' "$KIT_HOOK_COMMAND" | sed -nE "s/.*-m[[:space:]]+'([^']+)'.*/\1/p" 2>/dev/null)"
-if printf '%s' "$MSG" | grep -qiE '\band\b'; then
-  kit_block "BLOCKED: commit message contains 'and' — likely multiple changes. One commit = one logical change (see docs/guidelines/COMMITS.md)."
+# Unquoted -m, -F file, and editor commits leave MSG empty — the size check
+# below still applies, and it reads the staged tree rather than the command line.
+
+# A bare "and" is ordinary English ("parse header and trailer"). Only flag a
+# subject that joins two conventional-commit *types* — that is two changes.
+if [[ -n "$MSG" ]] \
+  && printf '%s' "$MSG" \
+    | grep -qiE '^[[:space:]]*(feat|fix|refactor|chore|docs|test|perf|build|ci|style|revert)([(!][^:]*)?:.*\b(and|\+)\b.*\b(feat|fix|refactor|chore|docs|test|perf|build|ci|style|revert)\b'; then
+  kit_block "commit message joining two change types" \
+    "The subject names more than one kind of change, so the commit cannot be reviewed or reverted as one unit." \
+    "Split it: stage and commit each change separately (see docs/guidelines/COMMITS.md)."
 fi
 
 if [[ "$FILE_COUNT" -gt 15 && "$DIR_COUNT" -gt 4 ]]; then
