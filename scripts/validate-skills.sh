@@ -77,6 +77,29 @@ check_doc_links() {
   [[ $link_err -eq 0 ]]
 }
 
+# Frontmatter keys Claude Code accepts (docs: code.claude.com/docs/en/skills).
+# An unknown key is silently ignored at runtime, so a typo like `user-invokable`
+# turns an internal skill into a user-facing one without any error.
+SKILL_FRONTMATTER_KEYS=" name description when_to_use argument-hint arguments \
+disable-model-invocation user-invocable allowed-tools disallowed-tools model \
+effort context agent background hooks paths shell metadata license compatibility "
+
+check_frontmatter_keys() {
+  local skill_md="$1" skill="$2" key bad=0
+  while IFS= read -r key; do
+    [[ -z "$key" ]] && continue
+    if [[ "$SKILL_FRONTMATTER_KEYS" != *" $key "* ]]; then
+      err "$skill: unknown frontmatter key '$key' (Claude Code ignores it)"
+      bad=1
+    fi
+  done < <(awk '
+    NR == 1 && $0 != "---" { exit }
+    NR > 1 && $0 == "---" { exit }
+    NR > 1 && /^[A-Za-z][A-Za-z0-9_-]*:/ { sub(/:.*/, ""); print }
+  ' "$skill_md")
+  [[ $bad -eq 0 ]]
+}
+
 parse_frontmatter() {
   local skill_md="$1"
   local bun_cli="$KIT_DIR/packages/kit-runtime/src/cli/parse-skill-frontmatter.ts"
@@ -145,6 +168,9 @@ while IFS= read -r skill; do
     fi
     if [[ ${#desc} -lt 20 ]]; then
       warn "$skill: description very short (${#desc} chars) — may not trigger implicit invocation"
+    fi
+    if ! check_frontmatter_keys "$skill_md" "$skill"; then
+      fm_ok="FAIL"
     fi
   fi
 
