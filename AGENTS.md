@@ -36,6 +36,8 @@ Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, us
 | [docs/guidelines/GIT.md](docs/guidelines/GIT.md) | Branches, merge policy |
 | [docs/shell-commands.md](docs/shell-commands.md) | Kit CLI (`./scripts/kit`); interactive shell via `$SHELL` |
 
+**Shipped language:** default `process_references: omit` — see [Shipped language](#shipped-language) below.
+
 ## Definition of Done
 
 Checklist: universal `registry/dod.yaml` + stack `skills/stacks/<id>/profile.yaml` → `dod_overlay`.
@@ -73,3 +75,18 @@ Full matrix: [docs/tool-adapters.md](docs/tool-adapters.md).
 - Duplicate user global rules (semantic commits, TDD, git branching, **shell syntax** for interactive commands).
 - Add AI attribution to commits or PRs.
 - Commit secrets, machine-specific paths, or personal tool injection blocks to the kit repo.
+
+## Shipped language
+
+Default (`.ai/kit.yaml` → `process_references: omit`, or missing key/file): do **not** put implementation-plan, stage/phase, or other generated planning jargon into product code, comments, public docs, commit messages, or PR bodies.
+
+| Forbidden in shipped text | Examples |
+|---------------------------|----------|
+| Delivery phases / stages | `Phase 0`, `stage 2`, `MVP` as product copy |
+| Kit / plan jargon | `AC-1`, `work_ref`, handoff, DoD as product copy |
+| Generated artifacts | paths like `.ai/work/*-plan.md`, “per implementation plan” |
+| Agent noise | Cursor/Claude attribution in commits or PRs |
+
+Planning stays under `.ai/` (or gitignored paths). Set `process_references: allow` only when the project explicitly wants kit jargon in shipped text. Stricter user global rules still win.
+
+Details: [CODING.md](docs/guidelines/CODING.md#shipped-language), [COMMITS.md](docs/guidelines/COMMITS.md#shipped-language).

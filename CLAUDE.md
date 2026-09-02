@@ -38,3 +38,5 @@ Natural language uses the **same steps** — commands bypass intent classificati
 ## Permissions
 
 You may create, edit, or delete files in the current project without asking, unless the user's rules require confirmation for destructive actions. Never modify files outside the project directory.
+
+**Shipped language:** default omit — see [AGENTS.md § Shipped language](AGENTS.md#shipped-language). Do not put plan/stage/generated-doc jargon in product code, commits, or public docs unless `.ai/kit.yaml` sets `process_references: allow`.
