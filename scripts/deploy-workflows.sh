@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# deploy-workflows.sh — Deploy workflow shortcuts (Claude commands + Antigravity workflows)
+# deploy-workflows.sh — Deploy Antigravity workflow shortcuts
 #
 # Source: skills/{feature,fix,plan,review,ship}/SKILL.md
 #
@@ -48,12 +48,22 @@ copy_workflow() {
   cp "$src" "$dest"
 }
 
-deploy_claude_commands() {
-  local base="$1" label="$2"
-  log "Claude commands → $label ($base)"
+# Claude Code merged custom commands into skills: a directory at
+# ~/.claude/skills/<name>/ already provides /<name>, and the skill wins when
+# both exist. Copying SKILL.md into ~/.claude/commands/ therefore adds nothing
+# and the copies go stale the moment the skill changes.
+report_stale_claude_commands() {
+  local base="$1"
+  local found=()
+  local name
   for name in "${WORKFLOW_SKILLS[@]}"; do
-    copy_workflow "$KIT_DIR/skills/$name/SKILL.md" "$base/$name.md"
+    [[ -f "$base/$name.md" ]] && found+=("$name.md")
   done
+  log "Claude commands: skipped — ~/.claude/skills/<name>/ already provides /<name>"
+  if ((${#found[@]})); then
+    log "Stale copies from an older kit remain in $base: ${found[*]}"
+    log "Remove them so the skill is the single source: rm $base/{$(IFS=,; echo "${found[*]%.md}")}.md"
+  fi
 }
 
 deploy_antigravity_workflows() {
@@ -70,7 +80,7 @@ $DRY_RUN && echo "  dry-run: yes"
 echo
 
 if [[ "$SCOPE" == "global" || "$SCOPE" == "both" ]]; then
-  deploy_claude_commands "$HOME/.claude/commands" "global ~/.claude/commands"
+  report_stale_claude_commands "$HOME/.claude/commands"
 fi
 
 if [[ "$SCOPE" == "project" || "$SCOPE" == "both" ]]; then
