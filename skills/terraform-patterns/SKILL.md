@@ -16,7 +16,9 @@ Use when authoring Terraform modules and environment stacks.
 
 ## State
 
-- Remote state (S3 + DynamoDB, GCS, Terraform Cloud) — **never** commit `terraform.tfstate`.
+- Remote state (S3, GCS, HCP Terraform) — **never** commit `terraform.tfstate`.
+- On S3 use native locking (`use_lockfile = true`); DynamoDB-based locking is deprecated
+  and kept only to migrate older configurations.
 - State locking enabled; one state per environment or bounded blast radius.
 
 ## Safety
