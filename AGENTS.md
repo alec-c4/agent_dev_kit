@@ -6,7 +6,7 @@ Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, us
 
 **Token dedup (Cursor):** run `./scripts/kit sync-rules` after install — see [docs/cursor-user-rules.md](docs/cursor-user-rules.md).
 
-**Tracker-agnostic intake:** [docs/guidelines/TRACKER.md](docs/guidelines/TRACKER.md) — paste ticket into `.ai/work/{work_ref}-analysis.md`; MCP/API optional (Phase 2).
+**Tracker-agnostic intake:** [docs/guidelines/TRACKER.md](docs/guidelines/TRACKER.md) — paste ticket into `.ai/work/{work_ref}-analysis.md`; MCP/API optional.
 
 **Shell:** Kit scripts run via `./scripts/kit` (bash inside) from any interactive shell — see [docs/shell-commands.md](docs/shell-commands.md). For ad-hoc commands, use the developer's `$SHELL` (user `fish-shell.mdc` or equivalent wins).
 

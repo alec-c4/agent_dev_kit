@@ -110,15 +110,15 @@ Shared shell hooks for Claude Code and Cursor — block dangerous commands, prot
 
 Not shipped yet; planned next:
 
-| Phase | Item | Notes |
-|-------|------|-------|
-| **4b** | Skills content depth | Layer 2/3 review for devops, mobile, astro, and remaining packs |
-| **4c** | Pack-dependent MCP presets | `--pack=rails` → merge recommended MCP servers into Cursor/Claude config |
-| **5** | Project scaffolds | `templates/project-*` for new repos |
-| **5** | Linear / Jira cache | `sync-tracker` today supports GitHub only; other providers via paste/export |
-| **5** | Antigravity hooks | Reuse shell scripts when IDE hook API is stable |
-| **5** | Copilot instructions | `.github/instructions/` pattern-scoped rules (last) |
-| **—** | Doc translations | More guideline locales — see [docs/i18n/README.md](docs/i18n/README.md) |
+| Item | Notes |
+|------|-------|
+| Skills content depth | Deeper review for devops, mobile, astro, and the remaining packs |
+| Pack-dependent MCP presets | `--pack=rails` → merge recommended MCP servers into Cursor/Claude config |
+| Project scaffolds | `templates/project-*` for new repos |
+| Linear / Jira cache | `sync-tracker` supports GitHub today; other providers via paste/export |
+| Antigravity hooks | Reuse the shell scripts once the IDE hook API is stable |
+| Copilot instructions | `.github/instructions/` pattern-scoped rules |
+| Doc translations | More guideline locales — see [docs/i18n/README.md](docs/i18n/README.md) |
 
 Implementation tracking lives outside this repo (not committed here).
 

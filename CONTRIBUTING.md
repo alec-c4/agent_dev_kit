@@ -35,7 +35,7 @@ CI runs [.github/workflows/validate.yml](.github/workflows/validate.yml) on ever
 | Tool adapters | `AGENTS.md` (canonical), `CLAUDE.md` (Claude Code), `templates/cursor/rules/` |
 | Framework patterns | `skills/<name>/` packs — **not** guidelines |
 | Doc translations | `docs/i18n/<locale>/` + [registry/locales.yaml](registry/locales.yaml) — English canonical |
-| Slash commands, agents, hooks | Phase 2+ |
+| Slash commands, agents, hooks | Shipped |
 
 See [docs/EXTENDING.md](docs/EXTENDING.md) and [docs/architecture.md](docs/architecture.md).
 

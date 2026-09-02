@@ -4,7 +4,7 @@
 #
 # Usage:
 #   bash scripts/validate-registry.sh           # full validation
-#   bash scripts/validate-registry.sh --phase=1 # registry JSON only (Phase 1 kit)
+#   bash scripts/validate-registry.sh --phase=1 # registry JSON and stack profiles only
 
 set -euo pipefail
 
@@ -95,7 +95,7 @@ elif [[ ! -f "$KIT_DIR/registry/locales.json" ]]; then
 fi
 
 if [[ "$PHASE" == "1" ]]; then
-  echo "Phase 1 mode — registry + stack skill profiles only"
+  echo "Registry mode — registry JSON + stack skill profiles only"
   echo ""
 
   if [[ -f "$KIT_DIR/registry/stacks.json" ]]; then
@@ -206,7 +206,7 @@ if [[ "$PHASE" == "1" ]]; then
   done
 
   if [[ ! -d "$KIT_DIR/agents" ]] || [[ ! -f "$KIT_DIR/agents/developer.md" ]]; then
-    err "missing agents/ personas (Phase 2 P6)"
+    err "missing agents/ personas"
   else
     ok "Claude Code agents (agents/*.md)"
   fi

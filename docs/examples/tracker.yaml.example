@@ -7,7 +7,7 @@ spec_filename: "specs/{spec_key}-spec.md"
 work_filename: "work/{work_ref}-{kind}.md"
 url_template: "https://github.com/org/repo/issues/{id}"
 
-# Optional Phase 2 — local index of active tickets (gitignore this file in target projects)
+# Optional — local index of active tickets (gitignore this file in target projects)
 cache_file: ".ai/tracker-cache.json"
 cache_max_items: 50
 cache_statuses:             # provider-specific open states to include

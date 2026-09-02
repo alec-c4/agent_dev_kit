@@ -110,13 +110,13 @@ ux_hints: true   # false disables soft command hints
 | Hint on every message | Noise |
 | Different steps for text vs command | Commands become dead code |
 
-## Phase 2 shortcuts (same table)
+## Tool shortcuts (same table)
 
 | Tool | Explicit shortcut | This skill |
 |------|-------------------|------------|
 | Claude Code | `/feature`, `/fix`, `/review`, `/ship` | NL → classify here |
 | Codex | `$feature`, `$intent-router` | `$intent-router` or implicit match |
 | Cursor | `@kit-workflow`, `@intent-router` | Step 0 in rules + this skill |
-| Antigravity | `.agents/workflows/*` (Phase 2) | AGENTS.md + this skill |
+| Antigravity | `.agents/workflows/*` | AGENTS.md + this skill |
 
-Commands and workflows (Phase 2 [P2]) inject the same routing table — do not fork behaviour.
+Commands and workflows inject the same routing table — do not fork behaviour.

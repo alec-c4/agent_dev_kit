@@ -15,7 +15,7 @@ Table 1: entry points and install targets.
 | Claude Code | `AGENTS.md` | [CLAUDE.md](../CLAUDE.md) | `./scripts/kit install --target=claude` |
 | OpenAI Codex CLI | `AGENTS.md` | — (native) | `./scripts/kit install --target=codex` |
 | Google Antigravity | `AGENTS.md` | [GEMINI.md](../GEMINI.md) | `./scripts/kit install --target=antigravity` |
-| Copilot | `AGENTS.md` | `.github/instructions/` (Phase 4) | project `AGENTS.md` |
+| Copilot | `AGENTS.md` | `.github/instructions/` (not shipped) | project `AGENTS.md` |
 | Windsurf | `AGENTS.md` | — | project `AGENTS.md` |
 
 Install all supported targets:
@@ -62,9 +62,9 @@ Global files: `~/.gemini/AGENTS.md`, `~/.gemini/GEMINI.md`. Project: repo root `
 - **Project install** (`--project`, e.g. `./scripts/kit install --target=cursor --project`) — shared `AGENTS.md`, `.agents/skills/`, project `.cursor/rules/` for the team; required for the Cursor CLI to see kit workflow/comprehension rules. Do not overwrite an existing project `docs/` tree.
 - Cursor: `AGENTS.md` + optional `kit-*.mdc` rules; user `~/.cursor/rules/` win when stricter.
 - Tool settings: `~/.config/agent_dev_kit/config.yaml` — see [tool-settings.md](tool-settings.md) (permissions, attribution).
-- Claude Code: `CLAUDE.md` adapter + `AGENTS.md`; slash commands in Phase 2.
+- Claude Code: `CLAUDE.md` adapter + `AGENTS.md`; slash commands come from the skill directories.
 
-## Skills and workflows (Phase 2+)
+## Skills and workflows
 
 Table 2: where kit skills and shortcuts deploy.
 
@@ -78,7 +78,7 @@ Table 2: where kit skills and shortcuts deploy.
 
 **CLI quirk:** Antigravity CLI may not read `~/.agents/skills/`. Copy or symlink kit skills to `~/.gemini/antigravity-cli/skills/` if CLI sessions miss them. Documented in install output.
 
-Phase 2 deploys kit skills to `.agents/skills/` and workflow shortcuts per tool:
+`deploy-skills` installs kit skills to `.agents/skills/`; workflow shortcuts are per tool:
 
 | Tool | Skills (`deploy-skills`) | Shortcuts (`deploy-workflows`) |
 |------|--------------------------|--------------------------------|
@@ -94,8 +94,8 @@ See [commands/README.md](../commands/README.md) and [INTENT-ROUTING.md](guidelin
 
 ```
 .agents/
-  skills/       # SKILL.md packages (Phase 2)
-  workflows/    # Antigravity slash workflows (Phase 2)
+  skills/       # SKILL.md packages
+  workflows/    # Antigravity slash workflows
 ```
 
 `.ai/` holds specs and plans — see [TRACKER.md](guidelines/TRACKER.md).
@@ -118,14 +118,14 @@ Install **does not** overwrite an existing user `AGENTS.override.md` or `GEMINI.
 
 Plain text and explicit shortcuts share one pipeline — [INTENT-ROUTING.md](guidelines/INTENT-ROUTING.md).
 
-| Tool | Explicit shortcut (Phase 2) | Plain text |
+| Tool | Explicit shortcut | Plain text |
 |------|----------------------------|------------|
 | Claude Code | `/feature`, `/fix` | classify in AGENTS.md Step 0 |
 | Codex | `$feature` skill | `$intent-router` or AGENTS.md |
 | Antigravity | workflow slash | GEMINI.md + AGENTS.md |
 | Cursor | `@kit-workflow` rule | AGENTS.md + skills |
 
-## Codex sandbox and approvals (Phase 3)
+## Codex sandbox and approvals
 
 Codex has no Cursor-style hook JSON. Use `config.toml` sandbox tiers and `--ask-for-approval` for dangerous commands. Kit documents gates in [WORKFLOW.md](guidelines/WORKFLOW.md) and defers to user `request-validation` rules.
 

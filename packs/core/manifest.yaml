@@ -1,4 +1,4 @@
-# Core pack — universal skills shipped with Phase 2 [P0]
+# Core pack — universal skills shipped with every install
 # Compile: bash scripts/compile_registry.sh → manifest.json
 
 id: core

@@ -35,7 +35,7 @@ External tracker (optional)     .ai/ in repo (canonical)
                               Agent reads spec + diff
 ```
 
-The tracker owns **status and human discussion**. It does **not** drive agent workflow unless you explicitly ask. Phase 2 may add optional **projection** (post PR link to ticket) — never make the tracker the control plane.
+The tracker owns **status and human discussion**. It does **not** drive agent workflow unless you explicitly ask. Optional **projection** (post a PR link to the ticket) may be added — never make the tracker the control plane.
 
 ## Intake ladder (no MCP required)
 
@@ -44,11 +44,11 @@ Use the highest step available. **Do not call tracker APIs** unless a human or a
 | Step | When | Action |
 |------|------|--------|
 | 1. **Paste** | Always works | Copy ticket title + body into `.ai/work/{work_ref}-analysis.md` |
-| 2. **Single fetch** | Phase 2 — one task by ref | `intake-work-item.sh GH-58` → analysis (preferred over full list) |
+| 2. **Single fetch** | One task by ref | `intake-work-item.sh GH-58` → analysis (preferred over full list) |
 | 3. **CLI** | GitHub + `gh` installed | `gh issue view 42` → save to analysis |
-| 4. **Cache snapshot** | Phase 2 — many active tasks | Refresh `.ai/tracker-cache.json` — see [Optional tracker cache](#optional-tracker-cache-phase-2) |
+| 4. **Cache snapshot** | Many active tasks | Refresh `.ai/tracker-cache.json` — see [Optional tracker cache](#optional-tracker-cache) |
 | 5. **Export** | Team exports CSV/JSON | Human drops file; agent reads path noted in analysis |
-| 6. **MCP / API** | Optional, Phase 2+ | Skill or integration — same output: analysis file in `.ai/` |
+| 6. **MCP / API** | Optional | Skill or integration — same output: analysis file in `.ai/` |
 
 If there is no ticket: use `work_ref: adhoc-{short-slug}` and proceed with [task-* naming](#naming-without-a-tracker).
 
@@ -90,7 +90,7 @@ Do not confuse **milestone** (product delivery) with **pipeline stage** (intake 
 ```
 .ai/
   tracker.yaml                 # optional project config
-  tracker-cache.json           # optional Phase 2 — active items index (gitignore)
+  tracker-cache.json           # optional — active items index (gitignore)
   specs/
     export-csv-spec.md         # current spec (spec_key)
   archive/
@@ -155,7 +155,7 @@ url_template: "https://github.com/org/repo/issues/{id}"
 
 Agents read this file during Analyze when present. If missing, use defaults from this document.
 
-## Optional tracker cache (Phase 2)
+## Optional tracker cache
 
 A **local snapshot of active work items** helps match `work_ref` to title and status when the human says «take ENG-77» without pasting the ticket. It is **optional** and **not** required for spec-first workflow.
 
@@ -223,9 +223,9 @@ The cache **resolves references**; **analysis + spec** remain the contract. Neve
 
 - Adhoc / `task-*` workflow
 - Team always pastes ticket body into analysis
-- Phase 1.5 paste-only is enough
+- Paste-only intake is enough
 
-### Phase 2 scripts
+### Intake scripts
 
 | Script | Purpose |
 |--------|---------|
@@ -244,7 +244,7 @@ Include `work_ref` where humans search:
 
 Spec content does not depend on which tracker you use.
 
-## Phase 2 automation
+## Optional automation
 
 | Component | Status | Purpose |
 |-----------|--------|---------|
@@ -260,5 +260,5 @@ Spec content does not depend on which tracker you use.
 2. **Same feature as before?** → find spec by `spec_key`; bump version for fix/update
 3. **New feature?** → new spec v1.0 with new `spec_key`
 4. **No ticket?** → `task-*` or `adhoc-{slug}`
-5. **Many ids / no paste?** → Phase 2: optional `tracker-cache.json`, then single-item intake
+5. **Many ids / no paste?** → optional `tracker-cache.json`, then single-item intake
 6. **MCP/API?** → optional; never block workflow without it

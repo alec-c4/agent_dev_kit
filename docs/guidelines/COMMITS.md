@@ -62,4 +62,4 @@ See [AGENTS.md](../../AGENTS.md#shipped-language) and [CODING.md](CODING.md#ship
 
 ## Review before commit (optional gate)
 
-When review hooks are installed (Phase 3), every commit requires an explicit developer approval after review. See [REVIEW.md](REVIEW.md).
+When review hooks are installed, every commit requires an explicit developer approval after review. See [REVIEW.md](REVIEW.md).

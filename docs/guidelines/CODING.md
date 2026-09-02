@@ -1,6 +1,6 @@
 # Coding guidelines
 
-Pragmatic standards for all stacks. Stack-specific overlays live in `registry/stacks.yaml` and framework skills (Phase 2+).
+Pragmatic standards for all stacks. Stack-specific overlays live in `registry/stacks.yaml` and framework skills.
 
 ## Philosophy
 

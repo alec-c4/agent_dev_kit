@@ -143,7 +143,7 @@ After presenting the review, **stop and wait**:
 
 Do not commit until the developer explicitly approves.
 
-When review hooks are installed (Phase 3), approval creates the review-passed flag for the next commit.
+When review hooks are installed, approval creates the review-passed flag for the next commit.
 
 ## Large changes
 

@@ -33,7 +33,7 @@ Agent Dev Kit is **stack-agnostic** and **LLM-agnostic**. Universal rules live i
 ┌───────────────────────────▼─────────────────────────────┐
 │  skills/stacks/<id>/            (tooling + dod_overlay) │
 │  skills/stack-detection|loader|testing-universal      │
-│  skills/<pattern>/              (packs — Phase 2+)      │
+│  skills/<pattern>/              (pattern packs)         │
 └─────────────────────────────────────────────────────────┘
 ```
 

@@ -50,7 +50,7 @@ Use the user's `request-validation` rule when present — one question, not a qu
 
 ## Same pipeline for text and commands
 
-| Intent | Plain text example | Command (Phase 2, Claude Code) | First artifact |
+| Intent | Plain text example | Command (Claude Code) | First artifact |
 |--------|------------------|--------------------------------|----------------|
 | Feature (new) | «Add CSV export to index» | `/feature` or `/resolve-task` | `work/{ref}-analysis.md` → spec v1.0 |
 | Bug fix | «Fix GH-58 UTF-8 export» | `/fix` | analysis → spec bump |
@@ -82,7 +82,7 @@ Tip (Claude Code): `/feature` runs the same pipeline explicitly.
 | Cursor | No `/` — suggest: «Say **start feature workflow**» or enable kit-workflow rule |
 | Opt-out | `.ai/tracker.yaml` → `ux_hints: false` |
 
-Track hints optionally in `.ai/ux-hints.json` (Phase 2, gitignored):
+Track hints optionally in `.ai/ux-hints.json` (gitignored):
 
 ```json
 { "feature": { "last_hint": "2026-06-18", "command_used": false } }
@@ -96,7 +96,7 @@ Track hints optionally in `.ai/ux-hints.json` (Phase 2, gitignored):
 | **Cursor** | No native slash; `@` rules, skills, or phrases | kit-workflow.mdc + AGENTS.md Step 0 |
 | **Any** | «Start feature workflow for …» | Treated as high-confidence intent |
 
-Phase 2: `commands/*.md` (Claude Code) and skill `intent-router` (all tools) share one routing table.
+Skill `intent-router` and the per-tool shortcuts share one routing table.
 
 ## What not to do
 
@@ -118,7 +118,7 @@ Regardless of entry point, **confirm** before:
 
 Slash command or typed phrase + human «yes» — both acceptable.
 
-## Phase 2 implementation
+## Implementation
 
 | Component | Role |
 |-----------|------|

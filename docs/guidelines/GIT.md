@@ -64,6 +64,6 @@ If staged changes span multiple features:
 
 Never commit or push directly to `main`, `master`, or `develop`. Use feature branches and PRs.
 
-## Review gate (optional, Phase 3)
+## Review gate (optional)
 
 When hooks are installed with `--with-review-gate`, commits require a passing review flag. See [REVIEW.md](REVIEW.md).

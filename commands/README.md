@@ -1,4 +1,4 @@
-# Kit workflow commands (Phase 2)
+# Kit workflow commands
 
 Canonical workflow shortcuts live as **skills** under `skills/{name}/SKILL.md` (`user-invocable: true`).
 

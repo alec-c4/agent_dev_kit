@@ -2,7 +2,7 @@
 
 How to verify a skill pack before merge: **automated checks → agent doc review → human sign-off in the PR**.
 
-Applies to `packs/core/` (Phase 2 [P0]) and future pattern packs from stash.
+Applies to `packs/core/` and the pattern packs.
 
 ## Three layers
 
