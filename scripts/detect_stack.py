@@ -203,10 +203,12 @@ def resolve_skills(profile: dict, cwd: Path) -> list[str]:
         for s in skills_cfg.get(key) or []:
             add(s)
 
+    # Not exclusive: a Rails app can carry both spec/ and test/, and the
+    # matching skill describes itself as loading whenever its directory exists.
     if (cwd / "spec").is_dir():
         for s in skills_cfg.get("if_spec_dir") or []:
             add(s)
-    elif (cwd / "test").is_dir():
+    if (cwd / "test").is_dir():
         for s in skills_cfg.get("if_test_dir") or []:
             add(s)
 

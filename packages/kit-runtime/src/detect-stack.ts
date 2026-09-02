@@ -174,9 +174,12 @@ function resolveSkills(profile: Record<string, unknown>, cwd: string): string[] 
     for (const s of (skillsCfg[key] as string[]) || []) add(s);
   }
 
+  // Not exclusive: a Rails app can carry both spec/ and test/, and the
+  // matching skill describes itself as loading whenever its directory exists.
   if (existsSync(join(cwd, "spec"))) {
     for (const s of (skillsCfg.if_spec_dir as string[]) || []) add(s);
-  } else if (existsSync(join(cwd, "test"))) {
+  }
+  if (existsSync(join(cwd, "test"))) {
     for (const s of (skillsCfg.if_test_dir as string[]) || []) add(s);
   }
 
