@@ -12,6 +12,8 @@ echo "$KIT_HOOK_COMMAND" | grep -qE 'git\s+commit\b' || exit 0
 kit_review_gate_enabled || exit 0
 
 if ! kit_any_review_flag; then
-  kit_block "BLOCKED: review gate enabled but no review-passed flag. Run /review and approve, or: bash hooks/mark-review-passed.sh"
+  kit_block "commit while the review gate is enabled" \
+    "This project requires a passing review before each commit; no review-passed flag is set." \
+    "Run /review and address the findings, then: bash hooks/mark-review-passed.sh"
 fi
 exit 0

@@ -13,7 +13,9 @@ BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
 
 case "$BRANCH" in
   main|master|develop)
-    kit_block "BLOCKED: direct commit/push to '$BRANCH' is not allowed. Create a feature branch first (see docs/guidelines/GIT.md)."
+    kit_block "direct commit/push to '$BRANCH'" \
+      "Protected branches take changes through a pull request, not direct writes." \
+      "Create a branch first: git switch -c feature/<short-name> (see docs/guidelines/GIT.md)."
     ;;
 esac
 exit 0

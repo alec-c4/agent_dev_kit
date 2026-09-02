@@ -20,6 +20,18 @@ Claude: merge `settings.hooks.kit.json` into `~/.claude/settings.json`, or use `
 
 Cursor: writes `~/.cursor/hooks.json` (global) or `./.cursor/hooks.json` (project). Restart the IDE after install.
 
+Deny text is always three lines so models can act on it:
+
+```text
+Blocked: <what>
+Why: <reason>
+Next: <what to do>
+```
+
+Each line is specific to the blocked command — `Why` explains the risk, `Next` gives a command or step the agent can actually take. `scripts/validate-registry.sh` fails if a hook falls back to the generic wording.
+
+**Dependencies:** deny hooks parse the tool payload with `jq` (preferred) or `python3`. With neither on `PATH` they deny and say so rather than allowing the command through. `auto-format.sh` is fail-open by design — a missing formatter is not a safety problem.
+
 ## Hook scripts
 
 | Script | When | Policy |
