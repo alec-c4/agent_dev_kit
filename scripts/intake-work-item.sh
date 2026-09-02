@@ -62,21 +62,19 @@ BUN_WORK_PATH="$KIT_DIR/packages/kit-runtime/src/cli/work-path.ts"
 BUN_CACHE_PATH="$KIT_DIR/packages/kit-runtime/src/cli/cache-path.ts"
 BUN_CACHE_LOOKUP="$KIT_DIR/packages/kit-runtime/src/cli/cache-lookup.ts"
 
-if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
-  if command -v bun &>/dev/null && [[ -f "$BUN_WORK_PATH" ]]; then
-    mapfile -t _wp < <(bun "$BUN_WORK_PATH" "$PROJECT_DIR" "$SAFE_REF" analysis)
-    OUTPUT="${_wp[0]}"
-    TRACKER_PROVIDER="${_wp[1]:-none}"
-  else
-    read -r OUTPUT TRACKER_PROVIDER <<EOF
-$(python3 - "$PROJECT_DIR/.ai/tracker.yaml" "$SAFE_REF" <<'PY'
+# Both resolvers print two lines: the artifact path, then the provider.
+# `mapfile` is bash 4+ and macOS ships bash 3.2, so split the lines with sed.
+resolve_work_path_python() {
+  python3 - "$PROJECT_DIR/.ai/tracker.yaml" "$SAFE_REF" <<'PYSCRIPT'
 import sys
 from pathlib import Path
+
 ref = sys.argv[2]
 path = Path(".ai") / "work" / f"{ref}-analysis.md"
 provider = "none"
 try:
     import yaml
+
     data = yaml.safe_load(Path(sys.argv[1]).read_text()) or {}
     provider = data.get("provider") or "none"
     wf = data.get("work_filename") or "work/{work_ref}-{kind}.md"
@@ -86,10 +84,58 @@ except ImportError:
     pass
 print(path)
 print(provider)
-PY
-EOF
-)
+PYSCRIPT
+}
+
+resolve_cache_path_python() {
+  python3 - "$PROJECT_DIR/.ai/tracker.yaml" <<'PYSCRIPT'
+import sys
+from pathlib import Path
+
+try:
+    import yaml
+
+    data = yaml.safe_load(Path(sys.argv[1]).read_text()) or {}
+    print(Path(".ai") / (data.get("cache_file") or "tracker-cache.json"))
+except ImportError:
+    print(".ai/tracker-cache.json")
+PYSCRIPT
+}
+
+lookup_cache_python() {
+  python3 - "$1" "$WORK_REF" <<'PYSCRIPT'
+import json
+import sys
+from pathlib import Path
+
+try:
+    data = json.loads(Path(sys.argv[1]).read_text())
+except (OSError, ValueError):
+    data = {}
+ref = sys.argv[2]
+for item in data.get("items") or []:
+    if item.get("work_ref") == ref:
+        print(item.get("title") or "")
+        print(item.get("url") or "")
+        print(item.get("status") or "")
+        break
+else:
+    print("")
+    print("")
+    print("")
+PYSCRIPT
+}
+
+if [[ -f "$PROJECT_DIR/.ai/tracker.yaml" ]]; then
+  if command -v bun &>/dev/null && [[ -f "$BUN_WORK_PATH" ]]; then
+    _wp="$(bun "$BUN_WORK_PATH" "$PROJECT_DIR" "$SAFE_REF" analysis)"
+  else
+    _wp="$(resolve_work_path_python)"
   fi
+  _wp_path="$(printf '%s\n' "$_wp" | sed -n '1p')"
+  _wp_provider="$(printf '%s\n' "$_wp" | sed -n '2p')"
+  [[ -n "$_wp_path" ]] && OUTPUT="$_wp_path"
+  [[ -n "$_wp_provider" ]] && TRACKER_PROVIDER="$_wp_provider"
 fi
 
 TITLE=""
@@ -147,49 +193,21 @@ enrich_from_cache() {
     if command -v bun &>/dev/null && [[ -f "$BUN_CACHE_PATH" ]]; then
       cache_path="$PROJECT_DIR/$(bun "$BUN_CACHE_PATH" "$PROJECT_DIR")"
     else
-      read -r cache_path <<EOF
-$(python3 - "$PROJECT_DIR/.ai/tracker.yaml" <<'PY'
-from pathlib import Path
-import sys
-try:
-    import yaml
-    data = yaml.safe_load(Path(sys.argv[1]).read_text()) or {}
-    print(Path(".ai") / (data.get("cache_file") or "tracker-cache.json"))
-except ImportError:
-    print(".ai/tracker-cache.json")
-PY
-EOF
-)
-      cache_path="$PROJECT_DIR/$cache_path"
+      cache_path="$PROJECT_DIR/$(resolve_cache_path_python)"
     fi
   fi
   [[ -f "$cache_path" ]] || return 0
+  local _cl
   if command -v bun &>/dev/null && [[ -f "$BUN_CACHE_LOOKUP" ]]; then
-    mapfile -t _cl < <(bun "$BUN_CACHE_LOOKUP" "$cache_path" "$WORK_REF")
-    CACHE_TITLE="${_cl[0]:-}"
-    CACHE_URL="${_cl[1]:-}"
-    CACHE_STATUS="${_cl[2]:-}"
+    _cl="$(bun "$BUN_CACHE_LOOKUP" "$cache_path" "$WORK_REF")"
   else
-    read -r CACHE_TITLE CACHE_URL CACHE_STATUS <<EOF
-$(python3 - "$cache_path" "$WORK_REF" <<'PY'
-import json, sys
-from pathlib import Path
-data = json.loads(Path(sys.argv[1]).read_text())
-ref = sys.argv[2]
-for item in data.get("items") or []:
-    if item.get("work_ref") == ref:
-        print(item.get("title") or "")
-        print(item.get("url") or "")
-        print(item.get("status") or "")
-        break
-else:
-    print("")
-    print("")
-    print("")
-PY
-EOF
-)
+    _cl="$(lookup_cache_python "$cache_path")"
   fi
+  # Three lines: title, url, status. Each may legitimately contain spaces, so
+  # split by line rather than by word.
+  CACHE_TITLE="$(printf '%s\n' "$_cl" | sed -n '1p')"
+  CACHE_URL="$(printf '%s\n' "$_cl" | sed -n '2p')"
+  CACHE_STATUS="$(printf '%s\n' "$_cl" | sed -n '3p')"
   [[ -z "$TITLE" && -n "$CACHE_TITLE" ]] && TITLE="$CACHE_TITLE"
   [[ -z "$TRACKER_LINK" && -n "$CACHE_URL" ]] && TRACKER_LINK="$CACHE_URL"
   if [[ -n "$CACHE_STATUS" && "$SOURCE" != gh* ]]; then
