@@ -8,6 +8,8 @@ user-invokable: true
 
 **Explicit invoke** — skip [intent-router](../intent-router/SKILL.md) classification. Same pipeline as natural-language bug intent ([INTENT-ROUTING.md](../../docs/guidelines/INTENT-ROUTING.md)).
 
+Load `.ai/work/{work_ref}-findings.md` if it exists; open/regressed **block** rows are constraints.
+
 ## Intent
 
 **Bug fix** — reproduce, update spec ACs, fix with TDD, verify.

@@ -1,0 +1,22 @@
+{
+  "patterns": [
+    {
+      "fingerprint": "shipped-process-language",
+      "stack": "*",
+      "guide": "Do not put process jargon in shipped paths (README, user docs, commits, PR bodies).",
+      "tokens": [
+        "work_ref",
+        "spec_key",
+        "process_references"
+      ]
+    }
+  ],
+  "sensor_patterns": [
+    {
+      "fingerprint": "skipped-fresh-verifier",
+      "stack": "*",
+      "guide": "Run verification in a new agent session, not in the writer session.",
+      "sensor": "verification"
+    }
+  ]
+}

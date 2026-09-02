@@ -1,0 +1,20 @@
+# Curated failure fingerprints (outer harness sensors).
+# Promote new rows via a human-reviewed kit PR — no customer paths or names.
+
+patterns:
+  - fingerprint: shipped-process-language
+    stack: "*"
+    guide: Do not put process jargon in shipped paths (README, user docs, commits, PR bodies).
+    tokens:
+      - work_ref
+      - spec_key
+      - process_references
+
+# Fingerprints with no `tokens` are not reachable by `kit check-patterns`:
+# they are raised by a named sensor. Listed here so retrospect and the kit
+# catalog share one vocabulary.
+sensor_patterns:
+  - fingerprint: skipped-fresh-verifier
+    stack: "*"
+    guide: Run verification in a new agent session, not in the writer session.
+    sensor: verification

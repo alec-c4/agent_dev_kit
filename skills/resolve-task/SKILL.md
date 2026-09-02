@@ -8,6 +8,8 @@ user-invokable: true
 
 End-to-end pipeline for **one work item**. Explicit invoke — skip generic [intent-router](../intent-router/SKILL.md) unless feature vs fix is unclear after intake.
 
+Load `.ai/work/{work_ref}-findings.md` if it exists; open/regressed **block** rows are constraints.
+
 Same artifacts as `/feature` or `/fix` plus mandatory intake. See [TRACKER.md](../../docs/guidelines/TRACKER.md) and [WORKFLOW.md](../../docs/guidelines/WORKFLOW.md).
 
 ## Arguments

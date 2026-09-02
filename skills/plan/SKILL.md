@@ -8,6 +8,8 @@ user-invokable: true
 
 **Explicit invoke** — skip [intent-router](../intent-router/SKILL.md) classification.
 
+Load `.ai/work/{work_ref}-findings.md` if it exists; open/regressed **block** rows are constraints.
+
 ## Intent
 
 **Plan only** — produce `.ai/work/{work_ref}-plan.md` after an **approved** spec. No production code in this session unless human explicitly asks.

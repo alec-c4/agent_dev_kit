@@ -8,6 +8,8 @@ user-invokable: true
 
 Run **Step 0** on every non-trivial user message before edits, commits, or deploys. Plain text and slash commands (`/feature`, `/fix`, …) share **one pipeline** — see [INTENT-ROUTING.md](../../docs/guidelines/INTENT-ROUTING.md) and [WORKFLOW.md](../../docs/guidelines/WORKFLOW.md).
 
+If `work_ref` is known, load `.ai/work/{work_ref}-findings.md` and stack-matching lessons (max 20) before planning or coding.
+
 ## When to invoke
 
 - User describes a task in natural language without a slash command.

@@ -20,6 +20,7 @@ Skip only for trivial changes (typo, comment) when the human agrees.
 2. **Read inputs:**
    - `.ai/*-spec.md` (if exists)
    - `.ai/*-plan.md` (if exists)
+   - `.ai/work/{work_ref}-findings.md` (open/regressed **block** rows)
    - `.ai/*-handoff.md` (if tier ≥ standard — see [COMPREHENSION.md](COMPREHENSION.md))
    - `git diff` / staged diff
    - Relevant docs touched or that should have been updated (README, API docs, config reference)
@@ -65,6 +66,34 @@ For each change in the diff, ask:
 ## Spec conformance
 
 When `.ai/*-spec.md` exists, verify each acceptance criterion — see [SPECS.md](SPECS.md). Include results in the verification report. Agent-verified ACs only; `human-verify` ACs are confirmed via handoff manual verification table.
+
+## Durable findings
+
+If a check above surfaces a fact the spec didn't already state (a constraint, gotcha, or architectural rule the writer had to discover), don't let it live only in this report:
+
+- Behaviour-relevant → add it to the spec's `## Constraints` (bump version per [SPECS.md](SPECS.md)).
+- Cross-cutting / stack-level → add it to the relevant `docs/guidelines/` file or stack skill.
+
+Note in the report whether any durable finding was promoted, and where.
+
+## Findings ledger
+
+On every FAIL, append a row with `./scripts/kit findings append --work-ref …` (do not leave the FAIL only in this report).
+
+Run the gate — it decides the first two bullets for you:
+
+```bash
+./scripts/kit findings gate --work-ref {work_ref} --remediation .ai/work/{work_ref}-plan.md
+```
+
+Verification **FAIL** when:
+
+- `./scripts/kit findings gate` exits non-zero — a `block` finding is `open`/`regressed` and not `wontfix`, or the remediations table misses one of its `F-*`
+- `./scripts/kit check-patterns --work-ref {work_ref}` exits non-zero (unless `.ai/kit.yaml` has `pattern_checks: false`)
+- This verification ran in the **same** agent session as the implementation — no file sensor can see this, so assert it yourself: `./scripts/kit findings append --work-ref {work_ref} --fingerprint skipped-fresh-verifier --severity block --summary "verified in the writer session" --evidence "same session as implement"` and FAIL
+- A previously `closed` fingerprint hits again — status becomes `regressed`
+
+`./scripts/kit check-patterns --list-sensors` lists the fingerprints no token scan can raise, which the verifier is responsible for asserting.
 
 ## Comprehension conformance
 
@@ -123,6 +152,10 @@ Save as `.ai/issue-{n}-verification.md` or `.ai/task-verification.md`:
 ## Blockers
 
 - …
+
+## Durable findings promoted
+
+- Promoted to spec/guideline: YES / NO — [where, if YES]
 
 ## Verifier sign-off
 

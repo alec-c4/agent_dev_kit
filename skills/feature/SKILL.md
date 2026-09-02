@@ -16,7 +16,7 @@ user-invokable: true
 
 Follow [WORKFLOW.md](../../docs/guidelines/WORKFLOW.md) standard feature flow:
 
-1. **Analyze** — read ticket or request; set **work_ref** and **spec_key** ([TRACKER.md](../../docs/guidelines/TRACKER.md)); paste into `.ai/work/{work_ref}-analysis.md` if needed; run `./scripts/kit detect-stack --write-profile`.
+1. **Analyze** — read ticket or request; set **work_ref** and **spec_key** ([TRACKER.md](../../docs/guidelines/TRACKER.md)); paste into `.ai/work/{work_ref}-analysis.md` if needed; run `./scripts/kit detect-stack --write-profile`. Load `.ai/work/{work_ref}-findings.md` and treat open/regressed **block** rows as constraints.
 2. **Spec** — new task: `.ai/specs/{spec_key}-spec.md` at **v1.0**; update: bump version, changelog, archive ([SPECS.md](../../docs/guidelines/SPECS.md)). **Wait for human approval** before plan or code.
 3. **Plan** — `.ai/work/{work_ref}-plan.md` with Detail level (minimal | standard | detailed). **Wait for approval** before production code.
 4. **Branch** — `feature/<short-name>` per [GIT.md](../../docs/guidelines/GIT.md).
