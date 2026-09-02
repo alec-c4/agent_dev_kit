@@ -22,7 +22,7 @@
 #   ./scripts/kit register [path]
 #   ./scripts/kit status [--project=PATH] [--all] [--json] [--watch]
 #   ./scripts/kit board
-#   ./scripts/kit findings list|append|gate|close|wontfix [--work-ref R]
+#   ./scripts/kit findings list|append|gate|close|wontfix [--work-ref R] [--run CMD]
 #   ./scripts/kit lessons list|propose|ack|promote [--stack ID]
 #   ./scripts/kit check-patterns [--work-ref R] [--list-sensors]
 #   ./scripts/kit run <script-name.sh> [args...]
@@ -161,7 +161,19 @@ case "$CMD" in
     fi
     script="$1"
     shift
+    # A bare filename only: a path would let `kit run ../x.sh` execute a script
+    # from outside the kit's scripts directory.
+    case "$script" in
+      */*|..|.)
+        echo "ERROR: kit run takes a script name in scripts/, not a path: $script" >&2
+        exit 1
+        ;;
+    esac
     [[ "$script" == *.sh ]] || script="${script}.sh"
+    if [[ ! -f "$KIT_DIR/scripts/$script" ]]; then
+      echo "ERROR: no such kit script: scripts/$script" >&2
+      exit 1
+    fi
     exec "$RUNNER" "$KIT_DIR/scripts/$script" "$@"
     ;;
   help|-h|--help)
