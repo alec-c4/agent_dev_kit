@@ -83,11 +83,22 @@ export function loadProjects(filePath: string): ProjectsFile {
   return parsed;
 }
 
-/** Drop entries whose path no longer exists. */
+/**
+ * Drop entries whose project directory was deleted.
+ *
+ * An unreachable path is not proof of deletion: an unmounted volume or a
+ * disconnected network share makes every project under it vanish, and pruning
+ * them would quietly lose the registry. Only prune when the parent directory
+ * is still there, which means the mount is up and the project itself is gone.
+ */
 export function pruneProjects(data: ProjectsFile): ProjectsFile {
   return {
     version: 1,
-    projects: data.projects.filter((p) => existsSync(p.path)),
+    projects: data.projects.filter((p) => {
+      if (existsSync(p.path)) return true;
+      const parent = dirname(p.path);
+      return parent === p.path || !existsSync(parent);
+    }),
   };
 }
 

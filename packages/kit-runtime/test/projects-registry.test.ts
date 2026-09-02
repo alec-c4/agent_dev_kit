@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import {
   formatProjectsYaml,
   loadProjects,
+  pruneProjects,
   saveProjects,
   type ProjectsFile,
 } from "../src/projects-registry.ts";
@@ -65,3 +66,33 @@ describe("projects registry YAML", () => {
     expect(loaded.projects[0].id).toBe("legacy");
   });
 });
+
+describe("prune safety", () => {
+  test("drops a deleted project whose parent is still mounted", () => {
+    const base = mkdtempSync(join(tmpdir(), "kit-reg-"));
+    const gone = join(base, "deleted-project");
+    const data = pruneProjects({
+      version: 1,
+      projects: [
+        { id: "gone", path: gone, added_at: "t", last_seen_at: "t" },
+      ],
+    });
+    expect(data.projects).toHaveLength(0);
+  });
+
+  test("keeps a project under an unreachable parent (unmounted volume)", () => {
+    const data = pruneProjects({
+      version: 1,
+      projects: [
+        {
+          id: "ext",
+          path: "/Volumes/NotMounted/work/app",
+          added_at: "t",
+          last_seen_at: "t",
+        },
+      ],
+    });
+    expect(data.projects.map((p) => p.id)).toEqual(["ext"]);
+  });
+});
+
