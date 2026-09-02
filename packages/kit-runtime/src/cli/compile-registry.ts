@@ -35,6 +35,7 @@ for (const name of [
   "tool-targets",
   "tool-settings",
   "locales",
+  "failure-patterns",
 ]) {
   compileOne(reg, name);
 }

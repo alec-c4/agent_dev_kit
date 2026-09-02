@@ -36,7 +36,7 @@ print('wrote $json')
   fi
 }
 
-for name in stacks topics dod gates cursor-user-rules tool-targets tool-settings locales; do
+for name in stacks topics dod gates cursor-user-rules tool-targets tool-settings locales failure-patterns; do
   compile_one "$name"
 done
 
