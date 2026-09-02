@@ -9,8 +9,11 @@
       "npx vitest run"
     ],
     "lint": [
-      "npm run check",
       "npx eslint ."
+    ],
+    "typecheck": [
+      "npm run check",
+      "npx svelte-check --tsconfig ./tsconfig.json"
     ],
     "deps_audit": [
       "npm audit"

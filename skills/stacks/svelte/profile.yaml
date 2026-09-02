@@ -8,8 +8,11 @@ tooling:
   - npm test
   - npx vitest run
   lint:
-  - npm run check
   - npx eslint .
+  typecheck:
+  # `npm run check` runs svelte-check: types, unused CSS, and a11y — not a linter
+  - npm run check
+  - npx svelte-check --tsconfig ./tsconfig.json
   deps_audit:
   - npm audit
 skills:
