@@ -314,8 +314,21 @@ export function detect(cwdIn: string, kitIn: string): Record<string, unknown> {
   };
 }
 
+/**
+ * Cache location for the detected profile. Defaults to `.claude/` because that
+ * is what every kit doc and skill reads; `KIT_STACK_PROFILE_DIR` redirects it
+ * for projects that do not want a Claude-named directory.
+ */
+export function stackProfileDir(cwd: string): string {
+  const override = process.env.KIT_STACK_PROFILE_DIR;
+  if (override) {
+    return override.startsWith("/") ? override : join(cwd, override);
+  }
+  return join(cwd, ".claude");
+}
+
 export function writeProfile(cwd: string, profile: Record<string, unknown>): string {
-  const outDir = join(cwd, ".claude");
+  const outDir = stackProfileDir(cwd);
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "stack.profile.json");
   writeFileSync(outPath, JSON.stringify(profile, null, 2) + "\n", "utf8");

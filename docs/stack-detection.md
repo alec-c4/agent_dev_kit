@@ -43,7 +43,7 @@ Human-oriented context: `skills/stacks/rails/SKILL.md`.
 
 ## Profile output
 
-`.claude/stack.profile.json` in the target project:
+`.claude/stack.profile.json` in the target project (set `KIT_STACK_PROFILE_DIR` to write it elsewhere — the kit itself is tool-agnostic):
 
 ```json
 {

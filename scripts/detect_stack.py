@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -330,7 +331,7 @@ def main() -> int:
     parser.add_argument(
         "--write-profile",
         action="store_true",
-        help="Write .claude/stack.profile.json in cwd",
+        help="Write stack.profile.json (default .claude/, see KIT_STACK_PROFILE_DIR)",
     )
     args = parser.parse_args()
 
@@ -347,7 +348,14 @@ def main() -> int:
     print(json.dumps(profile, indent=2))
 
     if args.write_profile and profile.get("primary_stack"):
-        out_dir = cwd / ".claude"
+        # Defaults to .claude/ because that is what the kit docs and skills
+        # read; KIT_STACK_PROFILE_DIR redirects it for non-Claude projects.
+        override = os.environ.get("KIT_STACK_PROFILE_DIR")
+        out_dir = (
+            (Path(override) if Path(override).is_absolute() else cwd / override)
+            if override
+            else cwd / ".claude"
+        )
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / "stack.profile.json"
         out_path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
