@@ -67,6 +67,8 @@ check_doc_links() {
   local link_err=0
   while IFS= read -r rel; do
     [[ -z "$rel" ]] && continue
+    rel="${rel%%#*}"        # strip #anchor before resolving the path
+    [[ -z "$rel" ]] && continue
     local target="$skill_dir/$rel"
     target="${target//\/\.\//\/}"
     if [[ ! -f "$target" ]]; then
