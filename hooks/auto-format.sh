@@ -12,11 +12,22 @@ FILE="$KIT_HOOK_FILE"
 ext="${FILE##*.}"
 case "$ext" in
   rb)
-    command -v standardrb &>/dev/null && standardrb --fix "$FILE" 2>/dev/null || true
-    command -v rubocop &>/dev/null && rubocop --autocorrect-all "$FILE" 2>/dev/null || true
+    # standard depends on rubocop, so both binaries resolve on a Standard
+    # project. Running rubocop after standardrb reformats the file a second
+    # time with default RuboCop rules — pick one.
+    if command -v standardrb &>/dev/null; then
+      standardrb --fix "$FILE" 2>/dev/null || true
+    elif command -v rubocop &>/dev/null; then
+      rubocop --autocorrect-all "$FILE" 2>/dev/null || true
+    fi
     ;;
   js|jsx|ts|tsx|mjs|cjs)
-    command -v eslint &>/dev/null && eslint --fix "$FILE" 2>/dev/null || true
+    # Prefer the project's pinned eslint over whatever is on PATH.
+    if [[ -x "node_modules/.bin/eslint" ]]; then
+      node_modules/.bin/eslint --fix "$FILE" 2>/dev/null || true
+    elif command -v eslint &>/dev/null; then
+      eslint --fix "$FILE" 2>/dev/null || true
+    fi
     ;;
   py)
     command -v ruff &>/dev/null && { ruff format "$FILE" 2>/dev/null || true; ruff check --fix "$FILE" 2>/dev/null || true; }
