@@ -73,7 +73,7 @@ pack_listed() {
 add_pack_order() {
   local pack="$1"
   pack_listed "$pack" && return 0
-  local manifest deps
+  local manifest
   manifest="$(find_manifest "$pack")" || exit 1
   while IFS= read -r dep; do
     [[ -z "$dep" ]] && continue

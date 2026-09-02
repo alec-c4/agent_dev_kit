@@ -1,4 +1,6 @@
+# shellcheck shell=bash
 # Kit hook shared helpers — source from hook scripts only.
+# shellcheck disable=SC2034  # KIT_HOOK_* are read by the sourcing hook scripts.
 # Supports Claude Code (PreToolUse/PostToolUse) and Cursor (beforeShellExecution/…).
 
 # Set by kit_read_input when neither jq nor python3 is available: the payload

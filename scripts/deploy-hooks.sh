@@ -48,7 +48,15 @@ case "$TARGET" in claude|cursor|both) ;; *)
 esac
 
 log() { echo "  $*"; }
-run() { $DRY_RUN && echo "  [dry] $*" || eval "$@"; }
+# Callers pass a command as separate words, so run it directly — `eval` would
+# re-split the already-quoted paths.
+run() {
+  if $DRY_RUN; then
+    echo "  [dry] $*"
+  else
+    "$@"
+  fi
+}
 
 chmod_hooks() {
   if $DRY_RUN; then return; fi
@@ -58,7 +66,7 @@ chmod_hooks() {
 deploy_claude_hooks() {
   local base="$1"
   log "Claude hooks → $base/hooks"
-  run "mkdir -p '$(dirname "$base/hooks")'"
+  run mkdir -p "$(dirname "$base/hooks")"
   if $DRY_RUN; then
     echo "  [dry] ln -s $REPO_DIR/hooks $base/hooks"
   else
@@ -90,7 +98,7 @@ deploy_claude_hooks() {
   if $REVIEW_GATE; then
     local gate="$base/kit-review-gate"
     log "Review gate marker → $gate"
-    run "touch '$gate'"
+    run touch "$gate"
     log "Export KIT_REVIEW_GATE=1 in shell profile, or rely on project .ai/kit-review-gate"
   fi
 }
@@ -99,7 +107,7 @@ deploy_cursor_hooks() {
   local hooks_path="$1"
   local dest="$2"
   log "Cursor hooks.json → $dest"
-  run "mkdir -p '$(dirname "$dest")'"
+  run mkdir -p "$(dirname "$dest")"
   if $DRY_RUN; then
     echo "  [dry] write $dest (hooks path: $hooks_path)"
   else
@@ -123,7 +131,7 @@ if [[ "$SCOPE" == "global" ]]; then
     deploy_cursor_hooks "$local_kit" "$HOME/.cursor/hooks.json"
   fi
   if $REVIEW_GATE; then
-    run "touch '$HOME/.claude/kit-review-gate'"
+    run touch "$HOME/.claude/kit-review-gate"
   fi
 else
   PROJECT_DIR="$(pwd)"
@@ -140,8 +148,8 @@ else
     deploy_cursor_hooks "$hooks_abs" "$PROJECT_DIR/.cursor/hooks.json"
   fi
   if $REVIEW_GATE; then
-    run "mkdir -p '$PROJECT_DIR/.ai'"
-    run "touch '$PROJECT_DIR/.ai/kit-review-gate'"
+    run mkdir -p "$PROJECT_DIR/.ai"
+    run touch "$PROJECT_DIR/.ai/kit-review-gate"
   fi
 fi
 
