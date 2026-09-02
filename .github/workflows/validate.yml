@@ -39,7 +39,24 @@ jobs:
       - name: Compile registry
         run: ./scripts/kit compile
 
-      - name: Golden parity detect-stack (Bun vs Python)
+      # Compiled JSON is committed; a YAML change without a recompile would
+      # otherwise pass CI and ship a stale registry.
+      - name: Registry JSON matches YAML
+        run: |
+          if ! git diff --exit-code --stat; then
+            echo "::error::compiled JSON is out of date — run ./scripts/kit compile and commit the result"
+            exit 1
+          fi
+
+      - name: Install kit-runtime dev dependencies
+        run: bun install --frozen-lockfile
+        working-directory: packages/kit-runtime
+
+      - name: Typecheck kit-runtime
+        run: bun run typecheck
+        working-directory: packages/kit-runtime
+
+      - name: Unit tests and golden parity (Bun vs Python)
         run: bun test
         working-directory: packages/kit-runtime
 
@@ -72,3 +89,9 @@ jobs:
 
       - name: Validate kit (full)
         run: ./scripts/kit validate
+
+      - name: Shellcheck scripts and hooks
+        run: |
+          sudo apt-get install -y shellcheck
+          shellcheck --severity=warning --external-sources \
+            scripts/kit scripts/*.sh scripts/lib/*.sh hooks/*.sh hooks/lib/*.sh hooks/cursor/*.sh
