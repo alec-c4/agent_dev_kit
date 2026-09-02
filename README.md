@@ -54,6 +54,7 @@ Ready to install and use:
 |------|-----|------------------|
 | Comprehension | [COMPREHENSION.md](docs/guidelines/COMPREHENSION.md) | Human understands the change before verify |
 | Verification | [VERIFICATION.md](docs/guidelines/VERIFICATION.md) | Separate agent runs tests, lint, doc truth |
+| Findings | [WORKFLOW.md](docs/guidelines/WORKFLOW.md) | `kit findings gate` fails while a `block` finding is open |
 | Review | [REVIEW.md](docs/guidelines/REVIEW.md) | Security and definition-of-done before merge |
 
 ### Skill packs
@@ -76,6 +77,10 @@ Deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`:
 | Validate | `./scripts/kit validate` (CI on push) |
 | Stack detection | `./scripts/kit detect-stack --write-profile` |
 | Tracker intake | `./scripts/kit intake` → `.ai/work/{ref}-analysis.md` — [TRACKER.md](docs/guidelines/TRACKER.md) |
+| Work status | `./scripts/kit status [--all] [--watch]`, `./scripts/kit board` (loopback only) |
+| Findings ledger | `./scripts/kit findings list\|append\|gate\|close\|wontfix` — verification gate on open `block` rows |
+| Lessons | `./scripts/kit lessons list\|propose\|ack\|promote` — project and opt-in user-global memory |
+| Pattern sensor | `./scripts/kit check-patterns [--work-ref R]` — [failure-patterns.yaml](registry/failure-patterns.yaml) |
 | Tool settings | `./scripts/kit configure` — permissions and attribution for Cursor + Claude — [tool-settings.md](docs/tool-settings.md) |
 | Shell reference | [shell-commands.md](docs/shell-commands.md) |
 
