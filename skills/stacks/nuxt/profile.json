@@ -12,6 +12,7 @@
       "npx eslint ."
     ],
     "typecheck": [
+      "npx nuxt prepare && npx vue-tsc -b --noEmit",
       "npx nuxi typecheck"
     ],
     "deps_audit": [
