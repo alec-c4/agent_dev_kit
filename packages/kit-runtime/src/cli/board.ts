@@ -26,7 +26,22 @@ function snapshot(): WorkStatus[] {
   return data.projects.flatMap((p) => scanProject(p.path, p.id));
 }
 
-function pageHtml(meta: { spec_language: string; gates: string }): string {
+/** kit.yaml is repo-controlled text — never interpolate it into HTML raw. */
+function esc(value: unknown): string {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function pageHtml(meta: {
+  spec_language: string;
+  process_references: string;
+  gates: string;
+  wiki_index: boolean;
+}): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,19 +61,19 @@ function pageHtml(meta: { spec_language: string; gates: string }): string {
 <body>
 <h1>Kit status board</h1>
 <p class="warn">Loopback only (${HOST}). Read-only view of configured project <code>.ai/</code> trees. Not a second tracker.</p>
-<p class="warn">cwd kit.yaml: spec_language=<strong>${meta.spec_language}</strong>; gates=${meta.gates}</p>
+<p class="warn">cwd kit.yaml: spec_language=<strong>${esc(meta.spec_language)}</strong>; process_references=<strong>${esc(meta.process_references)}</strong>; gates=${esc(meta.gates)}; wiki_index=<strong>${esc(meta.wiki_index)}</strong></p>
 <div class="legend">${PIPELINE_STAGES.map((s) => `<span class="chip">${s}</span>`).join("")}</div>
 <table>
-<thead><tr><th>Project</th><th>Work</th><th>Stage</th><th>Spec</th><th>Updated</th></tr></thead>
+<thead><tr><th>Project</th><th>Work</th><th>Stage</th><th>Spec</th><th>Open</th><th>Updated</th></tr></thead>
 <tbody id="rows"></tbody>
 </table>
 <script>
 const tbody = document.getElementById('rows');
 function render(rows) {
   tbody.innerHTML = rows.map(r => '<tr>' +
-    [r.project, r.work_ref, r.stage, r.spec_key || '-', r.updated_at || '-']
+    [r.project, r.work_ref, r.stage, r.spec_key || '-', r.open_findings ?? 0, r.updated_at || '-']
       .map(c => '<td>' + String(c).replace(/</g,'&lt;') + '</td>').join('') +
-    '</tr>').join('') || '<tr><td colspan="5">(no work items)</td></tr>';
+    '</tr>').join('') || '<tr><td colspan="6">(no work items)</td></tr>';
 }
 fetch('/api/status').then(r => r.json()).then(render);
 const es = new EventSource('/api/events');
@@ -98,13 +113,15 @@ const server = Bun.serve({
       return Response.json(snapshot());
     }
     if (url.pathname === "/api/events") {
-      const stream = new ReadableStream({
-        start(controller) {
+      let controller: ReadableStreamDefaultController<Uint8Array>;
+      const stream = new ReadableStream<Uint8Array>({
+        start(c) {
+          controller = c;
           clients.add(controller);
           controller.enqueue(enc.encode(`data: ${JSON.stringify(snapshot())}\n\n`));
         },
         cancel() {
-          /* client gone */
+          clients.delete(controller);
         },
       });
       return new Response(stream, {
@@ -123,7 +140,9 @@ const server = Bun.serve({
       return new Response(
         pageHtml({
           spec_language: kit.config.spec_language,
+          process_references: kit.config.process_references,
           gates,
+          wiki_index: kit.config.wiki_index,
         }),
         { headers: { "Content-Type": "text/html; charset=utf-8" } },
       );
