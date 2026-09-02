@@ -22,6 +22,9 @@
 #   ./scripts/kit register [path]
 #   ./scripts/kit status [--project=PATH] [--all] [--json] [--watch]
 #   ./scripts/kit board
+#   ./scripts/kit findings list|append|gate|close|wontfix [--work-ref R]
+#   ./scripts/kit lessons list|propose|ack|promote [--stack ID]
+#   ./scripts/kit check-patterns [--work-ref R] [--list-sensors]
 #   ./scripts/kit run <script-name.sh> [args...]
 #
 # Examples (same from fish, zsh, or bash):
@@ -29,6 +32,7 @@
 #   ./scripts/kit validate --phase=1
 #   ./scripts/kit status --watch
 #   ./scripts/kit board   # http://127.0.0.1:8787/ — explicit start only
+# ---8<---
 
 set -euo pipefail
 
@@ -47,9 +51,12 @@ kit_bun() {
 }
 
 usage() {
-  sed -n '3,26p' "$0"
-  echo
-  echo "Interactive shell: $(kit_interactive_shell_name) (\${SHELL:-unknown})"
+  # Print the header comment block between the Usage: and the end marker,
+  # with the leading "# " stripped. Line numbers would go stale on every edit.
+  # BSD sed has no \| alternation, so strip the two prefixes separately.
+  sed -n '/^# Usage:/,/^# ---8<---/p' "$0" \
+    | sed -e '/^# ---8<---/d' -e 's/^# //' -e 's/^#$//'
+  echo "Interactive shell: $(kit_interactive_shell_name) (${SHELL:-unknown})"
   echo "Kit runs scripts with: $RUNNER"
 }
 
@@ -122,6 +129,18 @@ case "$CMD" in
   board)
     kit_bun board
     exec bun "$KIT_DIR/packages/kit-runtime/src/cli/board.ts" "$@"
+    ;;
+  findings)
+    kit_bun findings
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/findings.ts" "$@"
+    ;;
+  lessons)
+    kit_bun lessons
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/lessons.ts" "$@"
+    ;;
+  check-patterns)
+    kit_bun check-patterns
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/check-patterns.ts" "$@"
     ;;
   sync-rules)
     exec "$RUNNER" "$KIT_DIR/scripts/sync-cursor-user-rules.sh" "$@"
