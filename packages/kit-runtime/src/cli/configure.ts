@@ -11,6 +11,7 @@ import {
 import { dirname, join } from "node:path";
 import { homedir } from "node:os";
 import { findKitRoot } from "../detect-stack.ts";
+import { kitConfigPath } from "../kit-paths.ts";
 import {
   applyClaudeSettings,
   applyCursorSettings,
@@ -24,14 +25,8 @@ function expandUser(path: string): string {
   return path;
 }
 
-function kitConfigDir(): string {
-  const xdg = process.env.XDG_CONFIG_HOME;
-  if (xdg) return join(expandUser(xdg), "agent_dev_kit");
-  return join(homedir(), ".config", "agent_dev_kit");
-}
-
 function defaultKitConfigPath(): string {
-  return join(kitConfigDir(), "config.yaml");
+  return kitConfigPath("config.yaml");
 }
 
 function resolveKitConfigPath(explicit: string | null): string {

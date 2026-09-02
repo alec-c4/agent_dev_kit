@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { homedir } from "node:os";
+import { kitConfigPath } from "./kit-paths.ts";
 import { escapeCell, splitRow } from "./md-table.ts";
 
 export type LessonAck = "pending" | "yes";
@@ -35,7 +35,7 @@ export function lessonsPath(projectRoot: string): string {
 }
 
 export function defaultGlobalLessonsPath(): string {
-  return join(homedir(), ".config", "agent-dev-kit", "lessons.yaml");
+  return kitConfigPath("lessons.yaml");
 }
 
 function today(): string {

@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { homedir } from "node:os";
+import { kitConfigPath } from "./kit-paths.ts";
 
 export type ProjectEntry = {
   id: string;
@@ -25,7 +25,7 @@ export type ProjectsFile = {
 };
 
 export function defaultProjectsPath(): string {
-  return join(homedir(), ".config", "agent-dev-kit", "projects.yaml");
+  return kitConfigPath("projects.yaml");
 }
 
 function nowIso(): string {
