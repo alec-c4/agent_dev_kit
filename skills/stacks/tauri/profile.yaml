@@ -10,7 +10,8 @@ tooling:
   lint:
   - cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
   security:
-  - cargo audit --manifest-path src-tauri/Cargo.toml
+  # cargo-audit has no --manifest-path and reads the lockfile, not the manifest
+  - cargo audit --file src-tauri/Cargo.lock
 skills:
   required:
   - stack-detection

@@ -12,7 +12,7 @@
       "cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings"
     ],
     "security": [
-      "cargo audit --manifest-path src-tauri/Cargo.toml"
+      "cargo audit --file src-tauri/Cargo.lock"
     ]
   },
   "skills": {
