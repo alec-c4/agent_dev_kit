@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, basename } from "node:path";
+import { basename, join } from "node:path";
+import { countOpenFindings, findingsPath } from "./findings.ts";
 
 export const PIPELINE_STAGES = [
   "intake",
@@ -22,6 +23,7 @@ export type WorkStatus = {
   stage: PipelineStage;
   artifacts: string[];
   updated_at: string | null;
+  open_findings: number;
 };
 
 function readHeader(path: string): Record<string, string> {
@@ -69,6 +71,7 @@ function inferStage(aiRoot: string, workRef: string): {
   touch(plan);
   touch(handoff);
   touch(verification);
+  touch(findingsPath(join(aiRoot, ".."), workRef));
 
   const headers = {
     ...readHeader(analysis),
@@ -90,8 +93,12 @@ function inferStage(aiRoot: string, workRef: string): {
       if (!f.endsWith("-spec.md")) continue;
       const p = join(specsDir, f);
       const h = readHeader(p);
-      const wr = (h["work ref"] || h["work_ref"] || "").replace(/[`|]/g, "");
-      if (wr.includes(workRef) || workRef.includes(wr.replace(/\s.*/g, ""))) {
+      const wr = (h["work ref"] || h["work_ref"] || "").replace(/[`|]/g, "").trim();
+      // An empty work ref must not match — `workRef.includes("")` is always true
+      // and would bind the first spec in the tree to every work item.
+      if (!wr || wr === "—" || wr === "-") continue;
+      const wrHead = wr.split(/\s/)[0];
+      if (wr === workRef || wrHead === workRef) {
         specPath = p;
         specKey = f.replace(/-spec\.md$/, "");
         break;
@@ -132,7 +139,7 @@ function listWorkRefs(aiRoot: string): string[] {
   if (!existsSync(workDir)) return [];
   const refs = new Set<string>();
   for (const f of readdirSync(workDir)) {
-    const m = f.match(/^(.+)-(analysis|plan|handoff|verification)\.md$/);
+    const m = f.match(/^(.+)-(analysis|plan|handoff|verification|findings)\.md$/);
     if (m) refs.add(m[1]);
   }
   return [...refs].sort();
@@ -152,13 +159,14 @@ export function scanProject(projectPath: string, projectId?: string): WorkStatus
       stage: inferred.stage,
       artifacts: inferred.artifacts,
       updated_at: inferred.updated_at,
+      open_findings: countOpenFindings(projectPath, work_ref),
     };
   });
 }
 
 export function formatStatusTable(rows: WorkStatus[]): string {
   if (!rows.length) return "(no work items found under .ai/work)";
-  const lines = ["PROJECT\tWORK_REF\tSTAGE\tSPEC_KEY\tUPDATED"];
+  const lines = ["PROJECT\tWORK_REF\tSTAGE\tSPEC_KEY\tOPEN_FINDINGS\tUPDATED"];
   for (const r of rows) {
     lines.push(
       [
@@ -166,6 +174,7 @@ export function formatStatusTable(rows: WorkStatus[]): string {
         r.work_ref,
         r.stage,
         r.spec_key || "-",
+        String(r.open_findings),
         r.updated_at || "-",
       ].join("\t"),
     );
