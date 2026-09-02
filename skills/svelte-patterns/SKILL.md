@@ -1,7 +1,7 @@
 ---
 name: svelte-patterns
 description: Svelte 5 patterns — runes, components, Inertia adapter. Load after stacks/svelte profile or with Inertia on Rails.
-user-invokable: false
+user-invocable: false
 ---
 
 # Svelte patterns

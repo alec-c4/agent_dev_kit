@@ -1,7 +1,7 @@
 ---
 name: stacks/nextjs
 description: Stack profile for Next.js — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Next.js

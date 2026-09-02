@@ -1,7 +1,7 @@
 ---
 name: feature
 description: Start feature workflow — analyze, spec v1.0, plan, TDD, comprehension, verification. Use when user runs /feature or asks to add or build a new capability.
-user-invokable: true
+user-invocable: true
 ---
 
 # Feature workflow

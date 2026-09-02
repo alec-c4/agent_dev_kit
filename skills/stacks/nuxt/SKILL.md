@@ -1,7 +1,7 @@
 ---
 name: stacks/nuxt
 description: Stack profile for Nuxt.js — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Nuxt.js

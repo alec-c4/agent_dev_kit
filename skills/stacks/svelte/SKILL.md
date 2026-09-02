@@ -1,7 +1,7 @@
 ---
 name: stacks/svelte
 description: Stack profile for Svelte (SPA / Vite) — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Svelte (SPA / Vite)

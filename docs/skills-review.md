@@ -51,7 +51,7 @@ For **each skill** in the pack manifest:
 | Stack-specific commands only in stack skills? | RSpec/pytest hardcoded in universal skills |
 | Points to profile.yaml / detect-stack? | Guesses tooling from memory |
 | Links to guidelines valid? | Broken paths |
-| `user-invokable: false` on internal skills? | User should not `$stack-loader` manually |
+| `user-invocable: false` on internal skills? | User should not `$stack-loader` manually |
 
 ## Layer 3 — Human sign-off (PR only)
 

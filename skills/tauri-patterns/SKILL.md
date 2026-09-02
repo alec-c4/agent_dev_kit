@@ -1,7 +1,7 @@
 ---
 name: tauri-patterns
 description: Tauri desktop patterns — commands, IPC, Rust backend, webview security. Load after stacks/tauri profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Tauri patterns

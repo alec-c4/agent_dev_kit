@@ -1,7 +1,7 @@
 ---
 name: rails-core-patterns
 description: Ruby on Rails patterns — compact namespacing, services, queries, N+1 avoidance. Load for Rails apps after stacks/rails profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Rails core patterns

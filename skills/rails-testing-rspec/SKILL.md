@@ -1,7 +1,7 @@
 ---
 name: rails-testing-rspec
 description: RSpec patterns for Rails — request specs, factories, system tests. Load when spec/ directory exists per stacks/rails profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Rails RSpec patterns

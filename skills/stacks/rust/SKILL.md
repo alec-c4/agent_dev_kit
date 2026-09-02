@@ -1,7 +1,7 @@
 ---
 name: stacks/rust
 description: Stack profile for Rust — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Rust

@@ -1,7 +1,7 @@
 ---
 name: work-intake
 description: Normalize work_ref and write .ai/work/{ref}-analysis.md from paste or gh fetch. Use before spec when a ticket or task id is provided.
-user-invokable: true
+user-invocable: true
 disable-model-invocation: false
 ---
 

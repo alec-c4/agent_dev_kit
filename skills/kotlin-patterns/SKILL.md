@@ -1,7 +1,7 @@
 ---
 name: kotlin-patterns
 description: Kotlin patterns — Gradle, coroutines, null safety, Android and Ktor. Load after stacks/kotlin profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Kotlin patterns

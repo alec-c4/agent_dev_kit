@@ -1,7 +1,7 @@
 ---
 name: nuxt-patterns
-description: Nuxt 3 patterns — server routes, composables, SSR boundaries. Load after stacks/nuxt profile.
-user-invokable: false
+description: Nuxt patterns — server routes, composables, SSR boundaries. Load after stacks/nuxt profile.
+user-invocable: false
 ---
 
 # Nuxt patterns
@@ -17,7 +17,7 @@ Load after [stacks/nuxt](../stacks/nuxt/SKILL.md).
 ## SSR and client
 
 - Respect `server_client_boundary` DoD — no server secrets in client composables.
-- Run `nuxi typecheck` from profile before PR.
+- Run the typecheck command from `profile.yaml` before PR — Nuxt 4 uses `nuxt prepare && vue-tsc -b --noEmit`; `nuxi typecheck` is the Nuxt 3 form.
 
 ## References
 

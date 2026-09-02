@@ -1,7 +1,7 @@
 ---
 name: elixir-phoenix-patterns
 description: Elixir and Phoenix patterns — contexts, Ecto, LiveView. Load after stacks/elixir profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Elixir / Phoenix patterns

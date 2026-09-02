@@ -1,7 +1,7 @@
 ---
 name: swift-patterns
 description: Swift patterns — SPM, SwiftUI, concurrency, testing. Load after stacks/swift profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Swift patterns

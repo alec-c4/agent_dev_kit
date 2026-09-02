@@ -1,7 +1,7 @@
 ---
 name: stacks/kotlin
 description: Stack profile for Kotlin — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Kotlin

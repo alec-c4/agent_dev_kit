@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Write implementation plan after approved spec — no production code yet. Use when user runs /plan or asks for a plan only.
-user-invokable: true
+user-invocable: true
 ---
 
 # Plan workflow

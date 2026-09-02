@@ -1,7 +1,7 @@
 ---
 name: stacks/fastapi
 description: Stack profile for FastAPI — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # FastAPI

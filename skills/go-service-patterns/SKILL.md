@@ -1,7 +1,7 @@
 ---
 name: go-service-patterns
 description: Go service patterns — packages, context, errors, HTTP handlers. Load after stacks/go profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Go service patterns

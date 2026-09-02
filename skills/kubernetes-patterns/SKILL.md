@@ -1,7 +1,7 @@
 ---
 name: kubernetes-patterns
 description: Kubernetes (k8s) patterns — workloads, networking, config, GitOps. Load for cluster manifests and deploy automation.
-user-invokable: false
+user-invocable: false
 ---
 
 # Kubernetes patterns

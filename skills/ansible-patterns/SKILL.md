@@ -1,7 +1,7 @@
 ---
 name: ansible-patterns
 description: Ansible patterns — playbooks, roles, idempotency, inventory. Load for config management and server provisioning.
-user-invokable: false
+user-invocable: false
 ---
 
 # Ansible patterns

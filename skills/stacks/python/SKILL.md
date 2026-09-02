@@ -1,7 +1,7 @@
 ---
 name: stacks/python
 description: Stack profile for Python — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Python

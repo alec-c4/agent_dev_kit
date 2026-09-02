@@ -1,7 +1,7 @@
 ---
 name: stacks/go
 description: Stack profile for Go — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Go

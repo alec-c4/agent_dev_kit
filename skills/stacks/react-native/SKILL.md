@@ -1,7 +1,7 @@
 ---
 name: stacks/react-native
 description: Stack profile for React Native — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # React Native

@@ -1,7 +1,7 @@
 ---
 name: stacks/flask
 description: Stack profile for Flask — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Flask

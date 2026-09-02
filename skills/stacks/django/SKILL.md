@@ -1,7 +1,7 @@
 ---
 name: stacks/django
 description: Stack profile for Django — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Django

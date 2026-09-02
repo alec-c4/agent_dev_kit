@@ -1,7 +1,7 @@
 ---
 name: changelog
 description: Draft user-facing changelog entries from spec changelog and merged PRs. Use before release notes or VERSION bump.
-user-invokable: false
+user-invocable: false
 ---
 
 # Changelog helper

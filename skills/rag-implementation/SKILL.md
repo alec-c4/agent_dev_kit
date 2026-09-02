@@ -1,7 +1,7 @@
 ---
 name: rag-implementation
 description: Retrieval-augmented generation — chunking, embeddings, vector store, and evaluation per stack.
-user-invokable: false
+user-invocable: false
 ---
 
 # RAG implementation

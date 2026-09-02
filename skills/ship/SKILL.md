@@ -1,7 +1,7 @@
 ---
 name: ship
 description: Prepare PR summary and ship checklist — confirm before push or merge. Use when user runs /ship or asks to open or prepare a pull request.
-user-invokable: true
+user-invocable: true
 ---
 
 # Ship workflow

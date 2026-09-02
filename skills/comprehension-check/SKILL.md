@@ -1,7 +1,7 @@
 ---
 name: comprehension-check
 description: Generate comprehension Q&A from spec and handoff; validate human answers before verification. Use after implement, before verifier session.
-user-invokable: true
+user-invocable: true
 ---
 
 # Comprehension check

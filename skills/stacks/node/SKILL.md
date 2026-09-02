@@ -1,7 +1,7 @@
 ---
 name: stacks/node
 description: Stack profile for Node.js / TypeScript — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Node.js / TypeScript

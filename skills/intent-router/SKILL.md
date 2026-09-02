@@ -1,7 +1,7 @@
 ---
 name: intent-router
 description: Classify user intent before acting — feature, bug, refactor, audit, or question. Same pipeline for plain text and slash commands; clarify when ambiguous.
-user-invokable: true
+user-invocable: true
 ---
 
 # Intent router

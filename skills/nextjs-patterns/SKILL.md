@@ -1,7 +1,7 @@
 ---
 name: nextjs-patterns
 description: Next.js App Router patterns — RSC boundaries, caching, server actions. Load after stacks/nextjs profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Next.js patterns
@@ -16,7 +16,7 @@ Load after [stacks/nextjs](../stacks/nextjs/SKILL.md). Commands from `profile.ya
 
 ## Data and caching
 
-- Prefer `fetch` cache options and `unstable_cache` / Cache Components per project Next version docs.
+- Prefer `fetch` cache options; for cached work use the `use cache` directive with `cacheLife` / `cacheTag` on versions that ship Cache Components, and `unstable_cache` only on older ones. Check the project's Next version before choosing.
 - Do not leak secrets into client bundles — env vars without `NEXT_PUBLIC_` stay server-only.
 
 ## DoD alignment

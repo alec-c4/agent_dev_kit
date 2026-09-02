@@ -1,7 +1,7 @@
 ---
 name: review
 description: Pre-commit and PR review checklist — security, DoD, diff quality. Use when user runs /review or asks to review before commit.
-user-invokable: true
+user-invocable: true
 ---
 
 # Review workflow

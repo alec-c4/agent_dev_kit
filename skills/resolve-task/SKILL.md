@@ -1,7 +1,7 @@
 ---
 name: resolve-task
 description: Full task pipeline from work_ref or pasted ticket — intake, classify feature vs fix, spec, plan, TDD, verification. Use with /resolve-task GH-58 or resolve this ticket.
-user-invokable: true
+user-invocable: true
 ---
 
 # Resolve task

@@ -1,7 +1,7 @@
 ---
 name: react-native-patterns
 description: React Native patterns — navigation, lists, native modules, platform APIs. Load after stacks/react-native profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # React Native patterns

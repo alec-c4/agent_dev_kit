@@ -1,7 +1,7 @@
 ---
 name: stack-detection
 description: Detect the project technology stack before any task. Run detect-stack.sh; do not guess tooling from memory.
-user-invokable: false
+user-invocable: false
 ---
 
 # Stack detection

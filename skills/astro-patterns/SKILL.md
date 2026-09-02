@@ -1,7 +1,7 @@
 ---
 name: astro-patterns
 description: Astro patterns — content collections, islands, SSR/SSG boundaries. Load after stacks/astro profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Astro patterns

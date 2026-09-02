@@ -1,7 +1,7 @@
 ---
 name: stacks/astro
 description: Stack profile for Astro — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Astro

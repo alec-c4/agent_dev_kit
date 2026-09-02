@@ -1,7 +1,7 @@
 ---
 name: stacks/rails
 description: Stack profile for Ruby on Rails — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Ruby on Rails

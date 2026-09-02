@@ -1,7 +1,7 @@
 ---
 name: mcp-server-integration
 description: Model Context Protocol servers — tools, resources, auth, and deployment per stack.
-user-invokable: false
+user-invocable: false
 ---
 
 # MCP server integration

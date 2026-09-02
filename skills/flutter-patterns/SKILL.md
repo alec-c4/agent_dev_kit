@@ -1,7 +1,7 @@
 ---
 name: flutter-patterns
 description: Flutter patterns — widgets, state, navigation, async, and platform integration. Load after stacks/flutter profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Flutter patterns

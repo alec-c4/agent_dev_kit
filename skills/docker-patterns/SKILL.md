@@ -1,7 +1,7 @@
 ---
 name: docker-patterns
 description: Docker and container patterns — images, compose, multi-stage builds, CI. Load for containerized apps and deploy pipelines.
-user-invokable: false
+user-invocable: false
 ---
 
 # Docker patterns

@@ -1,7 +1,7 @@
 ---
 name: tracker-sync
 description: Optional projection of spec or handoff summary to a tracker ticket comment. Never the control plane.
-user-invokable: false
+user-invocable: false
 ---
 
 # Tracker sync (optional projection)

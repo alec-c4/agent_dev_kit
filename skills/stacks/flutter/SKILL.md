@@ -1,7 +1,7 @@
 ---
 name: stacks/flutter
 description: Stack profile for Flutter — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Flutter

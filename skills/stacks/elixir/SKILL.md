@@ -1,7 +1,7 @@
 ---
 name: stacks/elixir
 description: Stack profile for Elixir / Phoenix — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Elixir / Phoenix

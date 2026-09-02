@@ -1,7 +1,7 @@
 ---
 name: sveltekit-patterns
 description: SvelteKit patterns — load functions, form actions, hooks. Load after stacks/sveltekit profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # SvelteKit patterns

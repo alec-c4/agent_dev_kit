@@ -1,7 +1,7 @@
 ---
 name: inertia
 description: Inertia.js patterns with Rails or Node backends. Load when inertia_rails or @inertiajs present per stack profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Inertia.js patterns

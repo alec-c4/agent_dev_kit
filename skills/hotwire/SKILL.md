@@ -1,7 +1,7 @@
 ---
 name: hotwire
 description: Hotwire Turbo and Stimulus patterns for Rails. Load when turbo-rails gem present per stacks/rails profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Hotwire (Turbo + Stimulus)

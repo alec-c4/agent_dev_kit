@@ -1,7 +1,7 @@
 ---
 name: llm-integration
 description: Patterns for calling LLM APIs, streaming, structured output, and cost controls per stack.
-user-invokable: false
+user-invocable: false
 ---
 
 # LLM integration

@@ -1,7 +1,7 @@
 ---
 name: stacks/tauri
 description: Stack profile for Tauri — tooling, DoD overlay, and skill routing.
-user-invokable: false
+user-invocable: false
 ---
 
 # Tauri

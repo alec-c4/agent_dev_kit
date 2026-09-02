@@ -1,7 +1,7 @@
 ---
 name: django-patterns
 description: Django patterns — models, views, ORM optimization. Load after stacks/django profile.
-user-invokable: false
+user-invocable: false
 ---
 
 # Django patterns

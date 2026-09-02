@@ -1,7 +1,7 @@
 ---
 name: terraform-patterns
 description: Terraform patterns — modules, state, workspaces, IAM. Load for IaC and cloud infrastructure.
-user-invokable: false
+user-invocable: false
 ---
 
 # Terraform patterns

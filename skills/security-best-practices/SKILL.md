@@ -1,7 +1,7 @@
 ---
 name: security-best-practices
 description: Cross-stack security checklist and stack-specific hardening. Load from detect-stack topic_files or review step 0.
-user-invokable: false
+user-invocable: false
 ---
 
 # Security best practices

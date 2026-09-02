@@ -1,7 +1,7 @@
 ---
 name: fix
 description: Start bug-fix workflow — analyze, spec bump, TDD fix, verification. Use when user runs /fix or reports a regression or broken behaviour.
-user-invokable: true
+user-invocable: true
 ---
 
 # Fix workflow

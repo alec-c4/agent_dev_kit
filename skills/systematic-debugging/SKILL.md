@@ -1,7 +1,7 @@
 ---
 name: systematic-debugging
 description: Structured debugging before guessing — reproduce, isolate, bisect, verify fix. Use when bugs are unclear or regressions need root cause.
-user-invokable: false
+user-invocable: false
 ---
 
 # Systematic debugging

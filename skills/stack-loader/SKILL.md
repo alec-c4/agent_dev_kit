@@ -1,7 +1,7 @@
 ---
 name: stack-loader
 description: Resolve tooling and skills from stack profile — registry detection plus skills/stacks/*/profile.yaml.
-user-invokable: false
+user-invocable: false
 disable-model-invocation: true
 ---
 
