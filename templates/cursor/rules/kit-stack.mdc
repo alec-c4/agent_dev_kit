@@ -6,8 +6,14 @@ alwaysApply: false
 
 # Kit stack detection
 
-Never assume stack or test runner. Run detect-stack, then read `skills/stacks/<id>/profile.yaml`.
+Never assume the stack or the test runner.
 
-Details: [docs/stack-detection.md](../agent_dev_kit/docs/stack-detection.md)
+1. Run `./scripts/kit detect-stack --write-profile` from the kit, or read the cached
+   `.claude/stack.profile.json` in the current project when it is already present.
+2. Take `test`, `lint`, `typecheck`, and `security` commands from that profile —
+   not from memory.
+3. `skills_to_load` in the profile lists the pattern skills that apply.
 
-User stack-specific rules (Rails, Svelte, etc.) override kit defaults.
+User stack-specific rules (Rails, Svelte, …) override kit defaults.
+
+Reference: `docs/stack-detection.md` in the kit tree (`kit_root` in `~/.cursor/kit-user-rules.manifest.json`).

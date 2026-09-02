@@ -5,21 +5,28 @@ alwaysApply: true
 
 # Kit + user Cursor rules
 
-User global rules in `~/.cursor/rules/` **win on conflict**. Kit supplements them; it does not replace them.
+User global rules in `~/.cursor/rules/` **win on conflict**. The kit supplements them;
+it does not replace them.
 
 ## Before loading kit guidelines
 
-1. Read `~/.cursor/kit-user-rules.manifest.json` — note `kit_root` (usually `~/.cursor/agent_dev_kit`).
-2. **Do not read** files listed in `skip_kit_guidelines` — user rules already cover those topics.
-3. **Always read** every path in `always_load_kit_guidelines_resolved` (absolute paths under `kit_root`). Applies in **every project** — no project install required.
-4. Load `optional_kit_guidelines` from the manifest only when the task needs them and no user rule applies.
+1. Read `~/.cursor/kit-user-rules.manifest.json` — it carries `kit_root`, the absolute
+   path every kit doc resolves against.
+2. **Do not read** files listed in `skip_kit_guidelines` — user rules already cover
+   those topics.
+3. **Always read** every path in `always_load_kit_guidelines_resolved` (absolute paths
+   under `kit_root`). Applies in every project — no project install required.
+4. Load `optional_kit_guidelines` only when the task needs them and no user rule applies.
 
-Global rules `kit-comprehension.mdc` and this file apply to all repos in the **Cursor IDE** when kit is installed with `./scripts/kit install --target=cursor`. The Cursor CLI (`agent` binary) does not read `~/.cursor/rules/` — it needs a project install (`./scripts/kit install --target=cursor --project`) per repo.
+Global rules `kit-comprehension.mdc` and this file apply to all repos in the **Cursor
+IDE**. The Cursor CLI (`agent` binary) does not read `~/.cursor/rules/` — it needs a
+project install (`./scripts/kit install --target=cursor --project`) per repo.
 
-Regenerate manifest after adding or renaming user rules:
+Regenerate the manifest after adding or renaming user rules:
 
 ```text
 ./scripts/kit sync-rules
 ```
 
-Optional local overrides: `~/.cursor/kit-user-rules.local.yaml` — see [docs/cursor-user-rules.md](../agent_dev_kit/docs/cursor-user-rules.md).
+Optional local overrides: `~/.cursor/kit-user-rules.local.yaml` — documented in
+`docs/cursor-user-rules.md` in the kit tree.

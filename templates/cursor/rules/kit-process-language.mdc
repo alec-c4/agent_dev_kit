@@ -1,0 +1,19 @@
+---
+description: Omit plan/stage/generated-doc jargon from shipped code, commits, and public docs unless kit.yaml allows it.
+alwaysApply: true
+---
+
+# Shipped language (process references)
+
+Read project `.ai/kit.yaml` → `process_references` when present.
+
+| Value | Meaning |
+|-------|---------|
+| `omit` (default if missing) | Do not mention implementation plans, stages/phases, handoff, `AC-*` / `work_ref` as product copy, or `.ai/work/*` paths in product code, comments, public docs, commits, or PR bodies |
+| `allow` | Kit does not add this restriction |
+
+Planning may live only under `.ai/` (or gitignored paths).
+
+**User global rules win** when stricter (for example `no-process-language.mdc`). `allow` never weakens a stricter user rule.
+
+Canon: `AGENTS.md` § Shipped language in the kit tree (`kit_root` in `~/.cursor/kit-user-rules.manifest.json`).

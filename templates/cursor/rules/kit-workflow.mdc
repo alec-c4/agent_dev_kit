@@ -7,26 +7,39 @@ alwaysApply: false
 
 Read before non-trivial tasks when Agent Dev Kit is installed.
 
-**User global rules** (`~/.cursor/rules/`) take precedence when stricter.
-
-Before loading kit guidelines, read `~/.cursor/kit-user-rules.manifest.json` — see [kit-user-rules.mdc policy](../agent_dev_kit/docs/cursor-user-rules.md).
+**User global rules** (`~/.cursor/rules/`) take precedence when stricter. Before
+loading kit guidelines, read `~/.cursor/kit-user-rules.manifest.json` — it carries
+`kit_root` and says which guidelines to skip.
 
 ## Flow
 
-0. Classify user message — load skill `intent-router` or [INTENT-ROUTING.md](../agent_dev_kit/docs/guidelines/INTENT-ROUTING.md) (text and `/feature` share the same pipeline; clarify if ambiguous).
-1. Set **work_ref** / **spec_key** when a ticket exists — [TRACKER.md](../agent_dev_kit/docs/guidelines/TRACKER.md).
-2. Follow [docs/guidelines/WORKFLOW.md](../agent_dev_kit/docs/guidelines/WORKFLOW.md).
-3. **Spec first** — write `.ai/*-spec.md`, get human approval ([SPECS.md](../agent_dev_kit/docs/guidelines/SPECS.md)).
-4. **Plan** — write `.ai/*-plan.md` with Detail: minimal | standard | detailed; wait for approval before production code.
-5. **TDD** — implement per [TESTING.md](../agent_dev_kit/docs/guidelines/TESTING.md).
-6. **Comprehension** — handoff + Q&A + human sign-off before verify ([COMPREHENSION.md](../agent_dev_kit/docs/guidelines/COMPREHENSION.md)).
-7. **Verification** — separate agent session before commit ([VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md)).
-8. **Review** — [REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md) before commit or PR.
+0. **Classify** the request — feature, bug, refactor, audit, or question. Plain text
+   and `/feature` share one pipeline; ask when ambiguous.
+1. **Identify the work** — set `work_ref` and `spec_key` when a ticket exists.
+2. **Load feedback** — read `.ai/work/{work_ref}-findings.md`; `block` rows that are
+   `open` or `regressed` carry the same weight as spec acceptance criteria.
+3. **Spec first** — write `.ai/specs/{spec_key}-spec.md`, get human approval before
+   planning or coding.
+4. **Plan** — write `.ai/work/{work_ref}-plan.md` with Detail: minimal | standard |
+   detailed; wait for approval before production code.
+5. **TDD** — red, green, refactor; tests trace to acceptance criteria.
+6. **Comprehension** — handoff, Q&A, human sign-off before verify.
+7. **Verification** — a **separate agent session** runs tests, lint, and doc truth.
+8. **Review** — security, spec conformance, and Definition of Done before commit.
 
-## Guidelines
+## Where the detail lives
 
-All kit guidelines: [docs/guidelines/](../agent_dev_kit/docs/guidelines/)
+All paths are relative to `kit_root` from the manifest:
 
-Spec examples: [docs/examples/specs/](../agent_dev_kit/docs/examples/specs/)
-
-Definition of Done: [registry/dod.yaml](../agent_dev_kit/registry/dod.yaml)
+| Topic | File |
+|-------|------|
+| Full pipeline | `docs/guidelines/WORKFLOW.md` |
+| Intent classification | `docs/guidelines/INTENT-ROUTING.md` |
+| work_ref / spec_key | `docs/guidelines/TRACKER.md` |
+| Spec format | `docs/guidelines/SPECS.md` |
+| Worked spec examples | `docs/examples/specs/` |
+| Testing | `docs/guidelines/TESTING.md` |
+| Comprehension gate | `docs/guidelines/COMPREHENSION.md` |
+| Verification gate | `docs/guidelines/VERIFICATION.md` |
+| Review checklist | `docs/guidelines/REVIEW.md` |
+| Definition of Done | `registry/dod.yaml` |

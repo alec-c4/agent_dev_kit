@@ -6,14 +6,22 @@ alwaysApply: false
 
 # Kit review
 
-**Prerequisite:** [VERIFICATION.md](../agent_dev_kit/docs/guidelines/VERIFICATION.md) must pass in a **separate agent session** before review.
+**Prerequisite:** verification must pass in a **separate agent session** before review.
 
-Before commit or PR, follow [docs/guidelines/REVIEW.md](../agent_dev_kit/docs/guidelines/REVIEW.md):
+Before commit or PR:
 
-1. Answer all four security questions on the diff.
-2. Check spec conformance when `.ai/*-spec.md` exists.
-3. Run DoD checklist from [registry/dod.yaml](../agent_dev_kit/registry/dod.yaml).
-4. Use fixed review output format from REVIEW.md.
-5. Wait for explicit developer approval before commit.
+1. **Security** — answer all four on the diff: does it take untrusted input; does it
+   cross an authn/authz boundary; does it log, store, or transmit secrets or personal
+   data; can it be made to act on someone else's data?
+2. **Spec conformance** — when `.ai/*-spec.md` exists, check every acceptance
+   criterion the diff claims to satisfy.
+3. **Findings** — `./scripts/kit findings gate --work-ref {work_ref}` must exit zero;
+   a `block` finding that is `open` or `regressed` fails review.
+4. **Definition of Done** — universal checklist plus the `dod_overlay` from the
+   detected stack profile.
+5. **Approval** — wait for explicit developer approval before commit.
 
 Defer to user TDD and semantic-commit rules when present.
+
+Full checklist and output format: `docs/guidelines/REVIEW.md` in the kit tree
+(`kit_root` in `~/.cursor/kit-user-rules.manifest.json`).

@@ -5,19 +5,27 @@ alwaysApply: true
 
 # Human comprehension gate (global)
 
-Agent Dev Kit is installed globally at `~/.cursor/agent_dev_kit`. In the **Cursor IDE**, this rule applies in **every project** — no per-project kit install required. The **Cursor CLI** (`agent` binary) does not read `~/.cursor/rules/`; run `./scripts/kit install --target=cursor --project` per repo so this gate also applies there.
+In the **Cursor IDE** this rule applies in every project once the kit is installed —
+no per-project install needed. The **Cursor CLI** (`agent` binary) does not read
+`~/.cursor/rules/`; run `./scripts/kit install --target=cursor --project` per repo so
+the gate applies there too.
 
-The developer is the **control plane**. Highly reliable automation reduces monitoring; kit counters that with an explicit human gate before commit.
+The developer is the **control plane**. Highly reliable automation reduces
+monitoring; this gate counters that with an explicit human checkpoint before commit.
 
 ## Before commit or PR (non-trivial work)
 
-1. Write `.ai/work/{work_ref}-handoff.md` in the **current project repo** (create `.ai/work/` if missing).
-2. Generate **3 comprehension questions** from the handoff — human answers in their own words.
-3. Wait for explicit **human sign-off**. Do not fill sign-off or Q&A for the human.
+1. Write `.ai/work/{work_ref}-handoff.md` in the **current project repo**
+   (create `.ai/work/` if missing). Cover: what changed, data flow, key files.
+2. Generate **3 comprehension questions** from the handoff — the human answers in
+   their own words.
+3. Wait for explicit **human sign-off**. Never fill in the sign-off or the answers
+   on the human's behalf.
 4. Only then run verification or commit.
 
-**Default tier:** standard. Skip only when the human explicitly says comprehension minimal (typo, comment-only).
+**Default tier:** standard. Skip only when the human explicitly says comprehension is
+minimal (typo or comment-only change). Strict tier adds a teach-back and 5 questions.
 
-Full rules: [COMPREHENSION.md](../agent_dev_kit/docs/guidelines/COMPREHENSION.md)
-
-Also load via `~/.cursor/kit-user-rules.manifest.json` → `always_load_kit_guidelines_resolved`.
+Full rules: `docs/guidelines/COMPREHENSION.md` in the kit tree (`kit_root` in
+`~/.cursor/kit-user-rules.manifest.json`), also listed in that manifest under
+`always_load_kit_guidelines_resolved`.

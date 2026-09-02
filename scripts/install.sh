@@ -219,20 +219,19 @@ install_cursor_rules_global() {
 
 install_cursor_rules_project() {
   local rules_dir="$1"
-  local tmp
-  tmp="$(mktemp)"
-  log "Cursor rules → $rules_dir (project paths)"
+  log "Cursor rules → $rules_dir"
   maybe mkdir -p "$rules_dir"
+  # The rules are self-contained: they carry the operative steps inline and name
+  # kit docs relative to `kit_root` from the manifest, so the same file works for
+  # a global and a project install with no path rewriting.
   for mdc in "$REPO_DIR"/templates/cursor/rules/*.mdc; do
     [[ -f "$mdc" ]] || continue
-    sed "s|../${KIT_LINK_NAME}/||g" "$mdc" > "$tmp"
     if $DRY_RUN; then
       echo "  [dry] write project rule $(basename "$mdc") -> $rules_dir/"
     else
-      cp "$tmp" "$rules_dir/$(basename "$mdc")"
+      cp "$mdc" "$rules_dir/$(basename "$mdc")"
     fi
   done
-  rm -f "$tmp"
 }
 
 install_cursor_global() {
