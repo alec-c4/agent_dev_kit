@@ -140,6 +140,8 @@ if [[ "$PHASE" == "1" ]]; then
     err "missing templates/cursor/rules/kit-user-rules.mdc"
   elif [[ ! -f "$KIT_DIR/templates/cursor/rules/kit-comprehension.mdc" ]]; then
     err "missing templates/cursor/rules/kit-comprehension.mdc"
+  elif [[ ! -f "$KIT_DIR/templates/cursor/rules/kit-process-language.mdc" ]]; then
+    err "missing templates/cursor/rules/kit-process-language.mdc"
   else
     ok "cursor user-rules dedup (sync script + kit-user-rules.mdc)"
     ok "cursor global comprehension gate (kit-comprehension.mdc)"
@@ -340,10 +342,13 @@ for skill_dir in "$KIT_DIR"/skills/*/; do
   if grep -qxF "$name" "$PACKED_SKILLS" 2>/dev/null || grep -qxF "$name" "$REGISTRY_SKILLS" 2>/dev/null; then
     continue
   fi
-  if [[ "${VALIDATE_ORPHANS_STRICT:-}" == "1" ]]; then
-    err "orphan skill directory (not in packs or registry): skills/$name"
-  else
+  # Strict by default: an orphan skill never reaches a user, because
+  # deploy-skills only walks pack manifests. Set VALIDATE_ORPHANS_STRICT=0
+  # to downgrade to a warning while a skill is still being drafted.
+  if [[ "${VALIDATE_ORPHANS_STRICT:-1}" == "0" ]]; then
     warn "orphan skill directory (not in packs or registry): skills/$name — add to a pack or remove"
+  else
+    err "orphan skill directory (not in packs or registry): skills/$name — add to a pack or remove"
   fi
 done
 
@@ -379,6 +384,18 @@ if [[ -f "$KIT_DIR/hooks/block-dangerous.sh" ]]; then
   else
     ok "hook smoke: block-dangerous rejects rm -rf"
   fi
+  deny_msg="$(printf '%s' '{"tool_input":{"command":"rm -rf /tmp/foo"}}' | bash "$KIT_DIR/hooks/block-dangerous.sh" 2>&1 >/dev/null || true)"
+  # The three lines must be specific to the blocked command — kit_block's
+  # generic fallbacks mean the call site passed only `what`.
+  if ! echo "$deny_msg" | grep -q '^Why:' || ! echo "$deny_msg" | grep -q '^Next:'; then
+    err "hook smoke: deny text missing Why/Next"
+  elif echo "$deny_msg" | grep -q '^Why: This command is not allowed\.$'; then
+    err "hook smoke: deny text uses the generic Why — pass a reason to kit_block"
+  elif echo "$deny_msg" | grep -q '^Next: Use a safer command or confirm with the human\.$'; then
+    err "hook smoke: deny text uses the generic Next — pass a remedy to kit_block"
+  else
+    ok "hook smoke: deny text has specific Why and Next"
+  fi
   if printf '%s' '{"tool_input":{"command":"git status"}}' | bash "$KIT_DIR/hooks/block-dangerous.sh" >/dev/null 2>&1; then
     ok "hook smoke: block-dangerous allows git status"
   else
@@ -397,59 +414,55 @@ kit_detect_stack() {
   fi
 }
 
-FIXTURE_RAILS="$KIT_DIR/scripts/fixtures/minimal-rails"
-if [[ -d "$FIXTURE_RAILS" ]]; then
-  if kit_detect_stack "$FIXTURE_RAILS" 2>/dev/null | jq -e '.primary_stack == "rails"' >/dev/null; then
-    ok "detect_stack fixture rails"
-  else
-    err "detect_stack fixture did not detect rails"
-  fi
-fi
+# fixture dir : expected primary_stack
+DETECT_FIXTURES=(
+  "minimal-rails:rails"
+  "minimal-elixir:elixir"
+  "minimal-swift:swift"
+  "minimal-kotlin:kotlin"
+  "minimal-react-native:react-native"
+  "minimal-flutter:flutter"
+  "minimal-node:node"
+  "minimal-fastapi:fastapi"
+  "minimal-django:django"
+  "minimal-flask:flask"
+  "minimal-python:python"
+  "minimal-tauri:tauri"
+)
 
-FIXTURE_ELIXIR="$KIT_DIR/scripts/fixtures/minimal-elixir"
-if [[ -d "$FIXTURE_ELIXIR" ]]; then
-  if kit_detect_stack "$FIXTURE_ELIXIR" 2>/dev/null | jq -e '.primary_stack == "elixir"' >/dev/null; then
-    ok "detect_stack fixture elixir"
+for entry in "${DETECT_FIXTURES[@]}"; do
+  fixture_name="${entry%%:*}"
+  expected="${entry##*:}"
+  fixture_dir="$KIT_DIR/scripts/fixtures/$fixture_name"
+  [[ -d "$fixture_dir" ]] || continue
+  actual="$(kit_detect_stack "$fixture_dir" 2>/dev/null | jq -r '.primary_stack // "null"')"
+  if [[ "$actual" == "$expected" ]]; then
+    ok "detect_stack fixture $expected"
   else
-    err "detect_stack fixture did not detect elixir"
+    err "detect_stack fixture $fixture_name: expected $expected, got $actual"
   fi
-fi
+done
 
-FIXTURE_SWIFT="$KIT_DIR/scripts/fixtures/minimal-swift"
-if [[ -d "$FIXTURE_SWIFT" ]]; then
-  if kit_detect_stack "$FIXTURE_SWIFT" 2>/dev/null | jq -e '.primary_stack == "swift"' >/dev/null; then
-    ok "detect_stack fixture swift"
-  else
-    err "detect_stack fixture did not detect swift"
-  fi
-fi
+# ── shell scripts parse (a nested heredoc broke `kit intake` silently) ───────
+for script in "$KIT_DIR"/scripts/kit "$KIT_DIR"/scripts/*.sh "$KIT_DIR"/scripts/lib/*.sh \
+  "$KIT_DIR"/hooks/*.sh "$KIT_DIR"/hooks/lib/*.sh "$KIT_DIR"/hooks/cursor/*.sh; do
+  [[ -f "$script" ]] || continue
+  bash -n "$script" 2>/dev/null || err "shell syntax error: ${script#"$KIT_DIR"/}"
+done
+ok "shell scripts parse (bash -n)"
 
-FIXTURE_KOTLIN="$KIT_DIR/scripts/fixtures/minimal-kotlin"
-if [[ -d "$FIXTURE_KOTLIN" ]]; then
-  if kit_detect_stack "$FIXTURE_KOTLIN" 2>/dev/null | jq -e '.primary_stack == "kotlin"' >/dev/null; then
-    ok "detect_stack fixture kotlin"
-  else
-    err "detect_stack fixture did not detect kotlin"
-  fi
+# ── intake smoke test ────────────────────────────────────────────────────────
+INTAKE_TMP="$(mktemp -d)"
+mkdir -p "$INTAKE_TMP/.ai"
+printf 'provider: github\n' > "$INTAKE_TMP/.ai/tracker.yaml"
+if (cd "$INTAKE_TMP" && printf 'Smoke title\n\nBody.\n' \
+      | bash "$KIT_DIR/scripts/intake-work-item.sh" GH-1 --paste >/dev/null 2>&1) \
+   && [[ -f "$INTAKE_TMP/.ai/work/GH-1-analysis.md" ]]; then
+  ok "intake writes .ai/work/{ref}-analysis.md"
+else
+  err "intake did not write .ai/work/GH-1-analysis.md"
 fi
-
-FIXTURE_REACT_NATIVE="$KIT_DIR/scripts/fixtures/minimal-react-native"
-if [[ -d "$FIXTURE_REACT_NATIVE" ]]; then
-  if kit_detect_stack "$FIXTURE_REACT_NATIVE" 2>/dev/null | jq -e '.primary_stack == "react-native"' >/dev/null; then
-    ok "detect_stack fixture react-native"
-  else
-    err "detect_stack fixture did not detect react-native"
-  fi
-fi
-
-FIXTURE_FLUTTER="$KIT_DIR/scripts/fixtures/minimal-flutter"
-if [[ -d "$FIXTURE_FLUTTER" ]]; then
-  if kit_detect_stack "$FIXTURE_FLUTTER" 2>/dev/null | jq -e '.primary_stack == "flutter"' >/dev/null; then
-    ok "detect_stack fixture flutter"
-  else
-    err "detect_stack fixture did not detect flutter"
-  fi
-fi
+rm -rf "$INTAKE_TMP"
 
 # ── validate-handoff fixture ──────────────────────────────────────────────────
 HANDOFF_EXAMPLE="$KIT_DIR/docs/examples/work/GH-58-handoff.example.md"
