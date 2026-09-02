@@ -69,6 +69,20 @@ Global Cursor rules and project rules override kit defaults when stricter.
 
 **Tool adapters:** [tool-adapters.md](tool-adapters.md) — Codex, Antigravity, Cursor, Claude Code install map in `registry/tool-targets.yaml`.
 
+## Inner vs outer harness
+
+The **host** (Cursor, Claude Code, Codex, …) owns the inner loop: model, tools, sandbox, compaction.
+
+This kit owns the **outer** harness only: guidelines, skills, file-based findings/lessons, hooks where the host supports them, and `kit check-patterns`.
+
+| Host | Outer sensors |
+|------|----------------|
+| Claude Code, Cursor | Kit hooks + `check-patterns` at verify |
+| Codex | Host sandbox + `check-patterns` at verify (no kit hook install) |
+| Antigravity | Not shipped; use `check-patterns` at verify |
+
+See [hooks.md](hooks.md) and [tool-adapters.md](tool-adapters.md).
+
 ## Extending
 
 **New stack:** add `skills/stacks/foo/`, one line in `registry/stacks.yaml`, compile.

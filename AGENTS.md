@@ -16,7 +16,8 @@ Supplements the developer's global rules (`~/.cursor/rules/`). **On conflict, us
 2. If a ticket exists: set **work_ref** and **spec_key** — [docs/guidelines/TRACKER.md](docs/guidelines/TRACKER.md).
 3. Read the matching guideline from `docs/guidelines/`.
 4. Detect stack — `./scripts/kit detect-stack --write-profile`; load `skills/stacks/<id>/` (see `docs/stack-detection.md`).
-5. For non-trivial work: write a **spec** (`.ai/specs/*-spec.md` or legacy `.ai/issue-*-spec.md`), get approval, then plan and code — see [docs/guidelines/SPECS.md](docs/guidelines/SPECS.md).
+5. Load feedback: `.ai/work/{work_ref}-findings.md` (treat `open`/`regressed` **block** rows as spec-weight constraints) and up to 20 stack-matching lessons from `.ai/lessons.md` plus `~/.config/agent-dev-kit/lessons.yaml`.
+6. For non-trivial work: write a **spec** (`.ai/specs/*-spec.md` or legacy `.ai/issue-*-spec.md`), get approval, then plan and code — see [docs/guidelines/SPECS.md](docs/guidelines/SPECS.md).
 
 ## Guidelines index
 
@@ -47,7 +48,8 @@ Checklist: universal `registry/dod.yaml` + stack `skills/stacks/<id>/profile.yam
 Store in `.ai/` (target project, not committed to kit by default):
 
 - `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-spec.md`
-- `.ai/work/{work_ref}-analysis.md`, `-plan.md`, `-verification.md`
+- `.ai/work/{work_ref}-analysis.md`, `-plan.md`, `-verification.md`, `-findings.md`
+- `.ai/lessons.md` (project lessons; prefer committing this file)
 - `.ai/task-*.md` when no tracker
 - `.ai/pr-summary.md`
 

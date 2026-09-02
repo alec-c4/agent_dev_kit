@@ -39,6 +39,17 @@ EOF
 ./scripts/kit status --all --json
 ./scripts/kit status --watch
 ./scripts/kit board
+./scripts/kit findings list [work_ref] [--open]
+./scripts/kit findings append --work-ref GH-58 --fingerprint FP --severity block|warn --summary S --evidence E
+./scripts/kit findings gate --work-ref GH-58 [--remediation .ai/work/GH-58-plan.md]
+./scripts/kit findings close F-1 --work-ref GH-58 --from-sensor
+./scripts/kit findings wontfix F-1 --work-ref GH-58 --human
+./scripts/kit lessons list [--stack rails]
+./scripts/kit lessons propose --fingerprint FP --guide G --sensor S [--stack rails]
+./scripts/kit lessons ack L-1
+./scripts/kit lessons promote L-1 --global
+./scripts/kit check-patterns [--work-ref GH-58] [--list-sensors]
+./scripts/kit register [path]
 ./scripts/kit run install.sh --dry-run --target=cursor
 ```
 

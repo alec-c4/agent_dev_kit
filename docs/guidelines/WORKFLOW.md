@@ -10,7 +10,11 @@ Structured flow from task to merge. Works with any AI assistant — read [AGENTS
 4. **TDD by default** — tests trace to spec acceptance criteria. See [TESTING.md](TESTING.md).
 5. **Comprehension before verify** — human understands what ships; handoff + Q&A. See [COMPREHENSION.md](COMPREHENSION.md).
 6. **Review before commit** — completion verification by a **separate agent** first. See [VERIFICATION.md](VERIFICATION.md), then [REVIEW.md](REVIEW.md).
-7. **Guidelines compound** — when AI repeats a mistake, update the relevant guideline.
+7. **Guidelines compound** — when AI repeats a mistake, record a finding, then a lesson, then (if shared) a catalog fingerprint.
+
+## Feedback loop
+
+Before plan, implement, verify, or review: read `.ai/work/{work_ref}-findings.md`. **block** + `open`/`regressed` has the same weight as spec acceptance criteria. Cite every such `F-*` in a remediations table. Writers never set `status: closed` — only `./scripts/kit findings close F-n --work-ref {work_ref} --from-sensor` after the sensor passes, or `./scripts/kit findings wontfix F-n --work-ref {work_ref} --human`. Verification runs `./scripts/kit findings gate --work-ref {work_ref}`, which exits non-zero while any `block` row is still open.
 
 ## Pipeline overview
 
@@ -54,7 +58,10 @@ Store session planning files in the **target project** (not in this kit repo). S
 
 ```
 .ai/
+  kit.yaml                  # optional — spec_language, process_references, gates, wiki_index
   tracker.yaml              # optional — provider, url_template (see docs/examples/tracker.yaml.example)
+  index.md                  # optional — wiki_index: true (see SPECS.md § Index and log)
+  log.md                    # optional — wiki_index: true
   specs/
     export-csv-spec.md        # current spec (spec_key lineage)
   archive/
@@ -95,6 +102,7 @@ See [.ai/README.md](../../.ai/README.md) for artifact naming. Worked examples: [
 
 - **New task:** create spec at version **1.0** — `.ai/specs/{spec_key}-spec.md` (recommended) or legacy `.ai/issue-{n}-spec.md` — [SPECS.md](SPECS.md).
 - **Fix or update:** open existing spec by **spec_key**, bump version, Changelog, archive old file, actualize ACs.
+- If `.ai/kit.yaml` sets `wiki_index: true`, update `.ai/index.md` and append to `.ai/log.md` in the same step — [SPECS.md § Index and log](SPECS.md#index-and-log).
 - **Present spec to the human. Wait for approval before plan or code.**
 
 ### 3. Plan
@@ -157,6 +165,7 @@ Detected: [from stack profile]
 - [ ] All spec AC IDs covered
 - [ ] Tests + lint per VERIFICATION.md
 - [ ] Gate suite from `.ai/kit.yaml` / [registry/gates.yaml](../../registry/gates.yaml) planned
+- [ ] `process_references` honored (default `omit` — [AGENTS.md](../../AGENTS.md#shipped-language))
 ```
 
 ### 4. Branch

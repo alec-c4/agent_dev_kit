@@ -99,3 +99,17 @@ my-app/.claude/
 - Bloat `registry/stacks.yaml` beyond detection + `stack_skill`.
 - Duplicate tooling in `commands/` — use `stack-loader` and stack profiles.
 - Commit profile/registry YAML without running `./scripts/kit compile`.
+
+## Failure pattern catalog
+
+Add a fingerprint to `registry/failure-patterns.yaml`:
+
+```yaml
+- fingerprint: local-example-token
+  stack: "*"
+  guide: One sentence the agent should follow next time.
+  tokens:
+    - example_token
+```
+
+Ship a kit PR. Do not paste customer paths, secrets, or proper names. Project-only lessons stay in `.ai/lessons.md`.
