@@ -18,7 +18,9 @@ if echo "$KIT_HOOK_COMMAND" | grep -qE 'rm\s+-[a-zA-Z]*r[a-zA-Z]*\s+/'; then
     "An absolute path can reach outside the project and delete unrelated files." \
     "Use a path relative to the project root, and confirm the target with the human first."
 fi
-if echo "$KIT_HOOK_COMMAND" | grep -qE 'git\s+push.*(--force|-f)(\s|$)'; then
+# `-f` must be its own flag: a branch called `fix-f` is not a force push, and
+# `--force-with-lease` is the remedy this hook recommends.
+if echo "$KIT_HOOK_COMMAND" | grep -qE 'git\s+push\b.*(\s--force(\s|$)|\s-[a-zA-Z]*f[a-zA-Z]*(\s|$))'; then
   kit_block "git push --force" \
     "A plain force push overwrites remote commits that other people may already have." \
     "Use 'git push --force-with-lease' after the human confirms the rewrite."
