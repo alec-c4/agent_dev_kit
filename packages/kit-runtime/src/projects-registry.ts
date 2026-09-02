@@ -1,4 +1,14 @@
-import { existsSync, mkdirSync, openSync, closeSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  openSync,
+  closeSync,
+  readFileSync,
+  renameSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { homedir } from "node:os";
 
@@ -20,6 +30,17 @@ export function defaultProjectsPath(): string {
 
 function nowIso(): string {
   return new Date().toISOString();
+}
+
+/** No kit command holds the registry lock for longer than this. */
+const STALE_LOCK_MS = 30_000;
+
+function lockAgeMs(lockPath: string): number {
+  try {
+    return Date.now() - statSync(lockPath).mtimeMs;
+  } catch {
+    return 0;
+  }
 }
 
 function slugFromPath(path: string): string {
@@ -86,8 +107,20 @@ export function saveProjects(filePath: string, data: ProjectsFile): void {
     try {
       lockFd = openSync(lockPath, "wx");
     } catch {
+      // A crash between open and unlink leaves the lock behind and would wedge
+      // every later write. Break a lock that no live writer could still hold.
+      if (lockAgeMs(lockPath) > STALE_LOCK_MS) {
+        try {
+          unlinkSync(lockPath);
+          continue;
+        } catch {
+          /* another writer won the race — fall through and keep waiting */
+        }
+      }
       if (Date.now() - started > 5000) {
-        throw new Error(`Timeout acquiring lock ${lockPath}`);
+        throw new Error(
+          `Timeout acquiring lock ${lockPath} — remove it if no kit command is running`,
+        );
       }
       Bun.sleepSync(20);
     }
