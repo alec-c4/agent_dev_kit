@@ -30,6 +30,8 @@ Installed to `~/.claude/agents/` — see [agents/](agents/README.md): developer,
 | `/review` | [skills/review/SKILL.md](skills/review/SKILL.md) | [REVIEW.md](docs/guidelines/REVIEW.md) checklist |
 | `/ship` | [skills/ship/SKILL.md](skills/ship/SKILL.md) | PR summary — confirm before push/merge |
 | `/resolve-task` | [skills/resolve-task/SKILL.md](skills/resolve-task/SKILL.md) | Intake → feature/fix pipeline end-to-end |
+| `/spec-lint` | [skills/spec-lint/SKILL.md](skills/spec-lint/SKILL.md) | Periodic audit of `.ai/specs/` — not a commit gate |
+| `/retrospect` | [skills/retrospect/SKILL.md](skills/retrospect/SKILL.md) | Closed findings → project lessons or a draft catalog entry |
 
 Natural language uses the **same steps** — commands bypass intent classification only.
 

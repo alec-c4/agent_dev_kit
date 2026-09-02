@@ -25,6 +25,8 @@ Deployed to `./.agents/workflows/` via `./scripts/kit install --target=antigravi
 | `review` | [skills/review/SKILL.md](skills/review/SKILL.md) | `/review` |
 | `ship` | [skills/ship/SKILL.md](skills/ship/SKILL.md) | `/ship` |
 | `resolve-task` | [skills/resolve-task/SKILL.md](skills/resolve-task/SKILL.md) | `/resolve-task` |
+| `spec-lint` | [skills/spec-lint/SKILL.md](skills/spec-lint/SKILL.md) | `/spec-lint` |
+| `retrospect` | [skills/retrospect/SKILL.md](skills/retrospect/SKILL.md) | `/retrospect` |
 
 Codex uses `$feature`, `$resolve-task`, … from `.agents/skills/` after `./scripts/kit deploy-skills --pack=core`.
 
