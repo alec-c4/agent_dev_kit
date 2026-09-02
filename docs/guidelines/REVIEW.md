@@ -42,7 +42,7 @@ See [SPECS.md](SPECS.md).
 
 ## Review areas
 
-Check all six areas. Cite `file:line` for every finding.
+Check all seven areas. Cite `file:line` for every finding.
 
 | Area | Focus |
 |------|-------|
@@ -51,7 +51,9 @@ Check all six areas. Cite `file:line` for every finding.
 | Code quality | Complexity, duplication, dead code, performance (N+1, etc.) |
 | Security | Step 0 answers + [rules in CODING.md](CODING.md#security-summary) |
 | Documentation | Public changes documented; docs match implementation ([VERIFICATION.md](VERIFICATION.md)) |
+| Durable findings | Promote non-obvious facts to spec/guidelines; append review blockers to `.ai/work/{work_ref}-findings.md` — [VERIFICATION.md](VERIFICATION.md#findings-ledger) |
 | Commits | [COMMITS.md](COMMITS.md) — format, scope, no attribution |
+| Shipped language | No plan/stage/generated-doc jargon when `process_references` is `omit` (default) — [AGENTS.md](../../AGENTS.md#shipped-language) |
 
 ## Definition of Done
 

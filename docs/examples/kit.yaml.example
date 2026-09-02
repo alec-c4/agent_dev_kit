@@ -1,6 +1,21 @@
 # Example project kit config (copy to .ai/kit.yaml)
 spec_language: en
 
+# omit (default): no implementation-plan / stage / generated-doc jargon in
+# product code, commits, PRs, or public docs. Planning stays under .ai/.
+# allow: kit does not add this restriction (stricter user rules still win).
+process_references: omit
+
+# false (default): agents don't maintain .ai/index.md / .ai/log.md.
+# true: agents keep a spec registry (index.md) and append-only event
+# log (log.md) in sync on every spec create/bump — see
+# docs/guidelines/SPECS.md#index-and-log. Worth it on projects with
+# many specs; skip on small ones.
+wiki_index: false
+
+# default true. Set false to skip kit check-patterns (e.g. this kit repo).
+pattern_checks: true
+
 gates:
   - id: tests
   - id: code_quality

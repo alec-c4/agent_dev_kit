@@ -219,6 +219,12 @@ This supplements Step 0 in [INTENT-ROUTING.md](INTENT-ROUTING.md) — clarify is
 - Override: project `.ai/kit.yaml` → `spec_language`, or the language the human writes the request in when no config exists.
 - Planning artifacts under `.ai/` may use `spec_language`. **Public** committed product docs stay English (or kit i18n) per documentation standards.
 
+### Process references
+
+- Default: `process_references: omit` (missing file or key).
+- When `omit`, do not leak plan/stage/generated-doc jargon into product code, commits, or public docs — [AGENTS.md](../../AGENTS.md#shipped-language).
+- Opt out: `process_references: allow` in `.ai/kit.yaml`.
+
 For **fix/update**, the Changelog row is mandatory. Annotate changed ACs with `*(added v1.1)*`, `*(modified v1.1)*`, `*(removed v2.0)*`.
 
 **Present the spec to the human. Wait for approval before writing the plan or code.**
@@ -240,6 +246,38 @@ specs/export-csv-spec.md **v1.1** (approved)
 ```
 
 In TDD Red phase, name tests after acceptance criteria: `AC-1: returns 201 when params valid`.
+
+## Index and log
+
+Optional, gated by `.ai/kit.yaml` → `wiki_index: true` (default `false` — see [kit.yaml.example](../examples/kit.yaml.example)). Skip entirely on small projects; the per-task search in ["How to find the spec to update"](#how-to-find-the-spec-to-update) is enough there. Worth turning on once `.ai/specs/` grows past a handful of files and cross-spec search stops being cheap.
+
+When enabled, maintain two files at the `.ai/` root:
+
+**`.ai/index.md`** — one row per current spec, kept as a flat catalog (not prose):
+
+```markdown
+| spec_key | status | version | milestone | related_spec_key |
+|----------|--------|---------|-----------|-------------------|
+| export-csv | approved | 1.1 | m1-export | — |
+```
+
+**`.ai/log.md`** — append-only, one line per event, oldest first, never rewritten:
+
+```markdown
+- 2026-06-10 — spec created — export-csv v1.0
+- 2026-06-14 — spec bumped — export-csv v1.1 (fix: CSV encoding)
+- 2026-06-14 — verified PASS — export-csv v1.1
+```
+
+Update both **at the same points** the spec itself changes:
+
+| Event | index.md | log.md |
+|-------|----------|--------|
+| New spec (v1.0) | Add row | Append `spec created` |
+| Version bump | Update `status`/`version` | Append `spec bumped` with summary |
+| Verification PASS/FAIL | Update `status` if it gates progress | Append `verified PASS/FAIL` |
+
+Do not treat `wiki_index` as a spec-lint substitute — [`spec-lint`](../../skills/spec-lint/SKILL.md) audits `.ai/specs/` for rot whether or not `wiki_index` is on; when it's on, spec-lint also checks `.ai/index.md` for missing rows.
 
 ## Multi-agent verification
 

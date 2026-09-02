@@ -32,6 +32,20 @@ Pragmatic standards for all stacks. Stack-specific overlays live in `registry/st
 - Explain **why**, not **what**.
 - Comment non-obvious constraints, workarounds, and business rules only.
 
+## Shipped language
+
+Default `.ai/kit.yaml` → `process_references: omit` (also when the file or key is missing).
+
+Do **not** put the following in product code, comments, or public docs (`README`, changelog, gem/package metadata):
+
+- References to an implementation plan, handoff, or other generated `.ai/work/*` artifacts
+- Delivery `stage` / `Phase N` labels as product copy
+- Kit jargon (`AC-1`, `work_ref`, DoD) as user-facing or committed product text
+
+Planning artifacts stay under `.ai/`. Opt out with `process_references: allow`. User global rules that are stricter still win.
+
+See [AGENTS.md](../../AGENTS.md#shipped-language) and [COMMITS.md](COMMITS.md#shipped-language).
+
 ## Security (summary)
 
 See [REVIEW.md](REVIEW.md) for the full checklist. Minimum bar:
