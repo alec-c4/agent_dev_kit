@@ -16,7 +16,7 @@ Claude Code loads `CLAUDE.md` automatically. **Canonical instructions:** [AGENTS
 
 ## Slash commands
 
-Installed to `~/.claude/commands/` and `~/.claude/skills/` via `./scripts/kit install --target=claude` (or `--target=all`).
+Installed to `~/.claude/skills/` via `./scripts/kit install --target=claude` (or `--target=all`). Each skill directory becomes a `/command`.
 
 ## Agents (optional personas)
 

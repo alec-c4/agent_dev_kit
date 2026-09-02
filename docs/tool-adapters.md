@@ -24,6 +24,8 @@ Install all supported targets:
 ./scripts/kit install --target=all
 ```
 
+Outer sensors: Claude Code and Cursor install kit hooks. Codex uses the host sandbox plus `./scripts/kit check-patterns` at verify. Antigravity hook wiring is not shipped.
+
 Legacy alias `--target=both` installs Claude Code + Cursor only.
 
 ## AGENTS.md merge order
@@ -81,7 +83,7 @@ Phase 2 deploys kit skills to `.agents/skills/` and workflow shortcuts per tool:
 | Tool | Skills (`deploy-skills`) | Shortcuts (`deploy-workflows`) |
 |------|--------------------------|--------------------------------|
 | Codex | `$feature`, `$fix`, … in `.agents/skills/` | — |
-| Claude Code | `~/.claude/skills/` | `/feature`, … in `~/.claude/commands/` |
+| Claude Code | `~/.claude/skills/` | `/feature`, … from the skill directory names |
 | Antigravity | `.agents/skills/` | `.agents/workflows/*.md` |
 
 See [commands/README.md](../commands/README.md) and [INTENT-ROUTING.md](guidelines/INTENT-ROUTING.md).
