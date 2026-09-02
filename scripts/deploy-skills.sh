@@ -2,7 +2,7 @@
 # deploy-skills.sh — Symlink pack skills into Agent Skills directories
 #
 # Usage:
-#   ./scripts/deploy-skills.sh --pack=core [--scope=global|project|both] [--dry-run]
+#   ./scripts/deploy-skills.sh --pack=core [--scope=global|project|both] [--dry-run] [--force]
 #   ./scripts/deploy-skills.sh --pack=rails --scope=project
 #   ./scripts/deploy-skills.sh --pack=core,rails --scope=both
 #
@@ -17,6 +17,8 @@ KIT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PACK=""
 SCOPE="project"
 DRY_RUN=false
+FORCE=false
+SKIPPED=0
 MODE="symlink"
 SYNC_AG_CLI=false
 ALSO_CLAUDE=false
@@ -28,6 +30,7 @@ for arg in "$@"; do
     --scope=*) SCOPE="${arg#--scope=}" ;;
     --copy) MODE="copy" ;;
     --dry-run) DRY_RUN=true ;;
+    --force) FORCE=true ;;
     --sync-antigravity-cli) SYNC_AG_CLI=true ;;
     --also-claude) ALSO_CLAUDE=true ;;
     --help|-h)
@@ -95,13 +98,32 @@ claude_skills_same_as_kit() {
   [[ -n "$resolved" && -n "$kit_resolved" && "$resolved" == "$kit_resolved" ]]
 }
 
+# A symlink at the destination is ours to repoint. A real directory is not:
+# it may be a skill the developer wrote by hand, and replacing it would delete
+# their work with no warning. Refuse those unless --force says otherwise.
+kit_owns_dest() {
+  local dest="$1"
+  [[ -L "$dest" ]] && return 0          # any symlink: previous deploy
+  [[ ! -e "$dest" ]] && return 0        # nothing there
+  return 1
+}
+
 link_or_copy() {
   local src="$1" dest="$2"
   if $DRY_RUN; then
-    echo "  [dry] $MODE $src -> $dest"
+    if kit_owns_dest "$dest" || $FORCE; then
+      echo "  [dry] $MODE $src -> $dest"
+    else
+      echo "  [dry] SKIP (not a kit symlink) $dest"
+    fi
     return
   fi
   mkdir -p "$(dirname "$dest")"
+  if ! kit_owns_dest "$dest" && ! $FORCE; then
+    echo "  skip: $dest exists and is not a kit symlink — pass --force to replace it" >&2
+    SKIPPED=$((SKIPPED + 1))
+    return
+  fi
   if [[ -e "$dest" || -L "$dest" ]]; then
     rm -rf "$dest"
   fi
@@ -168,6 +190,9 @@ for p in ${ORDERED_PACKS[@]+"${ORDERED_PACKS[@]}"}; do
 done
 
 echo
+if ((SKIPPED > 0)); then
+  log "Skipped $SKIPPED destination(s) that were not kit symlinks — rerun with --force to replace them"
+fi
 if ((${#ORDERED_PACKS[@]} > 0)); then
   log "Done (${#ORDERED_PACKS[@]} pack(s): ${ORDERED_PACKS[*]})"
 else
