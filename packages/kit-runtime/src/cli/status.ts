@@ -2,7 +2,7 @@
 /**
  * kit-status — scan .ai/ work items; optional --watch and --json.
  * Also upserts the current project into the global projects registry.
- * Honors `.ai/kit.yaml` (`spec_language`, `gates`); rejects `spec_locale`.
+ * Honors `.ai/kit.yaml` (`spec_language`, `process_references`, `gates`, `wiki_index`); rejects `spec_locale`.
  */
 import { resolve } from "node:path";
 import { watch } from "node:fs";
@@ -56,7 +56,9 @@ function emit(rows: WorkStatus[]) {
       JSON.stringify(
         {
           spec_language: kit.config.spec_language,
+          process_references: kit.config.process_references,
           gates: kit.config.gates,
+          wiki_index: kit.config.wiki_index,
           kit_yaml: kit.path,
           work: rows,
         },
@@ -71,7 +73,9 @@ function emit(rows: WorkStatus[]) {
   );
   console.error(
     `spec_language=${kit.config.spec_language}` +
-      (gateIds.length ? ` gates=[${gateIds.join(", ")}]` : " gates=[]"),
+      ` process_references=${kit.config.process_references}` +
+      (gateIds.length ? ` gates=[${gateIds.join(", ")}]` : " gates=[]") +
+      ` wiki_index=${kit.config.wiki_index}`,
   );
   console.log(formatStatusTable(rows));
 }
