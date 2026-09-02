@@ -22,25 +22,12 @@ skills:
   - resolve-task
   - tracker-sync
   - comprehension-check
-  # Stack profiles (tooling + DoD overlay per stack)
-  - stacks/django
-  - stacks/elixir
-  - stacks/fastapi
-  - stacks/flask
-  - stacks/go
-  - stacks/nextjs
-  - stacks/node
-  - stacks/nuxt
-  - stacks/python
-  - stacks/rails
-  - stacks/rust
-  - stacks/svelte
-  - stacks/sveltekit
-  - stacks/astro
-  - stacks/tauri
-  - stacks/swift
-  - stacks/kotlin
-  - stacks/react-native
-  - stacks/flutter
+  - retrospect
+  - spec-lint
 
+# Stack profiles are data, not Claude Code skills: they live at
+# skills/stacks/<id>/profile.yaml and are read by `stack-loader` and
+# `kit detect-stack`. Claude Code only discovers skills one directory deep
+# under a skills root, so listing them here would advertise skills that can
+# never load.
 # Review: docs/skills-review.md (human sign-off in PR, not in repo)

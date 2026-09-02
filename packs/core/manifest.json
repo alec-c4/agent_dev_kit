@@ -18,24 +18,7 @@
     "resolve-task",
     "tracker-sync",
     "comprehension-check",
-    "stacks/django",
-    "stacks/elixir",
-    "stacks/fastapi",
-    "stacks/flask",
-    "stacks/go",
-    "stacks/nextjs",
-    "stacks/node",
-    "stacks/nuxt",
-    "stacks/python",
-    "stacks/rails",
-    "stacks/rust",
-    "stacks/svelte",
-    "stacks/sveltekit",
-    "stacks/astro",
-    "stacks/tauri",
-    "stacks/swift",
-    "stacks/kotlin",
-    "stacks/react-native",
-    "stacks/flutter"
+    "retrospect",
+    "spec-lint"
   ]
 }
