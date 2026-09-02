@@ -79,7 +79,7 @@ Stack-specific topic content lives under `skills/` — not in guidelines.
 3. Run `./scripts/kit compile` and `./scripts/kit validate-skills --pack=my-pack`.
 4. Install: `./scripts/kit install --pack=core,my-pack` or `./scripts/kit deploy-skills --pack=my-pack`.
 
-Community packs: copy [packs/community/_template/](packs/community/_template/) → `packs/community/<id>/`.
+Community packs: copy [packs/community/_template/](../packs/community/_template/) → `packs/community/<id>/`.
 
 Official stack packs: `rails`, `node`, `python`, `go`, `elixir`, `devops`, `astro`, `tauri`, `swift`, `kotlin`, `react-native`, `flutter` — see [packs/README.md](../packs/README.md).
 

@@ -46,7 +46,7 @@ Use the highest step available. **Do not call tracker APIs** unless a human or a
 | 1. **Paste** | Always works | Copy ticket title + body into `.ai/work/{work_ref}-analysis.md` |
 | 2. **Single fetch** | Phase 2 — one task by ref | `intake-work-item.sh GH-58` → analysis (preferred over full list) |
 | 3. **CLI** | GitHub + `gh` installed | `gh issue view 42` → save to analysis |
-| 4. **Cache snapshot** | Phase 2 — many active tasks | Refresh `.ai/tracker-cache.json` — see [Optional tracker cache](#optional-tracker-cache) |
+| 4. **Cache snapshot** | Phase 2 — many active tasks | Refresh `.ai/tracker-cache.json` — see [Optional tracker cache](#optional-tracker-cache-phase-2) |
 | 5. **Export** | Team exports CSV/JSON | Human drops file; agent reads path noted in analysis |
 | 6. **MCP / API** | Optional, Phase 2+ | Skill or integration — same output: analysis file in `.ai/` |
 
