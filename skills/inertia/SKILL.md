@@ -12,9 +12,11 @@ Inertia is a **protocol** between server and SPA: the server returns a JSON page
 
 ## Server (any backend)
 
-- Render with the framework adapter (`Inertia.render` in Rails, equivalent in Node/PHP).
+- Render with the framework adapter — Rails: `render inertia: 'events/show', props: { event: }`;
+  a bare `render inertia: { event: }` resolves the component from the controller and action.
 - **Props** — only what the page needs; authorize before render.
-- **Shared data** (auth user, flash, locale) via adapter «share» hook — keep payloads small.
+- **Shared data** (auth user, flash, locale) — Rails: `inertia_share` in a base controller,
+  taking a hash, a lambda, or a block, with `if:` / `only:` / `except:` filters. Keep payloads small.
 - **Validation errors** — return `422` with field errors; client forms display them.
 - **Redirects** — standard HTTP redirects; Inertia follows on `X-Inertia` requests.
 - **Partial reloads** — refetch subset of props with `only` when documented in spec.
@@ -55,4 +57,5 @@ Load [svelte-patterns](../svelte-patterns/SKILL.md) when `@inertiajs/svelte` is 
 ## References
 
 - [Inertia.js](https://inertiajs.com/)
+- [Inertia Rails](https://inertia-rails.dev/)
 - [Inertia — Svelte](https://inertiajs.com/client-side-setup#svelte)

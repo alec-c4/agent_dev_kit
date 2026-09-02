@@ -1,6 +1,8 @@
 # Rails security
 
-- **Strong params** and explicit authorization (Pundit/CanCan) on every mutating action.
+- **Strong params** and explicit authorization (Pundit or CanCanCan) on every mutating action.
+- **Roles** via role_fu (or rolify in existing projects) — a role check is membership, never
+  a replacement for the policy check on the action.
 - **CSRF** on session forms; **Content-Security-Policy** when the app serves HTML.
 - **SQL** — bind parameters; avoid `send`/`constantize` on user input.
 - **Mass assignment** — `params.expect` / permitted attributes only.

@@ -10,7 +10,8 @@ Load after [stacks/astro](../stacks/astro/SKILL.md).
 
 ## Structure
 
-- **Content collections** for blog/docs with typed schemas (`src/content/config.ts`).
+- **Content collections** for blog/docs with typed schemas in `src/content.config.ts`;
+  each collection declares a `loader` (Content Layer) plus a Zod `schema`.
 - **Layouts** for shared chrome; pages stay thin.
 - **Components** — static by default; add client directives only when interactivity is required.
 
@@ -21,7 +22,8 @@ Load after [stacks/astro](../stacks/astro/SKILL.md).
 
 ## Assets and performance
 
-- Use `@astrojs/image` or built-in assets when available; lazy-load heavy client islands.
+- Images via `astro:assets` — `<Image />`, `<Picture />` for multiple formats, `getImage()`
+  outside HTML. The `@astrojs/image` integration is deprecated. Lazy-load heavy client islands.
 - Run `astro check` and project typecheck from stack profile before PR.
 
 ## References

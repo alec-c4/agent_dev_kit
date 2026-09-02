@@ -12,7 +12,9 @@ Use when exposing app capabilities to MCP clients (Cursor, Claude Desktop, etc.)
 
 - **Least privilege** — each tool scoped to one action; validate args server-side.
 - **No secrets in responses** — redact tokens and PII from tool output.
-- **Transport** — stdio for local dev; HTTP/SSE only with auth when remote.
+- **Transport** — the spec defines two: **stdio** for a client-launched local process, and
+  **Streamable HTTP** for remote (one endpoint, replies as JSON or a request-scoped SSE
+  stream). The separate HTTP+SSE transport of earlier revisions is gone. Remote means auth.
 - **Versioning** — breaking tool schema changes need a major bump or new tool name.
 - **Observability** — structured logs per tool call; rate-limit public endpoints.
 

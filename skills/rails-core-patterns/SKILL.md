@@ -22,7 +22,11 @@ Load after [stacks/rails](../stacks/rails/SKILL.md). Tooling from `profile.yaml`
 
 ## Security and i18n
 
-- Strong params; authorize with policy layer (Pundit/CanCan) when project uses it.
+- Strong params on every mutating action.
+- **Authorization** (what this user may do) — a policy layer: **Pundit** or **CanCanCan**.
+  The original `cancan` gem has not shipped since 2013; `cancancan` is the maintained fork.
+- **Roles** (what this user is) — **role_fu**; **rolify** is the alternative when a project
+  already uses it. Roles answer membership; they are not a substitute for a policy check.
 - User-visible strings via i18n when project uses locales ([profile dod_overlay](../stacks/rails/profile.yaml)).
 
 ## References
