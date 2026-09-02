@@ -17,12 +17,10 @@ function fail(msg: string): never {
   process.exit(1);
 }
 
-const provider = cfg.provider || "none";
-if (!existsSync(join(projectDir, ".ai", "tracker.yaml"))) {
-  // match python: default provider github when no yaml — actually python sets github if no file
-}
-const effectiveProvider =
-  existsSync(join(projectDir, ".ai", "tracker.yaml")) ? provider : "github";
+// With no tracker.yaml the Python implementation defaults to github; match it.
+const effectiveProvider = existsSync(join(projectDir, ".ai", "tracker.yaml"))
+  ? cfg.provider || "none"
+  : "github";
 
 if (effectiveProvider === "none") {
   fail("tracker provider is none — set provider: github in .ai/tracker.yaml");
@@ -45,13 +43,25 @@ const maxItems = Number(cfg.cache_max_items || 50);
 const statuses = (cfg.cache_statuses || ["open"]).map((s) => String(s).toLowerCase());
 const workRefFormat = cfg.work_ref_format || "GH-{n}";
 
+// `gh issue list --state` takes one of open|closed|all. Ask for what
+// cache_statuses actually wants, otherwise a `closed` config silently
+// produced an empty cache.
+const wantsOpen = statuses.includes("open");
+const wantsClosed = statuses.includes("closed");
+const ghState =
+  !statuses.length || (wantsOpen && wantsClosed)
+    ? "all"
+    : wantsClosed && !wantsOpen
+      ? "closed"
+      : "open";
+
 const list = Bun.spawnSync(
   [
     "gh",
     "issue",
     "list",
     "--state",
-    "open",
+    ghState,
     "--limit",
     String(maxItems),
     "--json",
@@ -63,12 +73,17 @@ if (list.exitCode !== 0) {
   fail("gh issue list failed — check repo context and gh auth");
 }
 
-const issues = JSON.parse(list.stdout.toString()) as Array<{
+let issues: Array<{
   number: number;
   title?: string;
   state?: string;
   url?: string;
 }>;
+try {
+  issues = JSON.parse(list.stdout.toString());
+} catch {
+  fail("gh issue list returned output that is not JSON");
+}
 
 const items = [];
 for (const issue of issues) {

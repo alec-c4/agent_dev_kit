@@ -42,6 +42,11 @@ export function loadTrackerConfig(projectDir: string): TrackerConfig {
   }
 }
 
+/** `..` and absolute paths would escape `.ai/` — keep artifacts inside it. */
+function safeSegment(value: string): string {
+  return value.replace(/[/\\]/g, "-").replace(/\.\./g, "-");
+}
+
 export function workArtifactPath(
   projectDir: string,
   workRef: string,
@@ -49,8 +54,8 @@ export function workArtifactPath(
 ): string {
   const cfg = loadTrackerConfig(projectDir);
   const rel = cfg.work_filename
-    .replaceAll("{work_ref}", workRef)
-    .replaceAll("{kind}", kind);
+    .replaceAll("{work_ref}", safeSegment(workRef))
+    .replaceAll("{kind}", safeSegment(kind));
   return join(".ai", rel);
 }
 
