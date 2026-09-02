@@ -12,7 +12,7 @@
       "flutter analyze"
     ],
     "format": [
-      "dart format --set-exit-if-changed ."
+      "dart format -o none --set-exit-if-changed ."
     ],
     "build": [
       "flutter build apk --debug"

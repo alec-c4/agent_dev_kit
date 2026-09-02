@@ -10,7 +10,8 @@ tooling:
   - dart analyze
   - flutter analyze
   format:
-  - dart format --set-exit-if-changed .
+  # -o none makes this a check: report the diff without rewriting the tree
+  - dart format -o none --set-exit-if-changed .
   build:
   - flutter build apk --debug
 skills:

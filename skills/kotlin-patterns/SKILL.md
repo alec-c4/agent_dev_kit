@@ -22,7 +22,9 @@ Load after [stacks/kotlin](../stacks/kotlin/SKILL.md).
 
 ## Android (when applicable)
 
-- UI state in ViewModel / presenter layer; collect flows with lifecycle-aware APIs.
+- UI state in ViewModel / presenter layer; collect flows with lifecycle-aware APIs —
+  `collectAsStateWithLifecycle()` in Compose, `repeatOnLifecycle(STARTED)` in Views.
+  Never a bare `collect` in a composable or `launchWhenStarted`.
 - No secrets in `BuildConfig` committed to git; use local properties or CI secrets.
 - Minimize work on main thread; use `Dispatchers.IO` for blocking IO.
 

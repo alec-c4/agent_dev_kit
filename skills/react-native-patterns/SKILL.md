@@ -23,7 +23,9 @@ Load after [stacks/react-native](../stacks/react-native/SKILL.md).
 ## Native and platform
 
 - Prefer **Expo modules** or well-maintained libraries before custom native code.
-- Custom **native modules** — thin bridges; validate inputs; document threading expectations.
+- Custom **native modules** — keep them thin, validate inputs, document threading.
+  The New Architecture (Fabric, TurboModules, JSI) is the default since 0.76, so write
+  new modules as **TurboModules**; the legacy bridge is opt-out, not the target.
 - Permissions requested in context with rationale; handle denied states in UI.
 
 ## Security

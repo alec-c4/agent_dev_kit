@@ -17,6 +17,8 @@ Load after [stacks/go](../stacks/go/SKILL.md).
 ## HTTP
 
 - Standard library `net/http` or chi/echo per project — one router style per repo.
+- Since Go 1.22 `ServeMux` matches methods and path wildcards (`GET /posts/{id}`,
+  `{rest...}`), so a new service often needs no third-party router.
 - Middleware for logging, auth, recovery.
 
 ## Testing
