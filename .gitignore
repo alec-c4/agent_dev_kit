@@ -14,3 +14,10 @@ __pycache__/
 
 # OS
 .DS_Store
+
+# Node / Bun (kit-runtime devDependencies for typecheck)
+node_modules/
+
+# Session planning artifacts — belong to the working repo, not the kit
+# (see AGENTS.md § Planning artifacts)
+.ai/

@@ -9,6 +9,11 @@
   "scripts": {
     "detect-stack": "bun run src/cli/detect-stack.ts",
     "test": "bun test",
-    "test:golden": "bun test test/detect-stack.golden.test.ts"
+    "test:golden": "bun test test/detect-stack.golden.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.6.0"
   }
 }
