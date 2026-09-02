@@ -4,14 +4,24 @@ import { resolve } from "node:path";
 import { detect, kitDirFromImportMeta } from "../src/detect-stack.ts";
 
 const kit = kitDirFromImportMeta(import.meta.url);
-const fixtures = [
-  "minimal-rails",
-  "minimal-elixir",
-  "minimal-swift",
-  "minimal-kotlin",
-  "minimal-react-native",
-  "minimal-flutter",
-] as const;
+/** Fixture directory → the stack `detection_order` must resolve it to. */
+const fixtures: Record<string, string> = {
+  "minimal-rails": "rails",
+  "minimal-elixir": "elixir",
+  "minimal-swift": "swift",
+  "minimal-kotlin": "kotlin",
+  "minimal-react-native": "react-native",
+  "minimal-flutter": "flutter",
+  "minimal-node": "node",
+  // `files` is an AND match: these once required every listed file at once and
+  // resolved to null. `tauri` sat after `node`, so it never won on a repo with
+  // a package.json.
+  "minimal-fastapi": "fastapi",
+  "minimal-django": "django",
+  "minimal-flask": "flask",
+  "minimal-python": "python",
+  "minimal-tauri": "tauri",
+};
 
 function pythonDetect(fixtureDir: string): Record<string, unknown> {
   const r = spawnSync(
@@ -37,13 +47,13 @@ function withoutDetectedAt(profile: Record<string, unknown>): Record<string, unk
 }
 
 describe("detect-stack golden parity", () => {
-  for (const name of fixtures) {
-    test(`${name}: Bun matches Python (sans detected_at)`, () => {
+  for (const [name, expected] of Object.entries(fixtures)) {
+    test(`${name}: resolves to ${expected}, Bun matches Python`, () => {
       const cwd = resolve(kit, "scripts/fixtures", name);
       const bunProfile = detect(cwd, kit);
       const pyProfile = pythonDetect(cwd);
       expect(withoutDetectedAt(bunProfile)).toEqual(withoutDetectedAt(pyProfile));
-      expect(bunProfile.primary_stack).toBeTruthy();
+      expect(bunProfile.primary_stack).toBe(expected);
     });
   }
 });

@@ -1,0 +1,5 @@
+{
+  "name": "minimal-tauri",
+  "private": true,
+  "dependencies": { "@tauri-apps/api": "^2.0.0" }
+}

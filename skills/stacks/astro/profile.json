@@ -22,7 +22,14 @@
     ],
     "recommended": [
       "astro-patterns"
-    ]
+    ],
+    "if_file": {
+      "src-tauri/Cargo.toml": {
+        "skills": [
+          "tauri-patterns"
+        ]
+      }
+    }
   },
   "mcp_suggest": [],
   "dod_overlay": [

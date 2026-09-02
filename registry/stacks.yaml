@@ -12,13 +12,13 @@ detection_order:
   - astro
   - react-native
   - flutter
+  - tauri
   - node
   - fastapi
   - django
   - flask
   - python
   - go
-  - tauri
   - swift
   - kotlin
   - rust
@@ -68,25 +68,25 @@ stacks:
 
   fastapi:
     detect:
-      files: [pyproject.toml, requirements.txt]
+      any_files: [pyproject.toml, requirements.txt]
       content_match: fastapi
     stack_skill: stacks/fastapi
 
   django:
     detect:
-      files: [pyproject.toml, requirements.txt, manage.py]
+      any_files: [pyproject.toml, requirements.txt, manage.py]
       content_match: django
     stack_skill: stacks/django
 
   flask:
     detect:
-      files: [pyproject.toml, requirements.txt]
+      any_files: [pyproject.toml, requirements.txt]
       content_match: flask
     stack_skill: stacks/flask
 
   python:
     detect:
-      files: [pyproject.toml, requirements.txt]
+      any_files: [pyproject.toml, requirements.txt]
     stack_skill: stacks/python
 
   go:

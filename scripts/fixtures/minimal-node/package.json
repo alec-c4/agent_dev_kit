@@ -1,0 +1,5 @@
+{
+  "name": "minimal-node",
+  "private": true,
+  "devDependencies": { "vitest": "^2.0.0" }
+}

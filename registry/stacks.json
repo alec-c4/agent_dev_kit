@@ -10,13 +10,13 @@
     "astro",
     "react-native",
     "flutter",
+    "tauri",
     "node",
     "fastapi",
     "django",
     "flask",
     "python",
     "go",
-    "tauri",
     "swift",
     "kotlin",
     "rust"
@@ -87,7 +87,7 @@
     },
     "fastapi": {
       "detect": {
-        "files": [
+        "any_files": [
           "pyproject.toml",
           "requirements.txt"
         ],
@@ -97,7 +97,7 @@
     },
     "django": {
       "detect": {
-        "files": [
+        "any_files": [
           "pyproject.toml",
           "requirements.txt",
           "manage.py"
@@ -108,7 +108,7 @@
     },
     "flask": {
       "detect": {
-        "files": [
+        "any_files": [
           "pyproject.toml",
           "requirements.txt"
         ],
@@ -118,7 +118,7 @@
     },
     "python": {
       "detect": {
-        "files": [
+        "any_files": [
           "pyproject.toml",
           "requirements.txt"
         ]
