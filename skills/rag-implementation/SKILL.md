@@ -2,6 +2,11 @@
 name: rag-implementation
 description: Retrieval-augmented generation — chunking, embeddings, vector store, and evaluation per stack.
 user-invocable: false
+metadata:
+  verify:
+    hex: ["oban"]
+    npm: ["bullmq"]
+    pypi: ["llama-index"]
 ---
 
 # RAG implementation

@@ -25,6 +25,7 @@
 #   ./scripts/kit findings list|append|gate|close|wontfix [--work-ref R] [--run CMD]
 #   ./scripts/kit lessons list|propose|ack|promote [--stack ID]
 #   ./scripts/kit check-patterns [--work-ref R] [--list-sensors]
+#   ./scripts/kit verify-docs [--skill NAME] [--no-links] [--json]
 #   ./scripts/kit run <script-name.sh> [args...]
 #
 # Examples (same from fish, zsh, or bash):
@@ -141,6 +142,10 @@ case "$CMD" in
   check-patterns)
     kit_bun check-patterns
     exec bun "$KIT_DIR/packages/kit-runtime/src/cli/check-patterns.ts" "$@"
+    ;;
+  verify-docs)
+    kit_bun verify-docs
+    exec bun "$KIT_DIR/packages/kit-runtime/src/cli/verify-docs.ts" "$@"
     ;;
   sync-rules)
     exec "$RUNNER" "$KIT_DIR/scripts/sync-cursor-user-rules.sh" "$@"

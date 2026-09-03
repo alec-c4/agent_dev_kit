@@ -2,6 +2,11 @@
 name: llm-integration
 description: Patterns for calling LLM APIs, streaming, structured output, and cost controls per stack.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["ruby-openai", "anthropic"]
+    npm: ["ai"]
+    pypi: ["anthropic", "openai"]
 ---
 
 # LLM integration

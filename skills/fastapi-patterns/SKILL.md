@@ -2,6 +2,9 @@
 name: fastapi-patterns
 description: FastAPI patterns — routers, dependency injection, Pydantic v2. Load after stacks/fastapi profile.
 user-invocable: false
+metadata:
+  verify:
+    pypi: ["fastapi", "pydantic", "httpx"]
 ---
 
 # FastAPI patterns

@@ -2,6 +2,9 @@
 name: nuxt-patterns
 description: Nuxt patterns — server routes, composables, SSR boundaries. Load after stacks/nuxt profile.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["nuxt", "vue-tsc"]
 ---
 
 # Nuxt patterns

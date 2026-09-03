@@ -2,6 +2,9 @@
 name: astro-patterns
 description: Astro patterns — content collections, islands, SSR/SSG boundaries. Load after stacks/astro profile.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["astro", "@astrojs/check"]
 ---
 
 # Astro patterns

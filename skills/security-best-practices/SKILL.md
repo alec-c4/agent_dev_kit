@@ -2,6 +2,10 @@
 name: security-best-practices
 description: Cross-stack security checklist and stack-specific hardening. Load from detect-stack topic_files or review step 0.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["brakeman", "bundler-audit"]
+    pypi: ["bandit", "pip-audit"]
 ---
 
 # Security best practices

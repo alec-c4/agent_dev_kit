@@ -2,6 +2,9 @@
 name: nextjs-patterns
 description: Next.js App Router patterns — RSC boundaries, caching, server actions. Load after stacks/nextjs profile.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["next"]
 ---
 
 # Next.js patterns

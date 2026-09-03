@@ -2,6 +2,11 @@
 name: rails-core-patterns
 description: Ruby on Rails patterns — compact namespacing, services, queries, N+1 avoidance. Load for Rails apps after stacks/rails profile.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["pundit", "cancancan", "role_fu", "rolify", "bullet"]
+    # named only as the alternative for projects already on it
+    accept: ["rolify"]
 ---
 
 # Rails core patterns

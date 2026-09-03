@@ -2,6 +2,9 @@
 name: react-native-patterns
 description: React Native patterns — navigation, lists, native modules, platform APIs. Load after stacks/react-native profile.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["react-native", "@shopify/flash-list", "@react-navigation/native"]
 ---
 
 # React Native patterns

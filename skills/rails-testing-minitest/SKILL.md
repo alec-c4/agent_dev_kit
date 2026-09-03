@@ -2,6 +2,9 @@
 name: rails-testing-minitest
 description: Minitest patterns for Rails — integration tests, fixtures. Load when test/ directory exists per stacks/rails profile.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["rails"]
 ---
 
 # Rails Minitest patterns

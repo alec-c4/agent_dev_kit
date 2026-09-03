@@ -2,6 +2,10 @@
 name: inertia
 description: Inertia.js patterns with Rails or Node backends. Load when inertia_rails or @inertiajs present per stack profile.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["inertia_rails"]
+    npm: ["@inertiajs/svelte", "@inertiajs/vue3", "@inertiajs/react"]
 ---
 
 # Inertia.js patterns

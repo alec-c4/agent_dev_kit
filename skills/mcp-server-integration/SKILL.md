@@ -2,6 +2,11 @@
 name: mcp-server-integration
 description: Model Context Protocol servers — tools, resources, auth, and deployment per stack.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["mcp", "fast-mcp"]
+    npm: ["@modelcontextprotocol/sdk"]
+    pypi: ["mcp"]
 ---
 
 # MCP server integration

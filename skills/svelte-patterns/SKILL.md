@@ -2,6 +2,9 @@
 name: svelte-patterns
 description: Svelte 5 patterns — runes, components, Inertia adapter. Load after stacks/svelte profile or with Inertia on Rails.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["svelte", "svelte-check", "@testing-library/svelte"]
 ---
 
 # Svelte patterns

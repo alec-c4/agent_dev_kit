@@ -50,6 +50,7 @@ EOF
 ./scripts/kit lessons ack L-1
 ./scripts/kit lessons promote L-1 --global
 ./scripts/kit check-patterns [--work-ref GH-58] [--list-sensors]
+./scripts/kit verify-docs [--skill rails-core-patterns] [--no-links] [--json]
 ./scripts/kit register [path]
 ./scripts/kit run install.sh --dry-run --target=cursor
 ```

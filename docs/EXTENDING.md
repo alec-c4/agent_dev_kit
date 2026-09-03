@@ -113,3 +113,28 @@ Add a fingerprint to `registry/failure-patterns.yaml`:
 ```
 
 Ship a kit PR. Do not paste customer paths, secrets, or proper names. Project-only lessons stay in `.ai/lessons.md`.
+
+## Keeping a skill's claims checkable
+
+A skill that names an external package should declare it, so a scheduled job can
+notice when that package stops moving:
+
+```yaml
+---
+name: rails-core-patterns
+description: ...
+metadata:
+  verify:
+    gem: ["pundit", "cancancan", "rolify"]
+    accept: ["rolify"]     # deliberately named as a legacy alternative
+---
+```
+
+Supported ecosystems: `gem`, `npm`, `pypi`, `hex`, `crate`. `accept` marks entries
+whose age is intentional so the check stays quiet about them.
+
+`./scripts/kit verify-docs` resolves every declaration against its registry and
+every documentation link in the skill. It fails only on a package the registry
+does not have, one that has not shipped in three years, or a dead link — a merely
+quiet package is reported, not failed, and an unreachable registry is never
+treated as a missing package.

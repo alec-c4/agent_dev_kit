@@ -2,6 +2,9 @@
 name: sveltekit-patterns
 description: SvelteKit patterns — load functions, form actions, hooks. Load after stacks/sveltekit profile.
 user-invocable: false
+metadata:
+  verify:
+    npm: ["@sveltejs/kit"]
 ---
 
 # SvelteKit patterns

@@ -2,6 +2,9 @@
 name: django-patterns
 description: Django patterns — models, views, ORM optimization. Load after stacks/django profile.
 user-invocable: false
+metadata:
+  verify:
+    pypi: ["django", "pytest-django"]
 ---
 
 # Django patterns

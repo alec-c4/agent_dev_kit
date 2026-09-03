@@ -2,6 +2,9 @@
 name: rails-testing-rspec
 description: RSpec patterns for Rails — request specs, factories, system tests. Load when spec/ directory exists per stacks/rails profile.
 user-invocable: false
+metadata:
+  verify:
+    gem: ["rspec-rails", "factory_bot_rails"]
 ---
 
 # Rails RSpec patterns

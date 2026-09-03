@@ -1,0 +1,29 @@
+name: Verify docs
+
+# Guidance about external tools rots silently: a gem stops shipping, a module
+# moves, an upstream deprecates an integration. Nothing in a normal push would
+# notice. This runs on a schedule instead of per-push so a throttled registry
+# never blocks a pull request.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  verify-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Verify declared packages and documentation links
+        run: ./scripts/kit verify-docs
+
+      - name: Report
+        if: failure()
+        run: |
+          echo "::warning::A package claim or documentation link in skills/ needs re-reading."
+          echo "Run ./scripts/kit verify-docs locally to see the detail."

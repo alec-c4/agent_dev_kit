@@ -2,6 +2,9 @@
 name: elixir-phoenix-patterns
 description: Elixir and Phoenix patterns — contexts, Ecto, LiveView. Load after stacks/elixir profile.
 user-invocable: false
+metadata:
+  verify:
+    hex: ["phoenix", "phoenix_live_view", "ecto"]
 ---
 
 # Elixir / Phoenix patterns
