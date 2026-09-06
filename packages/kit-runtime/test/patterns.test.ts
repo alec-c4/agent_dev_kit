@@ -108,3 +108,34 @@ sensor_patterns:
     expect(kitCatalog.every((p) => (p.tokens ?? []).length > 0)).toBe(true);
   });
 });
+
+describe("kit-owned paths are not project source", () => {
+  // A project that ran `kit deploy-skills --scope=project` has the kit's own
+  // skills on disk. Those legitimately spell out work_ref and spec_key, so
+  // scanning them raised a blocking finding on every run.
+  test("deployed skills and adapter dirs are skipped", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    for (const rel of [
+      [".agents", "skills", "feature"],
+      [".claude", "skills", "feature"],
+      [".cursor", "rules"],
+      [".codex", "prompts"],
+      [".gemini", "antigravity-cli"],
+    ]) {
+      mkdirSync(join(root, ...rel), { recursive: true });
+      writeFileSync(join(root, ...rel, "SKILL.md"), "Record the work_ref.\n");
+    }
+    const result = checkPatterns(root, { catalogText: catalog });
+    expect(result.hits).toEqual([]);
+    expect(result.ok).toBe(true);
+  });
+
+  test("a project file next to them still hits", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    mkdirSync(join(root, ".claude", "skills"), { recursive: true });
+    writeFileSync(join(root, ".claude", "skills", "s.md"), "work_ref\n");
+    writeFileSync(join(root, "README.md"), "work_ref\n");
+    const result = checkPatterns(root, { catalogText: catalog });
+    expect(result.hits.map((h) => h.path)).toEqual(["README.md"]);
+  });
+});

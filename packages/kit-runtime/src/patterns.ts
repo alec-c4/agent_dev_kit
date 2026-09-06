@@ -33,7 +33,24 @@ const SKIP_DIR = new Set([
   ".bun",
 ]);
 
-const SKIP_PATH_PREFIX = ["docs/examples/", "docs/guidelines/", "skills/"];
+/**
+ * Kit-owned text, in both places it lives: the kit checkout itself (docs/,
+ * skills/) and the destinations `kit install` / `kit deploy-*` write into a
+ * consumer project. Deployed skills legitimately talk about work refs and spec
+ * keys, so scanning them raises a `shipped-process-language` hit on every run
+ * of a project that installed the kit locally — and with `--work-ref` those
+ * hits land in the findings ledger as blocking.
+ */
+const SKIP_PATH_PREFIX = [
+  "docs/examples/",
+  "docs/guidelines/",
+  "skills/",
+  ".agents/",
+  ".claude/",
+  ".cursor/",
+  ".codex/",
+  ".gemini/",
+];
 const SKIP_FILES = new Set(["AGENTS.md", "CLAUDE.md", "GEMINI.md"]);
 
 export function loadPatternCatalog(path: string): PatternDef[] {
