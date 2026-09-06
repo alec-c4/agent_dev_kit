@@ -53,7 +53,7 @@ See [REVIEW.md](REVIEW.md) for the full checklist. Minimum bar:
 - No hardcoded secrets.
 - Parameterized queries only.
 - Validate input at system boundaries.
-- Check authorization on every protected operation.
+- Check authorization on every protected operation; cover allow + deny for relevant roles/scopes in tests (see [TESTING.md](TESTING.md) § Role-based access).
 
 ## User and tool rules
 

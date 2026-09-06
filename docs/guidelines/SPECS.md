@@ -242,7 +242,7 @@ specs/export-csv-spec.md **v1.1** (approved)
 
 ## Phase 1 — API endpoint
 - [ ] Add controller (covers AC-1, AC-2)
-- [ ] Tests: AC-1 happy path, AC-2 unauthorized
+- [ ] Tests: AC happy paths; role access matrix (allow + deny per relevant role/scope)
 ```
 
 In TDD Red phase, name tests after acceptance criteria: `AC-1: returns 201 when params valid`.

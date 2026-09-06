@@ -3,7 +3,7 @@
   "defaults": [
     {
       "id": "tests",
-      "label": "Automated tests (happy + sad paths)",
+      "label": "Automated tests for critical paths and role access matrix (not coverage padding)",
       "severity": "block"
     },
     {

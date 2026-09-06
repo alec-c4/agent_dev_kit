@@ -21,7 +21,7 @@ git diff --staged    # or git diff main...HEAD for a PR
 1. **State transitions** — Are lifecycle/state changes guarded? Can an object reach invalid states?
 2. **Data isolation** — Can any user read, write, or infer another user's data?
 3. **External failures** — What happens when HTTP, queue, DB, cache, or email fails or times out?
-4. **Untested edge cases** — Which branches lack tests (nil, empty, unauthorized, boundaries)?
+4. **Untested access / edges** — Missing role matrix (anonymous, wrong role, wrong scope, allowed, elevated)? Other real edges (nil, empty, boundaries)?
 
 Fix real risks before proceeding.
 

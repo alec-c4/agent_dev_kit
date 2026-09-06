@@ -2,8 +2,12 @@
   "version": 1,
   "universal": [
     {
-      "id": "tests_happy_and_sad",
-      "label": "Tests cover happy path and sad paths (nil, invalid, unauthorized, boundary)"
+      "id": "tests_critical_paths",
+      "label": "Critical behaviours have focused tests (AC/integrity); no tests-for-coverage padding"
+    },
+    {
+      "id": "tests_role_access_matrix",
+      "label": "Permission-sensitive changes cover allow+deny for relevant roles/scopes (anonymous, wrong role, wrong resource, intended role, elevated if any)"
     },
     {
       "id": "no_secrets",

@@ -5,7 +5,7 @@ version: 1
 
 defaults:
   - id: tests
-    label: Automated tests (happy + sad paths)
+    label: Automated tests for critical paths and role access matrix (not coverage padding)
     severity: block
   - id: code_quality
     label: Lint and project coding standards
