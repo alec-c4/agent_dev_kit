@@ -205,6 +205,26 @@ fi
 kit_run 0 "kit version (after install)" -- version &&
   assert_out 'install: [0-9]' "kit version reads the install stamp"
 
+# The working checkout has untracked files a clone does not. Installing from an
+# export of HEAD is the only way to see what a new user gets — this caught an
+# install that aborted because it linked the gitignored .ai/.
+if git -C "$KIT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
+  EXPORT="$SANDBOX/export"
+  EXPORT_HOME="$SANDBOX/export-home"
+  mkdir -p "$EXPORT" "$EXPORT_HOME/.config"
+  if git -C "$KIT_DIR" archive --format=tar HEAD | tar -x -C "$EXPORT" 2>/dev/null; then
+    if (cd "$EXPORT" && HOME="$EXPORT_HOME" XDG_CONFIG_HOME="$EXPORT_HOME/.config"       "$EXPORT/scripts/kit" install --target=all) >"$OUT" 2>&1; then
+      assert_file "$EXPORT_HOME/.claude/skills/feature/SKILL.md"         "install from a clean export of HEAD"
+    else
+      fail "install from a clean export of HEAD — a tracked file is missing from the commit"
+    fi
+  else
+    skip "install from a clean export (git archive failed)"
+  fi
+else
+  skip "install from a clean export (not a git repo)"
+fi
+
 kit_run 0 "kit deploy-skills" -- deploy-skills --pack=core --scope=project &&
   assert_file "$PROJECT/.agents/skills/feature/SKILL.md" "deploy-skills --scope=project"
 
