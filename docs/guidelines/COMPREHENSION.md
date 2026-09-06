@@ -76,11 +76,12 @@ First places to inspect (logs, files, config keys).
 ## Comprehension Q&A
 
 Agent generates questions **after** handoff draft; human answers **before** sign-off.
-Agents must not answer for the human.
+Agents must not pre-fill `**Human answer:**` for the human. After grading, wrong or material-partial answers get an `**Agent correction:**` (see [Answer validation](#answer-validation)).
 
 ### Q1
 **Question:** …
 **Human answer:** *(human fills)*
+**Agent correction:** *(agent fills only after grading — omit when consistent)*
 
 ### Q2
 …
@@ -103,6 +104,26 @@ Example: [docs/examples/work/GH-58-handoff.example.md](../examples/work/GH-58-ha
 2. Questions test **behaviour and structure**, not line numbers — e.g. «Where is UTF-8 enforced?» not «What is on line 42?»
 3. Wait for human answers. If answers conflict with spec or code, discuss — do not commit until resolved or spec is updated.
 4. **Do not** paste answers from the codebase into the Q&A block before the human tries.
+5. After the human answers, **grade and teach** — see [Answer validation](#answer-validation).
+
+## Answer validation
+
+After every `**Human answer:**` is filled, the agent grades each answer against the **current spec and implemented code**:
+
+| Grade | Meaning | Agent action |
+|-------|---------|--------------|
+| **Consistent** | Correct enough (wording may differ) | No correction field; proceed toward sign-off once all questions pass |
+| **Partial / vague** | Directionally right but missing a material piece | One clarifying follow-up **or** a concise `**Agent correction:**` that fills the gap (with a code example when useful); gate stays blocked until resolved or acknowledged |
+| **Wrong** | Conflicts with spec or code | Block sign-off/commit; write a detailed correct reference under `**Agent correction:**` for that question |
+
+**Wrong-answer teaching (required):**
+
+- The correction must answer the **same question** in enough detail for the human to rebuild the mental model — not only «incorrect, try again».
+- Prefer short **code examples** (project excerpts or a minimal illustrative snippet) when the question is about behaviour or structure and code clarifies the point. Prose alone is fine for pure decision/architecture questions.
+- Leave `**Human answer:**` as the human wrote it. Never overwrite it with the agent’s text.
+- Do **not** fill `Human sign-off` for the human. The human may revise their answer or explicitly acknowledge the correction before signing.
+- If the human revises an answer, re-grade; clear or update `**Agent correction:**` when the new answer is consistent.
+- If **spec and code disagree**, report the conflict — do not invent a single “correct” answer until the human chooses to update the spec or fix the code.
 
 ## Manual verification (acceptance criteria)
 
@@ -136,6 +157,8 @@ Comprehension runs **after** code is ready and **before** the verifier agent. Th
 | Let the agent write Human sign-off | Fake gate |
 | Replace reading the diff with handoff only | Summary is a map, not the territory |
 | Generate Q&A answers from code before human tries | No active recall |
+| Block on a wrong answer without a detailed correct reference | Gate without teaching |
+| Overwrite `**Human answer:**` with the agent’s text | Erases the human’s attempt |
 | Run comprehension after commit | Too late |
 
 ## Optional: project map (strict / periodic)
@@ -152,7 +175,7 @@ Skill `comprehension-check` and `validate-handoff.sh` automate the gate; opt-in 
 
 | Component | Status | Role |
 |-----------|--------|------|
-| `skills/comprehension-check/SKILL.md` | shipped | Generate Q&A; validate human answers against spec |
+| `skills/comprehension-check/SKILL.md` | shipped | Generate Q&A; grade answers; teach on wrong/partial with `Agent correction` |
 | `scripts/validate-handoff.sh` | shipped | Structural handoff checks (`./scripts/kit validate-handoff`) |
 | `.ai/tracker.yaml` | shipped | `comprehension_gate: minimal\|standard\|strict` |
 | Hook (opt-in) | shipped | `enforce-review-before-commit.sh` when `--with-review-gate` |

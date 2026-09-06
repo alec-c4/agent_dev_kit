@@ -19,9 +19,14 @@ monitoring; this gate counters that with an explicit human checkpoint before com
    (create `.ai/work/` if missing). Cover: what changed, data flow, key files.
 2. Generate **3 comprehension questions** from the handoff — the human answers in
    their own words.
-3. Wait for explicit **human sign-off**. Never fill in the sign-off or the answers
-   on the human's behalf.
-4. Only then run verification or commit.
+3. After answers exist, **grade** each against spec and code. On wrong or
+   material-partial answers: block sign-off, leave the human’s text as-is, and
+   write a detailed correct reference under `**Agent correction:**` (with a short
+   code example when it clarifies behaviour or structure). Present the correction
+   in chat as well.
+4. Wait for explicit **human sign-off**. Never fill in the sign-off or the
+   `**Human answer:**` blocks on the human's behalf.
+5. Only then run verification or commit.
 
 **Default tier:** standard. Skip only when the human explicitly says comprehension is
 minimal (typo or comment-only change). Strict tier adds a teach-back and 5 questions.

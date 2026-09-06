@@ -103,6 +103,7 @@ When `.ai/*-handoff.md` exists, verify:
 |-------|-----------|
 | Handoff present | File exists for work_ref |
 | Q&A complete | Each question has **Human answer** filled by human |
+| Agent corrections | Optional `**Agent correction:**` fields do **not** fail completeness; they must not replace or erase human answers |
 | Manual verify | At least one `human-verify` AC recorded for standard tier |
 | Sign-off | `Signed:` date present; **Files I read** lists ≥1 path |
 

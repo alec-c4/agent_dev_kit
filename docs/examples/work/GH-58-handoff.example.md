@@ -47,7 +47,17 @@ Check `CsvEncoder` for invalid byte sequences; confirm `Content-Type` in browser
 
 ### Q2
 **Question:** What happens if a row contains invalid encoding?  
-**Human answer:** CsvEncoder replaces invalid sequences per spec AC-3 (replacement character).
+**Human answer:** The controller rescues `EncodingError` and returns HTTP 500.  
+**Agent correction:** Invalid sequences are handled in `CsvEncoder`, not the controller. Per spec AC-3 the encoder replaces invalid bytes (replacement character) so the stream can continue:
+
+```ruby
+# app/services/csv_encoder.rb (illustrative)
+def self.encode(chunk)
+  chunk.to_s.encode("UTF-8", invalid: :replace, undef: :replace, replace: "\uFFFD")
+end
+```
+
+The controller still only sets `Content-Type` / charset and delegates to the builder.
 
 ### Q3
 **Question:** Why is there no BOM?  

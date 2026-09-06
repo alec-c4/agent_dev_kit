@@ -1,6 +1,6 @@
 ---
 name: comprehension-check
-description: Generate comprehension Q&A from spec and handoff; validate human answers before verification. Use after implement, before verifier session.
+description: Generate comprehension Q&A from spec and handoff; grade human answers and teach on errors before verification. Use after implement, before verifier session.
 user-invocable: true
 ---
 
@@ -59,6 +59,7 @@ Rules:
 - Test **behaviour and structure** — not line numbers.
 - Derive from spec ACs, handoff data flow, and diff summary.
 - Leave `**Human answer:**` empty for the human to fill.
+- Omit `**Agent correction:**` until after grading (add only when partial or wrong).
 
 Example question types:
 
@@ -68,20 +69,28 @@ Example question types:
 
 ### 4. Wait for human answers
 
-Stop until the human fills each **Human answer** block. If an answer conflicts with spec or code:
+Stop until the human fills each **Human answer** block. If answers conflict with spec or code:
 
 1. Discuss — do not commit.
 2. Update spec (with approval) or fix code — then regenerate Q&A if behaviour changed.
 
 ### 5. Validate answers (agent)
 
-After human answers exist, check each answer against spec + code:
+After human answers exist, grade each answer against **spec + implemented code**:
 
 | Result | Action |
 |--------|--------|
-| Consistent | Proceed to sign-off checklist |
-| Partial / vague | Ask **one** follow-up — do not lecture |
-| Wrong | Block until resolved |
+| **Consistent** | No lecture; omit or clear `**Agent correction:**` for that question; when all are consistent, proceed to sign-off checklist |
+| **Partial / vague** | Ask **one** follow-up **or** write a concise `**Agent correction:**` that fills the missing piece (code example when useful); block until resolved or acknowledged |
+| **Wrong** | Block sign-off/commit; write a **detailed correct reference** under `**Agent correction:**` for the same question — enough to rebuild the mental model, not only «incorrect» |
+
+**Teaching rules for wrong / material-partial:**
+
+- Prefer short **code examples** (project excerpts or a minimal illustrative snippet) when they clarify behaviour or structure; prose alone is fine for pure decision questions.
+- Leave `**Human answer:**` unchanged — never overwrite the human’s text.
+- Also present the correction in chat so the human sees it without hunting the file.
+- If spec and code disagree, report the conflict; do not invent a single correct answer until the human picks a resolution.
+- If the human revises an answer, re-grade; update or remove `**Agent correction:**` when consistent.
 
 Run structural check:
 
@@ -100,13 +109,17 @@ Human completes (never agent):
 - **Teach-back:** strict tier only — 2–3 sentences  
 - **Signed:** YYYY-MM-DD  
 
+After a correction, the human may revise their answer or explicitly acknowledge understanding before signing.
+
 ## Output
 
-Updated `.ai/work/{work_ref}-handoff.md` with Q&A and completed human sign-off. Verifier session reads this file — see [VERIFICATION.md](../../docs/guidelines/VERIFICATION.md).
+Updated `.ai/work/{work_ref}-handoff.md` with Q&A (and any `Agent correction` fields) plus completed human sign-off. Verifier session reads this file — see [VERIFICATION.md](../../docs/guidelines/VERIFICATION.md).
 
 ## Do not
 
-- Fill Human sign-off or Q&A answers for the human.
+- Fill Human sign-off or `**Human answer:**` for the human.
+- Pre-fill reference answers before the human tries.
+- Block on a wrong answer without a detailed `**Agent correction:**`.
 - Skip comprehension on «just fix it» without lowering tier + confirm.
 - Run comprehension after commit.
 - Merge comprehension checklist into verification — keep roles separate.

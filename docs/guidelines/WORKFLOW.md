@@ -192,8 +192,9 @@ Follow [GIT.md](GIT.md).
 
 1. Writer produces `.ai/work/{work_ref}-handoff.md` (what changed, data flow, key files, decisions).
 2. Agent generates comprehension Q&A (3 or 5 questions); **human answers** in own words.
-3. Human runs **manual-verify** acceptance criteria from the spec.
-4. Human completes **Human sign-off** in the handoff (files read, one-sentence explain, date).
+3. Agent **grades** answers against spec and code; on wrong or material-partial answers, writes a detailed `**Agent correction:**` (with code examples when useful) and blocks until the human revises or acknowledges.
+4. Human runs **manual-verify** acceptance criteria from the spec.
+5. Human completes **Human sign-off** in the handoff (files read, one-sentence explain, date).
 
 Skip only when tier is **minimal** or human explicitly lowers tier with confirm.
 
