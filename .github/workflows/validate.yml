@@ -90,6 +90,12 @@ jobs:
       - name: Validate kit (full)
         run: ./scripts/kit validate
 
+      # Every kit command, run for real against a throwaway HOME. `bash -n` in
+      # the validator catches syntax errors; this catches a command that parses
+      # and then fails on its first real argument.
+      - name: Smoke test kit commands
+        run: ./scripts/kit smoke
+
       - name: Shellcheck scripts and hooks
         run: |
           sudo apt-get install -y shellcheck

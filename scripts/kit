@@ -9,6 +9,7 @@
 #   ./scripts/kit compile
 #   ./scripts/kit validate [--phase=1]
 #   ./scripts/kit validate-skills --pack=core [--report=packs/core/validate-report.md]
+#   ./scripts/kit smoke [--verbose] [--keep]
 #   ./scripts/kit deploy-skills --pack=core [--scope=global|project|both]
 #   ./scripts/kit deploy-workflows [--scope=global|project|both]
 #   ./scripts/kit intake <work_ref> [--paste] [--file=path] [--dry-run]
@@ -81,6 +82,9 @@ case "$CMD" in
     ;;
   validate-skills)
     exec "$RUNNER" "$KIT_DIR/scripts/validate-skills.sh" "$@"
+    ;;
+  smoke)
+    exec "$RUNNER" "$KIT_DIR/scripts/smoke-commands.sh" "$@"
     ;;
   deploy-skills)
     exec "$RUNNER" "$KIT_DIR/scripts/deploy-skills.sh" "$@"

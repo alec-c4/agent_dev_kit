@@ -75,6 +75,7 @@ Deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`:
 |---------|---------------|
 | Install | `./scripts/kit install --target=all` — [installation.md](docs/installation.md) |
 | Validate | `./scripts/kit validate` (CI on push) |
+| Smoke test | `./scripts/kit smoke` — every kit command run against a throwaway `HOME` |
 | Stack detection | `./scripts/kit detect-stack --write-profile` |
 | Tracker intake | `./scripts/kit intake` → `.ai/work/{ref}-analysis.md` — [TRACKER.md](docs/guidelines/TRACKER.md) |
 | Work status | `./scripts/kit status [--all] [--watch]`, `./scripts/kit board` (loopback only) |
