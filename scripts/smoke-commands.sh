@@ -289,7 +289,17 @@ kit_run 0 "kit lessons list" -- lessons list &&
 kit_run 0 "kit check-patterns" -- check-patterns &&
   pass "check-patterns on a clean project"
 kit_run 0 "kit check-patterns --list-sensors" -- check-patterns --list-sensors &&
-  pass "check-patterns --list-sensors"
+  assert_out 'skipped-fresh-verifier' "check-patterns --list-sensors names the sensor rows"
+
+# A warn row is reported without failing; a block row fails. The shipped catalog
+# carries both, so the two exits have to stay distinguishable.
+printf 'mapfile -t x < f\n' >"$PROJECT/warn-only.sh"
+kit_run 0 "kit check-patterns (warn only)" -- check-patterns &&
+  assert_out 'WARN .*bash4-builtin-on-macos' "a warn row is reported without failing"
+printf 'see ../agent_dev_kit/AGENTS.md\n' >"$PROJECT/blocking.md"
+kit_run 1 "kit check-patterns (block)" -- check-patterns &&
+  assert_out 'BLOCK .*kit-path-escape' "a block row fails the check"
+rm -f "$PROJECT/warn-only.sh" "$PROJECT/blocking.md"
 
 # ── doc freshness (network) ──────────────────────────────────────────────────
 if [[ "${KIT_SMOKE_OFFLINE:-}" == "1" ]]; then
