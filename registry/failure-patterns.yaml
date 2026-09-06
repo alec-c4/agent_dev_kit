@@ -1,14 +1,61 @@
 # Curated failure fingerprints (outer harness sensors).
 # Promote new rows via a human-reviewed kit PR — no customer paths or names.
+#
+# Fields:
+#   fingerprint  stable id; shared with the findings ledger and lessons
+#   stack        "*" for every project, or a stack id from registry/stacks.yaml
+#   guide        what to do instead — this becomes the finding's summary
+#   tokens       literal substrings; a hit on any one raises the fingerprint
+#   severity     block (default) fails the gate; warn is reported and recorded
+#
+# A row earns its place by having burned someone. Tokens must be specific
+# enough that a hit is almost always the defect — a noisy row gets the whole
+# check switched off, which costs more than the row is worth.
 
 patterns:
   - fingerprint: shipped-process-language
     stack: "*"
     guide: Do not put process jargon in shipped paths (README, user docs, commits, PR bodies).
+    severity: block
     tokens:
       - work_ref
       - spec_key
       - process_references
+
+  - fingerprint: kit-path-escape
+    stack: "*"
+    guide: >-
+      Reference kit docs by a path resolved from the install manifest, not by
+      climbing out of the project. A relative link to a sibling checkout breaks
+      for everyone who installed the kit somewhere else.
+    severity: block
+    tokens:
+      - ../agent_dev_kit/
+      - ../../agent_dev_kit/
+
+  - fingerprint: ai-attribution-in-shipped-text
+    stack: "*"
+    guide: >-
+      Strip assistant attribution from anything shipped — commit messages, PR
+      bodies, changelogs, docs. Authorship belongs to the person who signed off.
+    severity: block
+    tokens:
+      - "Co-Authored-By: Claude"
+      - "Co-authored-by: Claude"
+      - "Co-authored-by: Cursor"
+      - "Generated with [Claude Code]"
+
+  - fingerprint: bash4-builtin-on-macos
+    stack: "*"
+    guide: >-
+      mapfile and readarray are bash 4 builtins; macOS ships bash 3.2, where the
+      line silently reads nothing. Use a read loop or `sed -n`.
+    severity: warn
+    tokens:
+      - "mapfile "
+      - "mapfile -"
+      - "readarray "
+      - "readarray -"
 
 # Fingerprints with no `tokens` are not reachable by `kit check-patterns`:
 # they are raised by a named sensor. Listed here so retrospect and the kit
@@ -18,3 +65,17 @@ sensor_patterns:
     stack: "*"
     guide: Run verification in a new agent session, not in the writer session.
     sensor: verification
+
+  - fingerprint: committed-agent-artifacts
+    stack: "*"
+    guide: >-
+      Working notes under .ai/ are for the session, not the repository. Commit
+      only what the project agreed to keep (lessons, tracker config).
+    sensor: "git ls-files .ai | grep -v -e '^.ai/lessons.md$' -e '^.ai/tracker.yaml$' -e '^.ai/kit.yaml$'"
+
+  - fingerprint: unverified-external-claim
+    stack: "*"
+    guide: >-
+      A skill that names a package, flag, or API must be checked against the
+      upstream source, not recalled. Declare the claim under metadata.verify.
+    sensor: "kit verify-docs"

@@ -4,10 +4,45 @@
       "fingerprint": "shipped-process-language",
       "stack": "*",
       "guide": "Do not put process jargon in shipped paths (README, user docs, commits, PR bodies).",
+      "severity": "block",
       "tokens": [
         "work_ref",
         "spec_key",
         "process_references"
+      ]
+    },
+    {
+      "fingerprint": "kit-path-escape",
+      "stack": "*",
+      "guide": "Reference kit docs by a path resolved from the install manifest, not by climbing out of the project. A relative link to a sibling checkout breaks for everyone who installed the kit somewhere else.",
+      "severity": "block",
+      "tokens": [
+        "../agent_dev_kit/",
+        "../../agent_dev_kit/"
+      ]
+    },
+    {
+      "fingerprint": "ai-attribution-in-shipped-text",
+      "stack": "*",
+      "guide": "Strip assistant attribution from anything shipped — commit messages, PR bodies, changelogs, docs. Authorship belongs to the person who signed off.",
+      "severity": "block",
+      "tokens": [
+        "Co-Authored-By: Claude",
+        "Co-authored-by: Claude",
+        "Co-authored-by: Cursor",
+        "Generated with [Claude Code]"
+      ]
+    },
+    {
+      "fingerprint": "bash4-builtin-on-macos",
+      "stack": "*",
+      "guide": "mapfile and readarray are bash 4 builtins; macOS ships bash 3.2, where the line silently reads nothing. Use a read loop or `sed -n`.",
+      "severity": "warn",
+      "tokens": [
+        "mapfile ",
+        "mapfile -",
+        "readarray ",
+        "readarray -"
       ]
     }
   ],
@@ -17,6 +52,18 @@
       "stack": "*",
       "guide": "Run verification in a new agent session, not in the writer session.",
       "sensor": "verification"
+    },
+    {
+      "fingerprint": "committed-agent-artifacts",
+      "stack": "*",
+      "guide": "Working notes under .ai/ are for the session, not the repository. Commit only what the project agreed to keep (lessons, tracker config).",
+      "sensor": "git ls-files .ai | grep -v -e '^.ai/lessons.md$' -e '^.ai/tracker.yaml$' -e '^.ai/kit.yaml$'"
+    },
+    {
+      "fingerprint": "unverified-external-claim",
+      "stack": "*",
+      "guide": "A skill that names a package, flag, or API must be checked against the upstream source, not recalled. Declare the claim under metadata.verify.",
+      "sensor": "kit verify-docs"
     }
   ]
 }
