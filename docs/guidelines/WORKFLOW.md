@@ -90,7 +90,7 @@ Store session planning files in the **target project** (not in this kit repo). S
 
 Add `.ai/` to the target project's `.gitignore` unless the team commits plans intentionally.
 
-See [.ai/README.md](../../.ai/README.md) for artifact naming. Worked examples: [docs/examples/specs/](../examples/specs/README.md).
+See [PLANNING-ARTIFACTS.md](PLANNING-ARTIFACTS.md) for artifact naming. Worked examples: [docs/examples/specs/](../examples/specs/README.md).
 
 ## Standard feature flow
 

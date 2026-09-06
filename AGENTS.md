@@ -53,7 +53,7 @@ Store in `.ai/` (target project, not committed to kit by default):
 - `.ai/task-*.md` when no tracker
 - `.ai/pr-summary.md`
 
-See [.ai/README.md](.ai/README.md).
+See [docs/guidelines/PLANNING-ARTIFACTS.md](docs/guidelines/PLANNING-ARTIFACTS.md).
 
 ## Architecture
 
