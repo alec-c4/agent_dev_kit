@@ -451,6 +451,27 @@ for script in "$KIT_DIR"/scripts/kit "$KIT_DIR"/scripts/*.sh "$KIT_DIR"/scripts/
 done
 ok "shell scripts parse (bash -n)"
 
+# ── config dir spelling agrees across bash, Python, and TypeScript ───────────
+# Three copies of the same rule. The bash one read only the legacy spelling and
+# nothing caught it, because nothing compared them.
+CONFIG_SPELLING_SOURCES=(
+  "scripts/lib/kit-env.sh"
+  "scripts/lib/kit_config_paths.py"
+  "packages/kit-runtime/src/kit-paths.ts"
+)
+for rel in "${CONFIG_SPELLING_SOURCES[@]}"; do
+  file="$KIT_DIR/$rel"
+  if [[ ! -f "$file" ]]; then
+    err "missing $rel (config path helper)"
+    continue
+  fi
+  grep -q 'agent-dev-kit' "$file" ||
+    err "$rel does not know the canonical config dir 'agent-dev-kit'"
+  grep -q 'agent_dev_kit' "$file" ||
+    err "$rel does not fall back to the legacy config dir 'agent_dev_kit'"
+done
+ok "config dir spelling agrees across bash, Python, and TypeScript"
+
 # ── intake smoke test ────────────────────────────────────────────────────────
 INTAKE_TMP="$(mktemp -d)"
 mkdir -p "$INTAKE_TMP/.ai"

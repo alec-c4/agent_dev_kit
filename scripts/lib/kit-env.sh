@@ -33,13 +33,40 @@ kit_interactive_shell_name() {
   esac
 }
 
+# Two directory spellings shipped: agent_dev_kit (tool settings) and
+# agent-dev-kit (projects and lessons). The hyphenated form is canonical; the
+# underscored one is still read so an existing install keeps working. Mirrors
+# scripts/lib/kit_config_paths.py and packages/kit-runtime/src/kit-paths.ts —
+# this copy read only the legacy name, so it saw nothing after a fresh install.
+KIT_CONFIG_CANONICAL="agent-dev-kit"
+KIT_CONFIG_LEGACY="agent_dev_kit"
+
+kit_config_home() {
+  echo "${XDG_CONFIG_HOME:-$HOME/.config}"
+}
+
+# Canonical directory for new files.
 kit_config_dir() {
-  local xdg="${XDG_CONFIG_HOME:-$HOME/.config}"
-  echo "$xdg/agent_dev_kit"
+  echo "$(kit_config_home)/$KIT_CONFIG_CANONICAL"
+}
+
+# Path to read for a name, preferring canonical over the legacy directory.
+kit_config_path() {
+  local name="$1" home canonical legacy
+  home="$(kit_config_home)"
+  canonical="$home/$KIT_CONFIG_CANONICAL/$name"
+  legacy="$home/$KIT_CONFIG_LEGACY/$name"
+  if [[ -e "$canonical" ]]; then
+    echo "$canonical"
+  elif [[ -e "$legacy" ]]; then
+    echo "$legacy"
+  else
+    echo "$canonical"
+  fi
 }
 
 kit_config_file() {
-  echo "$(kit_config_dir)/config.yaml"
+  kit_config_path config.yaml
 }
 
 kit_config_present() {
