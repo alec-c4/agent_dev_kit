@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -137,5 +137,115 @@ describe("kit-owned paths are not project source", () => {
     writeFileSync(join(root, "README.md"), "work_ref\n");
     const result = checkPatterns(root, { catalogText: catalog });
     expect(result.hits.map((h) => h.path)).toEqual(["README.md"]);
+  });
+});
+
+describe("severity", () => {
+  const mixed = `
+patterns:
+  - fingerprint: blocking
+    stack: "*"
+    guide: blocking guide
+    severity: block
+    tokens: ["BOOM"]
+  - fingerprint: advisory
+    stack: "*"
+    guide: advisory guide
+    severity: warn
+    tokens: ["HMM"]
+`;
+
+  test("a warn-only hit is reported but does not fail", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "HMM\n");
+    const result = checkPatterns(root, { catalogText: mixed });
+    expect(result.ok).toBe(true);
+    expect(result.hits.map((h) => [h.fingerprint, h.severity])).toEqual([
+      ["advisory", "warn"],
+    ]);
+  });
+
+  test("one block hit fails even alongside warns", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "HMM\nBOOM\n");
+    const result = checkPatterns(root, { catalogText: mixed });
+    expect(result.ok).toBe(false);
+  });
+
+  test("severity carries into the findings ledger", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    mkdirSync(join(root, ".ai", "work"), { recursive: true });
+    writeFileSync(join(root, "a.md"), "HMM\n");
+    checkPatterns(root, { catalogText: mixed, workRef: "GH-9" });
+    const rows = parseFindingsFile(findingsPath(root, "GH-9"));
+    expect(rows.map((r) => r.severity)).toEqual(["warn"]);
+  });
+
+  test("an omitted severity still blocks", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "work_ref\n");
+    expect(checkPatterns(root, { catalogText: catalog }).ok).toBe(false);
+  });
+});
+
+describe("stack scoping", () => {
+  const scoped = `
+patterns:
+  - fingerprint: everywhere
+    stack: "*"
+    guide: g
+    tokens: ["ANY"]
+  - fingerprint: flutter-only
+    stack: flutter
+    guide: g
+    tokens: ["DART"]
+`;
+
+  test("an unknown stack runs only the * rows", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "ANY DART\n");
+    const result = checkPatterns(root, { catalogText: scoped });
+    expect(result.hits.map((h) => h.fingerprint)).toEqual(["everywhere"]);
+  });
+
+  test("a matching stack adds its own rows", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "ANY DART\n");
+    const result = checkPatterns(root, { catalogText: scoped, stack: "flutter" });
+    expect(result.hits.map((h) => h.fingerprint).sort()).toEqual([
+      "everywhere",
+      "flutter-only",
+    ]);
+  });
+
+  test("a different stack does not pick them up", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "a.md"), "ANY DART\n");
+    const result = checkPatterns(root, { catalogText: scoped, stack: "rails" });
+    expect(result.hits.map((h) => h.fingerprint)).toEqual(["everywhere"]);
+  });
+});
+
+describe("shipped catalog", () => {
+  const shipped = join(import.meta.dir, "..", "..", "..", "registry", "failure-patterns.yaml");
+
+  test("every token row is reachable and every sensor row is not", () => {
+    const tokenRows = loadPatternCatalog(shipped);
+    expect(tokenRows.length).toBeGreaterThan(0);
+    for (const row of tokenRows) {
+      expect(row.tokens?.length ?? 0).toBeGreaterThan(0);
+      expect(row.guide.length).toBeGreaterThan(0);
+    }
+    for (const row of parseSensorCatalog(readFileSync(shipped, "utf8"))) {
+      expect(row.tokens ?? []).toEqual([]);
+      expect(row.sensor?.length ?? 0).toBeGreaterThan(0);
+    }
+  });
+
+  test("the catalog does not fire on a project that only uses the kit", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-pat-"));
+    writeFileSync(join(root, "README.md"), "A normal project readme.\n");
+    writeFileSync(join(root, "app.rb"), "puts 'hello'\n");
+    expect(checkPatterns(root, { catalogPath: shipped }).hits).toEqual([]);
   });
 });

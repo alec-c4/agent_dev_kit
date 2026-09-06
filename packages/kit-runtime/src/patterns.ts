@@ -2,12 +2,20 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { appendFinding, regressFingerprint } from "./findings.ts";
 
+export type PatternSeverity = "block" | "warn";
+
 export type PatternDef = {
   fingerprint: string;
   stack: string;
   guide: string;
   tokens?: string[];
   sensor?: string;
+  /**
+   * Every hit used to be blocking, so a merely suspicious token could not be
+   * catalogued without stopping a gate on it — which is why the catalog stayed
+   * near-empty. `warn` rows are reported and recorded, and do not fail.
+   */
+  severity?: PatternSeverity;
 };
 
 export type PatternHit = {
@@ -15,9 +23,11 @@ export type PatternHit = {
   path: string;
   token: string;
   guide: string;
+  severity: PatternSeverity;
 };
 
 export type CheckPatternsResult = {
+  /** False only when a `block` row hit; `warn` hits leave this true. */
   ok: boolean;
   skipped: boolean;
   hits: PatternHit[];
@@ -123,6 +133,18 @@ function walkFiles(root: string, dir: string, out: string[]): void {
   }
 }
 
+/**
+ * Catalog rows carry a `stack`, and until now nothing read it — every pattern
+ * ran against every project, so a Flutter-only token would fire on a Rails
+ * repo. An unknown stack runs the `*` rows only; a stack-specific row needs a
+ * stack to opt into it.
+ */
+export function selectForStack(catalog: PatternDef[], stack?: string): PatternDef[] {
+  return catalog.filter(
+    (p) => !p.stack || p.stack === "*" || (!!stack && p.stack === stack),
+  );
+}
+
 export function checkPatterns(
   projectRoot: string,
   opts: {
@@ -130,21 +152,28 @@ export function checkPatterns(
     catalogPath?: string;
     enabled?: boolean;
     workRef?: string;
+    stack?: string;
   } = {},
 ): CheckPatternsResult {
   if (opts.enabled === false) {
     return { ok: true, skipped: true, hits: [] };
   }
-  const catalog = opts.catalogText
-    ? parseCatalog(opts.catalogText)
-    : opts.catalogPath
-      ? loadPatternCatalog(opts.catalogPath)
-      : [];
+  const catalog = selectForStack(
+    opts.catalogText
+      ? parseCatalog(opts.catalogText)
+      : opts.catalogPath
+        ? loadPatternCatalog(opts.catalogPath)
+        : [],
+    opts.stack,
+  );
   if (!catalog.length) return { ok: true, skipped: false, hits: [] };
 
   const files: string[] = [];
   walkFiles(projectRoot, projectRoot, files);
   const hits: PatternHit[] = [];
+  // One file tripping one rule is one hit, whichever of the rule's tokens
+  // matched. Listing each token separately just repeats the same defect.
+  const seen = new Set<string>();
   for (const file of files) {
     if (shouldSkipFile(projectRoot, file)) continue;
     let text = "";
@@ -158,11 +187,15 @@ export function checkPatterns(
     for (const pat of catalog) {
       for (const token of pat.tokens ?? []) {
         if (token && text.includes(token)) {
+          const key = `${pat.fingerprint}\u0000${rel}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
           hits.push({
             fingerprint: pat.fingerprint,
             path: rel,
             token,
             guide: pat.guide,
+            severity: pat.severity === "warn" ? "warn" : "block",
           });
         }
       }
@@ -186,12 +219,16 @@ export function checkPatterns(
       appendFinding(projectRoot, opts.workRef, {
         fingerprint: fp,
         stage: "verify",
-        severity: "block",
+        severity: list[0].severity,
         summary: guide,
         evidence,
       });
     }
   }
 
-  return { ok: hits.length === 0, skipped: false, hits };
+  return {
+    ok: !hits.some((h) => h.severity === "block"),
+    skipped: false,
+    hits,
+  };
 }
