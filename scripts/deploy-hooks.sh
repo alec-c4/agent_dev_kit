@@ -60,7 +60,9 @@ run() {
 
 chmod_hooks() {
   if $DRY_RUN; then return; fi
-  find "$REPO_DIR/hooks" -name '*.sh' -exec chmod +x {} +
+  # Entrypoints only. hooks/lib/ is sourced, never executed, and marking it +x
+  # left a mode change in the kit checkout after every deploy.
+  find "$REPO_DIR/hooks" -name '*.sh' -not -path '*/lib/*' -exec chmod +x {} +
 }
 
 deploy_claude_hooks() {
