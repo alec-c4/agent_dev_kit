@@ -76,6 +76,9 @@ maybe() {
   fi
 }
 
+# Replaces the destination outright, so only ever point it at kit-owned paths.
+# It used to be handed .ai/ as well: in a project install that deleted the
+# project's own specs, findings and lessons and left a symlink to the kit's.
 link_or_copy() {
   local src="$1" dest="$2"
   if [[ ! -e "$src" ]]; then
@@ -128,7 +131,9 @@ deploy_kit_tree() {
   deploy_dir "registry" "$base"
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
-  deploy_dir ".ai" "$base"
+  # Not .ai/ — it is gitignored session state. Linking it aborted the install
+  # on any clone that did not happen to have one, and on a checkout that did,
+  # published the kit author's own working notes to every install site.
 }
 
 install_project_agents_scaffold() {
@@ -158,7 +163,6 @@ install_project_agents_scaffold() {
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
   deploy_dir "agents" "$base"
-  deploy_dir ".ai" "$base"
   if $WITH_HOOKS; then
     deploy_dir "hooks" "$base"
   fi
@@ -181,7 +185,6 @@ install_codex_project() {
   deploy_dir "registry" "$base"
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
-  deploy_dir ".ai" "$base"
   install_project_agents_scaffold "$base"
 }
 
@@ -203,7 +206,6 @@ install_antigravity_project() {
   deploy_dir "registry" "$base"
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
-  deploy_dir ".ai" "$base"
   install_project_agents_scaffold "$base"
 }
 
@@ -289,7 +291,6 @@ install_cursor_project() {
   deploy_dir "registry" "$base"
   deploy_dir "scripts" "$base"
   deploy_dir "skills" "$base"
-  deploy_dir ".ai" "$base"
   maybe mkdir -p "$base/.cursor"
   install_cursor_rules_project "$base/.cursor/rules"
   sync_cursor_user_rules_project "$base"
