@@ -8,6 +8,36 @@ The version that matters to a user is the one in `VERSION`, reported by
 
 ## [Unreleased]
 
+### Fixed
+
+- `kit install` aborted on a fresh clone and destroyed a project's `.ai/`. Five
+  install paths linked the kit's own gitignored `.ai/` into the destination,
+  and the deploy helper replaces a destination outright.
+- `kit check-patterns` raised blocking findings against the kit's own skills in
+  any project that had deployed them.
+- `kit lessons list` could not show a pending lesson, so the id needed to
+  acknowledge one was visible only in the output that created it (`--all`).
+- `kit deploy-hooks` marked the sourced hook library executable, leaving a mode
+  change in the kit checkout after every run.
+- The bash config-path helper read only the pre-rename `agent_dev_kit`
+  directory, disagreeing with its Python and TypeScript siblings.
+- AGENTS.md and WORKFLOW.md linked to `.ai/README.md`, which is in no clone.
+  The `.ai/` contract now lives in `docs/guidelines/PLANNING-ARTIFACTS.md`.
+
+### Added
+
+- `kit smoke` — every command run against a throwaway `HOME`, including an
+  install from an export of `HEAD` rather than the working checkout.
+- `kit version` and a `VERSION` file; `kit install` records a stamp so the
+  command can say whether an install still matches the checkout it came from.
+- Failure-pattern rows for kit-path escapes, assistant attribution in shipped
+  text, bash 4 builtins on macOS, and committed agent artifacts.
+
+### Changed
+
+- Catalog rows now honour `stack`, and can declare `severity: warn` to be
+  reported and recorded without failing a gate.
+
 ## [0.1.0]
 
 First tracked version. Everything below already shipped; this entry records the
