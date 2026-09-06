@@ -74,6 +74,7 @@ Deploy with `./scripts/kit install` or `./scripts/kit deploy-skills --pack=…`:
 | Feature | Command / doc |
 |---------|---------------|
 | Install | `./scripts/kit install --target=all` — [installation.md](docs/installation.md) |
+| Version | `./scripts/kit version` — [CHANGELOG.md](CHANGELOG.md) |
 | Validate | `./scripts/kit validate` (CI on push) |
 | Smoke test | `./scripts/kit smoke` — every kit command run against a throwaway `HOME` |
 | Stack detection | `./scripts/kit detect-stack --write-profile` |

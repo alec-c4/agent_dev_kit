@@ -451,6 +451,28 @@ for script in "$KIT_DIR"/scripts/kit "$KIT_DIR"/scripts/*.sh "$KIT_DIR"/scripts/
 done
 ok "shell scripts parse (bash -n)"
 
+# ── VERSION is semver and matches the runtime package ────────────────────────
+if [[ ! -f "$KIT_DIR/VERSION" ]]; then
+  err "missing VERSION"
+else
+  KIT_VERSION="$(tr -d '[:space:]' <"$KIT_DIR/VERSION")"
+  if [[ ! "$KIT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+    err "VERSION is not semver: $KIT_VERSION"
+  else
+    RUNTIME_PKG="$KIT_DIR/packages/kit-runtime/package.json"
+    if [[ -f "$RUNTIME_PKG" ]]; then
+      RUNTIME_VERSION="$(jq -r '.version // ""' "$RUNTIME_PKG")"
+      if [[ "$RUNTIME_VERSION" != "$KIT_VERSION" ]]; then
+        err "VERSION ($KIT_VERSION) != kit-runtime package.json ($RUNTIME_VERSION)"
+      fi
+    fi
+    if [[ -f "$KIT_DIR/CHANGELOG.md" ]] && ! grep -q "\[$KIT_VERSION\]" "$KIT_DIR/CHANGELOG.md"; then
+      warn "CHANGELOG.md has no section for $KIT_VERSION"
+    fi
+    ok "VERSION $KIT_VERSION (semver, matches kit-runtime)"
+  fi
+fi
+
 # ── config dir spelling agrees across bash, Python, and TypeScript ───────────
 # Three copies of the same rule. The bash one read only the legacy spelling and
 # nothing caught it, because nothing compared them.

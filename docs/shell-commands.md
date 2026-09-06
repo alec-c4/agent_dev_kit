@@ -20,6 +20,7 @@ From the kit repo root (works in fish, zsh, bash):
 ./scripts/kit install --target=all
 ./scripts/kit install --target=both --with-hooks --with-review-gate
 ./scripts/kit compile
+./scripts/kit version [--json]   # kit version, commit, and what the last install wrote
 ./scripts/kit validate --phase=1
 ./scripts/kit validate-skills --pack=core
 ./scripts/kit smoke                 # run every kit command against a throwaway HOME

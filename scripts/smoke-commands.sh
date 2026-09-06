@@ -149,6 +149,12 @@ kit_run 1 "kit run missing.sh" -- run definitely-missing.sh &&
   assert_out 'no such kit script' "kit run rejects an unknown script"
 
 # ── introspection ────────────────────────────────────────────────────────────
+kit_run 0 "kit version" -- version && assert_out 'Agent Dev Kit' "kit version"
+kit_run 0 "kit version --json" -- version --json &&
+  { jq -e '.version | test("^[0-9]+\\.[0-9]+\\.[0-9]+$")' "$OUT" >/dev/null 2>&1 &&
+    pass "kit version --json reports a semver" ||
+    fail "kit version --json did not report a semver"; }
+
 kit_run 0 "kit shell-info" -- shell-info --json &&
   { jq -e . "$OUT" >/dev/null 2>&1 && pass "shell-info --json emits JSON" ||
     fail "shell-info --json did not emit JSON"; }
@@ -192,7 +198,12 @@ fi
 if kit_run 0 "kit install --target=claude" -- install --target=claude; then
   assert_file "$SANDBOX_HOME/.claude/skills/feature/SKILL.md" "install --target=claude deploys skills"
   assert_file "$SANDBOX_HOME/.claude/AGENTS.md" "install --target=claude deploys AGENTS.md"
+  assert_file "$XDG_CONFIG_HOME/agent-dev-kit/install.json" "install records a version stamp"
 fi
+
+# With a stamp on disk, `kit version` must read it rather than report none.
+kit_run 0 "kit version (after install)" -- version &&
+  assert_out 'install: [0-9]' "kit version reads the install stamp"
 
 kit_run 0 "kit deploy-skills" -- deploy-skills --pack=core --scope=project &&
   assert_file "$PROJECT/.agents/skills/feature/SKILL.md" "deploy-skills --scope=project"

@@ -422,6 +422,35 @@ if $WITH_HOOKS; then
   fi
 fi
 
+# Record what was installed, so `kit version` can say whether the install site
+# still matches this checkout.
+write_install_stamp() {
+  local dir stamp version commit
+  dir="$(kit_config_dir)"
+  stamp="$dir/install.json"
+  version="unknown"
+  [[ -f "$REPO_DIR/VERSION" ]] && version="$(tr -d '[:space:]' <"$REPO_DIR/VERSION")"
+  commit="$(git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || true)"
+  if $DRY_RUN; then
+    echo "  [dry] write $stamp ($version${commit:+ $commit})"
+    return
+  fi
+  mkdir -p "$dir"
+  cat >"$stamp" <<STAMP
+{
+  "version": "$version",
+  "commit": "$commit",
+  "kit_root": "$REPO_DIR",
+  "target": "$TARGET",
+  "scope": "$SCOPE",
+  "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+STAMP
+  log "Install stamp → $stamp"
+}
+
+write_install_stamp
+
 echo
 log "Done. Restart your AI tool to pick up changes."
 log "Canonical instructions: AGENTS.md → docs/guidelines/"
