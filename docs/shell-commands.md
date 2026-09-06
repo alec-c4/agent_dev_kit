@@ -22,6 +22,7 @@ From the kit repo root (works in fish, zsh, bash):
 ./scripts/kit compile
 ./scripts/kit validate --phase=1
 ./scripts/kit validate-skills --pack=core
+./scripts/kit smoke                 # run every kit command against a throwaway HOME
 ./scripts/kit deploy-skills --pack=core --scope=project --dry-run
 ./scripts/kit deploy-workflows --scope=project --dry-run
 ./scripts/kit intake GH-58 --paste --dry-run <<'EOF'
@@ -45,7 +46,7 @@ EOF
 ./scripts/kit findings close F-1 --work-ref GH-58 --run "bundle exec rspec"   # verified
 ./scripts/kit findings close F-1 --work-ref GH-58 --from-sensor              # asserted
 ./scripts/kit findings wontfix F-1 --work-ref GH-58 --human
-./scripts/kit lessons list [--stack rails]
+./scripts/kit lessons list [--stack rails] [--all]   # --all includes pending (not-yet-ack'd) rows
 ./scripts/kit lessons propose --fingerprint FP --guide G --sensor S [--stack rails]
 ./scripts/kit lessons ack L-1
 ./scripts/kit lessons promote L-1 --global

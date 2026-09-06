@@ -202,6 +202,17 @@ export function promoteLessonToGlobal(
   return entry;
 }
 
+/**
+ * Every lesson in the project ledger, ack'd or not.
+ *
+ * `loadLessonsForSession` deliberately hides pending rows — they must not be
+ * injected into a session before a human has ack'd them. But that left no way
+ * to see what is waiting, and `kit lessons ack L-n` needs the id.
+ */
+export function loadProjectLessons(projectRoot: string): Lesson[] {
+  return load(projectRoot);
+}
+
 export function loadLessonsForSession(
   projectRoot: string,
   detectedStack: string,

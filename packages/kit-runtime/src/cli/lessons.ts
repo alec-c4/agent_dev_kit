@@ -2,7 +2,7 @@
 /**
  * kit lessons — list / ack / propose / promote project and user-global lessons.
  *
- *   kit lessons list [--stack ID] [--project PATH]
+ *   kit lessons list [--stack ID] [--all] [--project PATH]
  *   kit lessons ack L-n [--project PATH]
  *   kit lessons propose --fingerprint F --guide G --sensor S [--stack ID] [--source SRC]
  *   kit lessons promote L-n --global [--project PATH]
@@ -12,6 +12,7 @@ import {
   ackLesson,
   defaultGlobalLessonsPath,
   loadLessonsForSession,
+  loadProjectLessons,
   promoteLessonToGlobal,
   proposeLesson,
 } from "../lessons.ts";
@@ -32,7 +33,7 @@ const argv = process.argv.slice(2);
 const cmd = argv[0] ?? "list";
 if (cmd === "-h" || cmd === "--help" || cmd === "help") {
   console.log(`Usage:
-  kit lessons list [--stack ID] [--project PATH]
+  kit lessons list [--stack ID] [--all] [--project PATH]
   kit lessons ack L-n [--project PATH]
   kit lessons propose --fingerprint F --guide G --sensor S [--stack ID] [--source SRC]
   kit lessons promote L-n --global [--project PATH]`);
@@ -47,14 +48,21 @@ const globalPath =
 try {
   if (cmd === "list") {
     const stack = arg("--stack", rest) ?? "*";
-    const rows = loadLessonsForSession(project, stack, globalPath);
+    // Default is the session view: ack'd lessons only, project + global.
+    // --all adds the pending project rows, so `ack` has an id to be given.
+    const all = has("--all", rest);
+    const rows = all
+      ? loadProjectLessons(project).filter(
+          (r) => stack === "*" || r.stack === "*" || r.stack === stack,
+        )
+      : loadLessonsForSession(project, stack, globalPath);
     if (!rows.length) {
-      console.log("(no lessons)");
+      console.log(all ? "(no lessons)" : "(no lessons; --all shows pending)");
       process.exit(0);
     }
-    console.log(["ID", "STACK", "FINGERPRINT", "GUIDE"].join("\t"));
+    console.log(["ID", "STACK", "ACK", "FINGERPRINT", "GUIDE"].join("\t"));
     for (const r of rows) {
-      console.log([r.id, r.stack, r.fingerprint, r.guide].join("\t"));
+      console.log([r.id, r.stack, r.ack, r.fingerprint, r.guide].join("\t"));
     }
     process.exit(0);
   }

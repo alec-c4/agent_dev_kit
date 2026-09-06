@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import {
   ackLesson,
   loadLessonsForSession,
+  loadProjectLessons,
   lessonsPath,
   parseLessonsMarkdown,
   promoteLessonToGlobal,
@@ -115,5 +116,26 @@ describe("lessons (AC-8, AC-9, AC-10)", () => {
     expect(merged.some((l) => l.fingerprint === "shipped-process-language")).toBe(
       true,
     );
+  });
+});
+
+describe("pending lessons stay out of a session but remain discoverable", () => {
+  test("loadProjectLessons returns a pending row that the session view hides", () => {
+    const root = mkdtempSync(join(tmpdir(), "kit-les-"));
+    mkdirSync(join(root, ".ai"), { recursive: true });
+    const row = proposeLesson(root, {
+      fingerprint: "pending-fp",
+      stack: "*",
+      guide: "g",
+      sensor: "s",
+      source: "GH-1 F-1",
+    });
+    expect(row.ack).toBe("pending");
+    // The session view is the gate: an un-ack'd lesson must not be injected.
+    expect(loadLessonsForSession(root, "*")).toEqual([]);
+    // But `kit lessons ack L-n` needs the id, so listing must be able to show it.
+    expect(loadProjectLessons(root).map((l) => [l.id, l.ack])).toEqual([
+      [row.id, "pending"],
+    ]);
   });
 });
