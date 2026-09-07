@@ -5,6 +5,8 @@ user-invocable: false
 metadata:
   verify:
     pypi: ["fastapi", "pydantic", "httpx"]
+    # httpx releases slowly by design; the repo is active and 0.28.1 is current
+    accept: ["httpx"]
 ---
 
 # FastAPI patterns

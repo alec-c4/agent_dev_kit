@@ -5,8 +5,9 @@ user-invocable: false
 metadata:
   verify:
     gem: ["pundit", "cancancan", "role_fu", "rolify", "bullet"]
-    # named only as the alternative for projects already on it
-    accept: ["rolify"]
+    # rolify: named only as the alternative for projects already on it
+    # cancancan: stable API, repo active — the gap is low churn, not neglect
+    accept: ["rolify", "cancancan"]
 ---
 
 # Rails core patterns
@@ -31,7 +32,8 @@ Load after [stacks/rails](../stacks/rails/SKILL.md). Tooling from `profile.yaml`
 - **Authorization** (what this user may do) — a policy layer: **Pundit** or **CanCanCan**.
   The original `cancan` gem has not shipped since 2013; `cancancan` is the maintained fork.
 - **Roles** (what this user is) — **role_fu**; **rolify** is the alternative when a project
-  already uses it. Roles answer membership; they are not a substitute for a policy check.
+  already uses it, though it has not cut a release since 6.0.1 (the repo is still active).
+  Roles answer membership; they are not a substitute for a policy check.
 - User-visible strings via i18n when project uses locales ([profile dod_overlay](../stacks/rails/profile.yaml)).
 
 ## References

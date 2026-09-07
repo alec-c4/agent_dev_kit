@@ -35,6 +35,12 @@ export type Verdict =
 
 export type PackageResult = PackageClaim & {
   verdict: Verdict;
+  /**
+   * What the age alone said, before `accept` was applied. Kept so an accepted
+   * package that has crossed into abandoned territory can still be shown —
+   * silencing it entirely would let the accept list outlive its reasoning.
+   */
+  underlying?: Verdict;
   version?: string;
   released?: string | null;
   months?: number | null;

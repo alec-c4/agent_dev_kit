@@ -5,6 +5,8 @@ user-invocable: false
 metadata:
   verify:
     gem: ["turbo-rails", "stimulus-rails"]
+    # a thin wrapper around the Stimulus assets — it has little reason to ship
+    accept: ["stimulus-rails"]
 ---
 
 # Hotwire (Turbo + Stimulus)

@@ -169,9 +169,21 @@ await pooled(claimTasks, 4, async ({ skill, claim, accepted }) => {
     packages.push({ ...claim, skill, verdict: "unknown" });
     return;
   }
-  let { verdict, months } = classify(rel.released, now, staleMonths, abandonedMonths);
-  if (accepted && verdict !== "current") verdict = "accepted";
-  packages.push({ ...claim, skill, verdict, version: rel.version, released: rel.released, months });
+  const { verdict: aged, months } = classify(rel.released, now, staleMonths, abandonedMonths);
+  // `accept` says a slow release cadence is fine for this package. It stops the
+  // run failing; it does not erase the fact. One that has crossed into
+  // abandoned territory is still printed, so the list cannot quietly outlive
+  // the judgement behind it.
+  const verdict = accepted && aged !== "current" ? "accepted" : aged;
+  packages.push({
+    ...claim,
+    skill,
+    verdict,
+    underlying: aged,
+    version: rel.version,
+    released: rel.released,
+    months,
+  });
 });
 
 await pooled([...linkRefs.keys()], 4, async (url) => {
@@ -209,6 +221,14 @@ if (asJson) {
       `  ${label.padEnd(9)} ${l.status || "no response"}  ${l.url} — ${l.skills.join(", ")}`,
     );
   }
+  // An accepted package that is merely stale needs no line of its own; one that
+  // has gone past abandoned does, even though it does not fail.
+  const acceptedAbandoned = accepted.filter((p) => p.underlying === "abandoned");
+  for (const p of acceptedAbandoned) {
+    console.log(
+      `  ACCEPTED  ${p.ecosystem}:${p.name} (${p.version ?? "-"}, ${p.months ?? "?"}mo) — ${p.skill}: past the abandoned threshold, accepted anyway`,
+    );
+  }
   if (accepted.length) {
     console.log(`  (${accepted.length} accepted as deliberately old)`);
   }
@@ -220,7 +240,7 @@ if (asJson) {
     ].filter(Boolean);
     console.log(`  (${parts.join(" and ")} could not be reached — not counted as failures)`);
   }
-  if (!bad.length && !deadLinks.length) {
+  if (!bad.length && !deadLinks.length && !acceptedAbandoned.length) {
     console.log(
       warn.length || unreachableLinks.length
         ? "no failures; re-read the entries above"
