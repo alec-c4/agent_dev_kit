@@ -13,10 +13,13 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   classify,
+  classifyLink,
+  isRetryableStatus,
   parseRelease,
   parseAcceptedNames,
   parseVerifyClaims,
   registryUrl,
+  type LinkVerdict,
   type PackageResult,
 } from "../doc-verify.ts";
 import { findKitRoot } from "../detect-stack.ts";
@@ -63,7 +66,6 @@ type FetchOutcome =
   | { kind: "unreachable" };  // throttled, offline, or timed out — not a claim about the package
 
 async function fetchJson(url: string): Promise<FetchOutcome> {
-  let lastUnreachable = true;
   for (let attempt = 0; attempt < 3; attempt++) {
     if (attempt) await Bun.sleep(400 * attempt);
     try {
@@ -72,39 +74,47 @@ async function fetchJson(url: string): Promise<FetchOutcome> {
         signal: AbortSignal.timeout(15_000),
       });
       if (res.status === 404) return { kind: "absent" };
-      if (res.status === 429 || res.status >= 500) continue; // worth retrying
-      if (!res.ok) {
-        lastUnreachable = true;
-        continue;
-      }
+      if (isRetryableStatus(res.status)) continue;
+      if (!res.ok) continue;
       return { kind: "ok", body: await res.json() };
     } catch {
-      lastUnreachable = true;
+      // Timeout or transport error — retry, then report unreachable.
     }
   }
-  return { kind: lastUnreachable ? "unreachable" : "unreachable" };
+  return { kind: "unreachable" };
 }
 
-async function linkOk(url: string): Promise<number> {
-  for (const method of ["HEAD", "GET"] as const) {
-    try {
-      const res = await fetch(url, {
-        method,
-        redirect: "follow",
-        headers: { "User-Agent": "Mozilla/5.0 agent-dev-kit-verify-docs" },
-        signal: AbortSignal.timeout(15_000),
-      });
-      if (res.ok) return res.status;
-      if (method === "GET") return res.status;
-    } catch {
-      if (method === "GET") return 0;
+/**
+ * HEAD first because it is cheap, GET as the fallback for hosts that refuse
+ * HEAD. Retries on a throttle or a 5xx: a shared CI runner gets rate-limited
+ * by busy documentation hosts, and one 429 is not a dead link.
+ */
+async function checkLink(url: string): Promise<{ verdict: LinkVerdict; status: number }> {
+  let status = 0;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt) await Bun.sleep(500 * attempt);
+    for (const method of ["HEAD", "GET"] as const) {
+      try {
+        const res = await fetch(url, {
+          method,
+          redirect: "follow",
+          headers: { "User-Agent": "Mozilla/5.0 agent-dev-kit-verify-docs" },
+          signal: AbortSignal.timeout(15_000),
+        });
+        status = res.status;
+        if (res.ok) return { verdict: "ok", status };
+        if (classifyLink(status) === "dead") return { verdict: "dead", status };
+      } catch {
+        status = 0;
+      }
     }
+    if (status !== 0 && !isRetryableStatus(status)) break;
   }
-  return 0;
+  return { verdict: classifyLink(status), status };
 }
 
 const packages: Array<PackageResult & { skill: string }> = [];
-const links: Array<{ skill: string; url: string; status: number }> = [];
+const links: Array<{ skills: string[]; url: string; status: number; verdict: LinkVerdict }> = [];
 
 /** Run tasks with a bounded pool — registries throttle, and serial is far too slow. */
 async function pooled<T>(items: T[], limit: number, fn: (item: T) => Promise<void>) {
@@ -120,7 +130,8 @@ async function pooled<T>(items: T[], limit: number, fn: (item: T) => Promise<voi
 
 type ClaimTask = { skill: string; claim: ReturnType<typeof parseVerifyClaims>[number]; accepted: boolean };
 const claimTasks: ClaimTask[] = [];
-const linkTasks: Array<{ skill: string; url: string }> = [];
+// One URL, one request, however many skills cite it.
+const linkRefs = new Map<string, Set<string>>();
 
 for (const file of skillFiles()) {
   const text = readFileSync(file, "utf8");
@@ -134,7 +145,9 @@ for (const file of skillFiles()) {
     for (const url of new Set(urls)) {
       // Placeholder hosts in worked examples are not real endpoints.
       if (/github\.com\/(org|owner)\//.test(url)) continue;
-      linkTasks.push({ skill, url });
+      const refs = linkRefs.get(url) ?? new Set<string>();
+      refs.add(skill);
+      linkRefs.set(url, refs);
     }
   }
 }
@@ -161,21 +174,27 @@ await pooled(claimTasks, 4, async ({ skill, claim, accepted }) => {
   packages.push({ ...claim, skill, verdict, version: rel.version, released: rel.released, months });
 });
 
-await pooled(linkTasks, 8, async ({ skill, url }) => {
-  const status = await linkOk(url);
-  if (status < 200 || status >= 400) links.push({ skill, url, status });
+await pooled([...linkRefs.keys()], 4, async (url) => {
+  const { verdict, status } = await checkLink(url);
+  if (verdict === "ok") return;
+  links.push({ skills: [...(linkRefs.get(url) ?? [])].sort(), url, status, verdict });
 });
+links.sort((a, b) => a.url.localeCompare(b.url));
 
 packages.sort((a, b) => `${a.skill}${a.name}`.localeCompare(`${b.skill}${b.name}`));
 
 const bad = packages.filter((p) => p.verdict === "missing" || p.verdict === "abandoned");
 const warn = packages.filter((p) => p.verdict === "stale" || p.verdict === "unknown");
+// A link the host refused to serve us is not a link that is gone. Only 404 and
+// 410 fail the run; everything else is reported and moves on.
+const deadLinks = links.filter((l) => l.verdict === "dead");
+const unreachableLinks = links.filter((l) => l.verdict === "unreachable");
 
 if (asJson) {
   console.log(JSON.stringify({ packages, links }, null, 2));
 } else {
   console.log(
-    `verify-docs: ${packages.length} package claim(s), ${links.length} unreachable link(s)`,
+    `verify-docs: ${packages.length} package claim(s), ${linkRefs.size} link(s), ${deadLinks.length} dead`,
   );
   const accepted = packages.filter((p) => p.verdict === "accepted");
   for (const p of [...bad, ...warn]) {
@@ -184,19 +203,30 @@ if (asJson) {
       `  ${p.verdict.toUpperCase().padEnd(9)} ${p.ecosystem}:${p.name} (${p.version ?? "-"}, ${age}) — ${p.skill}`,
     );
   }
-  for (const l of links) {
-    console.log(`  LINK ${l.status || "unreachable"}  ${l.url} — ${l.skill}`);
+  for (const l of [...deadLinks, ...unreachableLinks]) {
+    const label = l.verdict === "dead" ? "DEAD" : "UNREACHED";
+    console.log(
+      `  ${label.padEnd(9)} ${l.status || "no response"}  ${l.url} — ${l.skills.join(", ")}`,
+    );
   }
   if (accepted.length) {
     console.log(`  (${accepted.length} accepted as deliberately old)`);
   }
   const unknown = packages.filter((p) => p.verdict === "unknown").length;
-  if (unknown) {
-    console.log(`  (${unknown} could not be reached — not counted as failures)`);
+  if (unknown || unreachableLinks.length) {
+    const parts = [
+      unknown ? `${unknown} package claim(s)` : "",
+      unreachableLinks.length ? `${unreachableLinks.length} link(s)` : "",
+    ].filter(Boolean);
+    console.log(`  (${parts.join(" and ")} could not be reached — not counted as failures)`);
   }
-  if (!bad.length && !links.length) {
-    console.log(warn.length ? "no failures; re-read the entries above" : "all claims current");
+  if (!bad.length && !deadLinks.length) {
+    console.log(
+      warn.length || unreachableLinks.length
+        ? "no failures; re-read the entries above"
+        : "all claims current",
+    );
   }
 }
 
-process.exit(bad.length || links.length ? 1 : 0);
+process.exit(bad.length || deadLinks.length ? 1 : 0);

@@ -22,8 +22,11 @@ jobs:
       - name: Verify declared packages and documentation links
         run: ./scripts/kit verify-docs
 
+      # Only a package that is gone or abandoned, or a link the host answered
+      # 404/410 for, gets here. Stale versions and hosts that throttled the
+      # runner are printed in the step above without failing it.
       - name: Report
         if: failure()
         run: |
-          echo "::warning::A package claim or documentation link in skills/ needs re-reading."
+          echo "::warning::A package claim or documentation link in skills/ is gone, not just old."
           echo "Run ./scripts/kit verify-docs locally to see the detail."

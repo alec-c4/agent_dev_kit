@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import {
   classify,
+  classifyLink,
+  isRetryableStatus,
   monthsSince,
   parseAcceptedNames,
   parseRelease,
@@ -157,5 +159,49 @@ metadata:
   test("a skill without accept accepts nothing", () => {
     expect(parseAcceptedNames("---\nname: d\n---\n").size).toBe(0);
     expect(parseAcceptedNames("no frontmatter").size).toBe(0);
+  });
+});
+
+describe("classifyLink", () => {
+  // A weekly run reported docs.ansible.com as a broken link. The host had
+  // rate-limited the CI runner; it served 200 to everyone else.
+  test("only 404 and 410 mean the page is gone", () => {
+    expect(classifyLink(404)).toBe("dead");
+    expect(classifyLink(410)).toBe("dead");
+  });
+
+  test("a throttle or a bad minute at the host is not a dead link", () => {
+    for (const status of [429, 500, 502, 503, 504]) {
+      expect(classifyLink(status)).toBe("unreachable");
+    }
+  });
+
+  test("a bot wall is not a dead link either", () => {
+    expect(classifyLink(401)).toBe("unreachable");
+    expect(classifyLink(403)).toBe("unreachable");
+  });
+
+  test("no response at all is unreachable, not dead", () => {
+    expect(classifyLink(0)).toBe("unreachable");
+  });
+
+  test("2xx and 3xx are fine", () => {
+    for (const status of [200, 204, 301, 302, 308]) {
+      expect(classifyLink(status)).toBe("ok");
+    }
+  });
+});
+
+describe("isRetryableStatus", () => {
+  test("throttles and 5xx are worth another attempt", () => {
+    expect(isRetryableStatus(429)).toBe(true);
+    expect(isRetryableStatus(500)).toBe(true);
+    expect(isRetryableStatus(599)).toBe(true);
+  });
+
+  test("a verdict the server already gave is not", () => {
+    for (const status of [200, 301, 403, 404, 410]) {
+      expect(isRetryableStatus(status)).toBe(false);
+    }
   });
 });

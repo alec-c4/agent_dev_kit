@@ -177,3 +177,28 @@ export function parseRelease(eco: Ecosystem, body: unknown): ReleaseInfo | null 
     }
   }
 }
+
+export type LinkVerdict = "ok" | "dead" | "unreachable";
+
+/**
+ * What a status code actually says about a documentation link.
+ *
+ * Only 404 and 410 are the server telling us the page is gone. A 429 is the
+ * host rate-limiting the caller, a 5xx is the host having a bad minute, and a
+ * 401/403 is usually a bot wall in front of a page that is perfectly fine —
+ * none of those are claims about the link. Treating them as failures is how a
+ * scheduled run reported docs.ansible.com as broken while it served 200 to
+ * everyone else.
+ *
+ * A status of 0 means the request never completed (timeout, DNS, TLS).
+ */
+export function classifyLink(status: number): LinkVerdict {
+  if (status >= 200 && status < 400) return "ok";
+  if (status === 404 || status === 410) return "dead";
+  return "unreachable";
+}
+
+/** Statuses worth trying again: the host is throttling or briefly unwell. */
+export function isRetryableStatus(status: number): boolean {
+  return status === 429 || (status >= 500 && status < 600);
+}
