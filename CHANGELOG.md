@@ -23,6 +23,12 @@ The version that matters to a user is the one in `VERSION`, reported by
   directory, disagreeing with its Python and TypeScript siblings.
 - AGENTS.md and WORKFLOW.md linked to `.ai/README.md`, which is in no clone.
   The `.ai/` contract now lives in `docs/guidelines/PLANNING-ARTIFACTS.md`.
+- `kit verify-docs` failed the weekly run on a link whose host had rate-limited
+  the CI runner. Only 404 and 410 count as a dead link now; a throttle, a 5xx
+  or a bot wall is reported as unreachable and does not fail.
+- `metadata.verify.accept` silenced a package at any age, hiding one that had
+  gone 43 months without a release. It now suppresses the failure, not the
+  report.
 
 ### Added
 
